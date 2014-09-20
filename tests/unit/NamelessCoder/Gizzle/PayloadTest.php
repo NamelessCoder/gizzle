@@ -17,6 +17,14 @@ class PayloadTest extends \PHPUnit_Framework_TestCase {
 		$payload->loadPlugins('NamelessCoder\\Gizzle');
 	}
 
+	public function testLoadPluginsSupportsArray() {
+		$payload = $this->getMock('NamelessCoder\\Gizzle\\Payload', array('validate', 'loadPluginsFromPackage'), array('{}', ''));
+		$payload->expects($this->exactly(2))->method('loadPluginsFromPackage')
+			->with('NamelessCoder\\Gizzle')
+			->will($this->returnValue(array()));
+		$payload->loadPlugins(array('NamelessCoder\\Gizzle', 'NamelessCoder\\Gizzle'));
+	}
+
 	public function testLoadPluginsLoadsExpectedPlugins() {
 		$payload = $this->getMock('NamelessCoder\\Gizzle\\Payload', array('validate'), array('{}', ''));
 		$payload->loadPlugins('NamelessCoder\\Gizzle\\Tests\\Fixtures');
@@ -30,6 +38,34 @@ class PayloadTest extends \PHPUnit_Framework_TestCase {
 		$result = $payload->process();
 		$this->assertInstanceOf('NamelessCoder\\Gizzle\\Response', $result);
 		$this->assertEquals(0, $result->getCode());
+	}
+
+	public function testValidate() {
+		$data = file_get_contents('tests/fixtures/sample-payload.json');
+		$secret = 'dummysecret';
+		$hash = hash_hmac('sha1', $data, $secret);
+		$payload = $this->getMock('NamelessCoder\\Gizzle\\Payload', array('readSignatureHeader'), array($data, $secret), '', FALSE);
+		$payload->expects($this->once())->method('readSignatureHeader')->will($this->returnValue('sha1=' . $hash));
+		$payload->__construct($data, $secret);
+	}
+
+	public function testValidateThrowsRuntimeExceptionOnHashMismatch() {
+		$data = file_get_contents('tests/fixtures/sample-payload.json');
+		$secret = 'dummysecret';
+		$hash = hash_hmac('sha1', $data . 'appendforinvalidchecksum', $secret);
+		$payload = $this->getMock('NamelessCoder\\Gizzle\\Payload', array('readSignatureHeader'), array($data, $secret), '', FALSE);
+		$payload->expects($this->once())->method('readSignatureHeader')->will($this->returnValue('sha1=' . $hash));
+		$this->setExpectedException('RuntimeException', '', 1411225210);
+		$payload->__construct($data, $secret);
+	}
+
+	public function testReadSignatureHeaderReadsFromServerVariable() {
+		$data = file_get_contents('tests/fixtures/sample-payload.json');
+		$secret = 'dummysecret';
+		$hash = hash_hmac('sha1', $data, $secret);
+		$_SERVER['HTTP_X_HUB_SIGNATURE'] = 'sha1=' . $hash;
+		$payload = new Payload($data, $secret);
+		unset($_SERVER['HTTP_X_HUB_SIGNATURE']);
 	}
 
 }
