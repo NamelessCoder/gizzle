@@ -64,4 +64,42 @@ You can control which plugins should be loaded from your `PluginList` class, for
 
 Simply create the class, include the package name which contains the class when running $gizzle->loadPlugins().
 
+Example plugin
+--------------
 
+```php
+<?php
+namespace NamelessCoder\Gizzle\GizzlePlugins;
+
+/**
+ * Example Gizzle Plugin
+ *
+ * Sends an email to the person who pushed the commit,
+ * but only if the commit was made to the "demo" branch.
+ */
+class ExamplePlugin implements \NamelessCoder\Gizzle\PluginInterface {
+
+	/**
+	 * @param Payload $payload
+	 * @return boolean
+	 */
+	public function trigger(Payload $payload) {
+		return 'demo' === $payload->getRef();
+	}
+
+	/**
+	 * @param Payload $payload
+	 * @return void
+	 * @throws \RuntimeException
+	 */
+	public function process(Payload $payload) {
+		$pusherEmail = $payload->getPusher()->getEmail();
+		$body = 'A big thank you from ' . $payload->getRepository()->getOwner()->getName();
+		$mailed = mail($pusherEmail, 'Thank you for contributing!', $body);
+		if (FALSE === $mailed) {
+			throw new \RuntimeException('Could not email the kind contributor at ' . $pusherEmail);
+		}
+	}
+
+}
+```
