@@ -82,7 +82,8 @@ class PayloadTest extends \PHPUnit_Framework_TestCase {
 		$result = $payload->process();
 		$this->assertInstanceOf('NamelessCoder\\Gizzle\\Response', $result);
 		$this->assertEquals(1, $result->getCode());
-		$error = reset($result->getErrors());
+		$errors = $result->getErrors();
+		$error = $errors[0];
 		$this->assertInstanceOf('RuntimeException', $error);
 		$this->assertEquals(1411238763, $error->getCode());
 	}
