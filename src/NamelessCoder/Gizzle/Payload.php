@@ -122,12 +122,34 @@ class Payload extends JsonDataMapper {
 	}
 
 	/**
-	 * @param mixed $packageOrPackages
+	 * @param mixed $_
 	 * @return self
 	 */
-	public function loadPlugins($packageOrPackages) {
-
+	public function loadPlugins($_) {
+		$arguments = func_get_args();
+		foreach ($arguments as $possiblePackage) {
+			if (TRUE === is_array($possiblePackage)) {
+				array_walk($possiblePackage, array($this, 'loadPluginsFromPackage'));
+			} else {
+				$this->loadPluginsFromPackage($possiblePackage);
+			}
+		}
 		return $this;
+	}
+
+	/**
+	 * @param string $package
+	 * @return void
+	 */
+	protected function loadPluginsFromPackage($package) {
+		$expectedListerClassName = '\\' . $package . '\\GizzlePlugins\\PluginList';
+		if (TRUE === class_exists($expectedListerClassName)) {
+			/** @var PluginListInterface $lister */
+			$lister = new $expectedListerClassName();
+			foreach ($lister->getPluginClassNames() as $pluginClassName) {
+				$this->plugins[] = new $pluginClassName();
+			}
+		}
 	}
 
 	/**
