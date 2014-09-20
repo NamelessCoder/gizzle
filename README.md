@@ -25,7 +25,9 @@ Security
 Gizzle uses the `secret` (a token) which you enter in GitHub while setting up the web hook. Use the same secret token when initializing your Payload class. The secret token is required and must match, or the Payload throws a RuntimeException.
 
 ```php
-$gizzle = new \NamelessCoder\Gizzle\Payload($payloadData, $mySecret);
+$data = file_get_contents('php://input');
+$secret = 'mysecret';
+$gizzle = new \NamelessCoder\Gizzle\Payload($data, $secret);
 ```
 
 When using the shipped public file in `./web/github-webhook.php` your secret token will be read from the file `./.secret` (note: dot-file, placed outside the public web root).
@@ -36,7 +38,9 @@ Running
 The `./web/github-webhook.php` file which is shipped with this repository can be used as URL of your web hook when configuring it in GitHub - or you can manually process the payload from within your own application and use its URL instead:
 
 ```php
-$gizzle = new \NamelessCoder\Gizzle\Payload($payloadData, $mySecret);
+$data = file_get_contents('php://input');
+$secret = 'mysecret';
+$gizzle = new \NamelessCoder\Gizzle\Payload($data, $secret);
 $gizzle->loadPlugins('MyVendor\\MyPackage');
 // alternative loading 1: $gizzle->loadPlugins($arrayOfPackageNames);
 // alternative loading 2: $gizzle->loadPlugins($package1, $package2, $package3);
