@@ -308,7 +308,7 @@ class Repository extends JsonDataMapper {
 	}
 
 	/**
-	 * @param \DateTime $pushedAt
+	 * @param \DateTime $pushed
 	 */
 	public function setPushed($pushed) {
 		$this->pushed = $pushed;

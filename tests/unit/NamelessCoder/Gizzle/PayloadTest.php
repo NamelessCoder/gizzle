@@ -107,15 +107,15 @@ class PayloadTest extends \PHPUnit_Framework_TestCase {
 		return array(
 			array('parent', uniqid()),
 			array('child', uniqid()),
-			array('commits', array(new Commit(array()), new Commit(array()))),
+			array('commits', array(new Commit(), new Commit())),
 			array('comparisonUrl', uniqid()),
 			array('created', TRUE),
 			array('deleted', TRUE),
 			array('forced', TRUE),
-			array('head', new Commit(array())),
-			array('sender', new Entity(array())),
+			array('head', new Commit()),
+			array('sender', new Entity()),
 			array('ref', uniqid()),
-			array('repository', new Repository(array())),
+			array('repository', new Repository()),
 		);
 	}
 

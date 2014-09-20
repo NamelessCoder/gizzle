@@ -17,9 +17,9 @@ abstract class JsonDataMapper {
 	protected $propertyClasses = array();
 
 	/**
-	 * @param string $jsonData
+	 * @param mixed $jsonData
 	 */
-	public function __construct($jsonData) {
+	public function __construct($jsonData = array()) {
 		$this->map($jsonData);
 	}
 
