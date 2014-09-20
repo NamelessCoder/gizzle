@@ -105,6 +105,23 @@ class Payload extends JsonDataMapper {
 	}
 
 	/**
+	 * @param mixed $packageOrPackages
+	 * @return self
+	 */
+	public function loadPlugins($packageOrPackages) {
+
+		return $this;
+	}
+
+	/**
+	 * @return self
+	 */
+	public function process() {
+
+		return $this;
+	}
+
+	/**
 	 * @param string $parent
 	 */
 	public function setParent($parent) {
@@ -256,14 +273,6 @@ class Payload extends JsonDataMapper {
 	 */
 	public function getRepository() {
 		return $this->repository;
-	}
-
-	/**
-	 * @param mixed $packageOrPackages
-	 * @return void
-	 */
-	public function loadPlugins($packageOrPackages) {
-
 	}
 
 }
