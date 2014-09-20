@@ -87,11 +87,6 @@ class Payload extends JsonDataMapper {
 	protected $plugins = array();
 
 	/**
-	 * @var \RuntimeException
-	 */
-	protected $errors = array();
-
-	/**
 	 * @param string $jsonData
 	 * @param string $secret
 	 */
