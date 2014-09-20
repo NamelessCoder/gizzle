@@ -1,0 +1,246 @@
+<?php
+namespace NamelessCoder\Gizzle;
+
+/**
+ * Class Payload
+ */
+class Payload extends JsonDataMapper {
+
+	/**
+	 * @var array
+	 */
+	protected $propertyMap = array(
+		'head_commit' => 'head',
+		'compare' => 'comparisonUrl',
+		'after' => 'parent',
+		'before' => 'child'
+	);
+
+	/**
+	 * @var array
+	 */
+	protected $propertyClasses = array(
+		'commits' => 'Commit[]',
+		'head' => 'Commit',
+		'committer' => 'Entity',
+		'repository' => 'Repository'
+	);
+
+	/**
+	 * @var string
+	 */
+	protected $parent = NULL;
+
+	/**
+	 * @var string
+	 */
+	protected $child = NULL;
+
+	/**
+	 * @var Commit[]
+	 */
+	protected $commits = NULL;
+
+	/**
+	 * @var string
+	 */
+	protected $comparisonUrl = NULL;
+
+	/**
+	 * @var boolean
+	 */
+	protected $created = NULL;
+
+	/**
+	 * @var boolean
+	 */
+	protected $deleted = NULL;
+
+	/**
+	 * @var boolean
+	 */
+	protected $forced;
+
+	/**
+	 * @var Commit
+	 */
+	protected $head;
+
+	/**
+	 * @var Entity
+	 */
+	protected $pusher;
+
+	/**
+	 * @var string
+	 */
+	protected $ref;
+
+	/**
+	 * @var Repository
+	 */
+	protected $repository;
+
+	/**
+	 * @param string $parent
+	 */
+	public function setParent($parent) {
+		$this->parent = $parent;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getParent() {
+		return $this->parent;
+	}
+
+	/**
+	 * @param string $child
+	 */
+	public function setChild($child) {
+		$this->child = $child;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getChild() {
+		return $this->child;
+	}
+
+	/**
+	 * @param Commit[] $commits
+	 */
+	public function setCommits(array $commits) {
+		$this->commits = $commits;
+	}
+
+	/**
+	 * @return Commit[]
+	 */
+	public function getCommits() {
+		return $this->commits;
+	}
+
+	/**
+	 * @param string $comparisonUrl
+	 */
+	public function setComparisonUrl($comparisonUrl) {
+		$this->comparisonUrl = $comparisonUrl;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getComparisonUrl() {
+		return $this->comparisonUrl;
+	}
+
+	/**
+	 * @param boolean $created
+	 */
+	public function setCreated($created) {
+		$this->created = $created;
+	}
+
+	/**
+	 * @return boolean
+	 */
+	public function getCreated() {
+		return $this->created;
+	}
+
+	/**
+	 * @param boolean $deleted
+	 */
+	public function setDeleted($deleted) {
+		$this->deleted = $deleted;
+	}
+
+	/**
+	 * @return boolean
+	 */
+	public function getDeleted() {
+		return $this->deleted;
+	}
+
+	/**
+	 * @param boolean $forced
+	 */
+	public function setForced($forced) {
+		$this->forced = $forced;
+	}
+
+	/**
+	 * @return boolean
+	 */
+	public function getForced() {
+		return $this->forced;
+	}
+
+	/**
+	 * @param Commit $head
+	 */
+	public function setHead(Commit $head) {
+		$this->head = $head;
+	}
+
+	/**
+	 * @return Commit
+	 */
+	public function getHead() {
+		return $this->head;
+	}
+
+	/**
+	 * @param Entity $pusher
+	 */
+	public function setPusher(Entity $pusher) {
+		$this->pusher = $pusher;
+	}
+
+	/**
+	 * @return Entity
+	 */
+	public function getPusher() {
+		return $this->pusher;
+	}
+
+	/**
+	 * @param string $ref
+	 */
+	public function setRef($ref) {
+		$this->ref = $ref;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getRef() {
+		return $this->ref;
+	}
+
+	/**
+	 * @param Repository $repository
+	 */
+	public function setRepository(Repository $repository) {
+		$this->repository = $repository;
+	}
+
+	/**
+	 * @return Repository
+	 */
+	public function getRepository() {
+		return $this->repository;
+	}
+
+	/**
+	 * @param mixed $packageOrPackages
+	 * @return void
+	 */
+	public function loadPlugins($packageOrPackages) {
+
+	}
+
+}
