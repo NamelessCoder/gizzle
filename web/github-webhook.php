@@ -9,6 +9,10 @@ if (TRUE === file_exists($secretFile)) {
 }
 $data = file_get_contents('php://input');
 
-$payload = new \NamelessCoder\Gizzle\Payload($data, $secret);
-$payload->loadPlugins('NamelessCoder\\Gizzle');
-$payload->run();
+try {
+	$payload = new \NamelessCoder\Gizzle\Payload($data, $secret);
+	$payload->loadPlugins('NamelessCoder\\Gizzle');
+	$payload->run();
+} catch (\RuntimeException $error) {
+	echo $error->getMessage() . ' (' . $error->getCode() . ')';
+}
