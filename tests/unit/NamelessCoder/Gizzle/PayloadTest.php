@@ -1,7 +1,11 @@
 <?php
 namespace NamelessCoder\Gizzle\Tests\Unit;
 
+use NamelessCoder\Gizzle\Commit;
+use NamelessCoder\Gizzle\Entity;
 use NamelessCoder\Gizzle\Payload;
+use NamelessCoder\Gizzle\Repository;
+use NamelessCoder\Gizzle\Tests\Fixtures\GizzlePlugins\ErrorPlugin;
 use NamelessCoder\Gizzle\Tests\Fixtures\GizzlePlugins\Plugin;
 
 /**
@@ -66,6 +70,53 @@ class PayloadTest extends \PHPUnit_Framework_TestCase {
 		$_SERVER['HTTP_X_HUB_SIGNATURE'] = 'sha1=' . $hash;
 		$payload = new Payload($data, $secret);
 		unset($_SERVER['HTTP_X_HUB_SIGNATURE']);
+	}
+
+	public function testResponseContainsErrorCodeAndErrorsWhenPluginsCauseErrors() {
+		$errorPlugin = new ErrorPlugin();
+		$payload = $this->getMock('NamelessCoder\\Gizzle\\Payload', array('loadPluginsFromPackage', 'validate'), array('{}', ''));
+		$payload->expects($this->once())->method('loadPluginsFromPackage')
+			->with('NamelessCoder\\Gizzle')
+			->will($this->returnValue(array($errorPlugin)));
+		$payload->loadPlugins('NamelessCoder\\Gizzle');
+		$result = $payload->process();
+		$this->assertInstanceOf('NamelessCoder\\Gizzle\\Response', $result);
+		$this->assertEquals(1, $result->getCode());
+		$error = reset($result->getErrors());
+		$this->assertInstanceOf('RuntimeException', $error);
+		$this->assertEquals(1411238763, $error->getCode());
+	}
+
+	/**
+	 * @dataProvider getPropertyValueDataSets
+	 * @param string $property
+	 * @param mixed $value
+	 */
+	public function testGetterAndSetter($property, $value) {
+		$payload = $this->getMock('NamelessCoder\\Gizzle\\Payload', array('loadPluginsFromPackage', 'validate'), array('{}', ''));
+		$getter = 'get' . ucfirst($property);
+		$setter = 'set' . ucfirst($property);
+		$payload->$setter($value);
+		$this->assertEquals($value, $payload->$getter());
+	}
+
+	/**
+	 * @return array
+	 */
+	public function getPropertyValueDataSets() {
+		return array(
+			array('parent', uniqid()),
+			array('child', uniqid()),
+			array('commits', array(new Commit(array()), new Commit(array()))),
+			array('comparisonUrl', uniqid()),
+			array('created', TRUE),
+			array('deleted', TRUE),
+			array('forced', TRUE),
+			array('head', new Commit(array())),
+			array('sender', new Entity(array())),
+			array('ref', uniqid()),
+			array('repository', new Repository(array())),
+		);
 	}
 
 }

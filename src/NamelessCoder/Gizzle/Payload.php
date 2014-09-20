@@ -126,7 +126,7 @@ class Payload extends JsonDataMapper {
 			if (TRUE === is_array($possiblePackage)) {
 				array_walk($possiblePackage, array($this, 'loadPluginsFromPackage'));
 			} else {
-				$this->loadPluginsFromPackage($possiblePackage);
+				$this->plugins += $this->loadPluginsFromPackage($possiblePackage);
 			}
 		}
 		return $this;
@@ -134,17 +134,19 @@ class Payload extends JsonDataMapper {
 
 	/**
 	 * @param string $package
-	 * @return void
+	 * @return PluginInterface[]
 	 */
 	protected function loadPluginsFromPackage($package) {
+		$plugins = array();
 		$expectedListerClassName = '\\' . $package . '\\GizzlePlugins\\PluginList';
 		if (TRUE === class_exists($expectedListerClassName)) {
 			/** @var PluginListInterface $lister */
 			$lister = new $expectedListerClassName();
 			foreach ($lister->getPluginClassNames() as $pluginClassName) {
-				$this->plugins[] = new $pluginClassName();
+				$plugins[] = new $pluginClassName();
 			}
 		}
+		return $plugins;
 	}
 
 	/**
