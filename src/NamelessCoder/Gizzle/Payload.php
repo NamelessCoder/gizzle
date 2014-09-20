@@ -96,12 +96,19 @@ class Payload extends JsonDataMapper {
 	 * @return void
 	 */
 	protected function validate($jsonData, $secret) {
-		$signatureHeader = trim($_SERVER['HTTP_X_HUB_SIGNATURE']);
+		$signatureHeader = $this->readSignatureHeader();
 		list ($algorithm, $hash) = explode('=', $signatureHeader);
 		$calculatedHash = hash_hmac($algorithm, $jsonData, $secret);
 		if ($calculatedHash !== $hash) {
 			throw new \RuntimeException('Invalid request hash - please make sure you entered the correct "secret"', 1411225210);
 		}
+	}
+
+	/**
+	 * @return string|NULL
+	 */
+	protected function readSignatureHeader() {
+		return TRUE === isset($_SERVER['HTTP_X_HUB_SIGNATURE']) ? $_SERVER['HTTP_X_HUB_SIGNATURE'] : NULL;
 	}
 
 	/**
