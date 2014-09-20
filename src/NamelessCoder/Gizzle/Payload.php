@@ -82,6 +82,29 @@ class Payload extends JsonDataMapper {
 	protected $repository;
 
 	/**
+	 * @param string $jsonData
+	 * @param string $secret
+	 */
+	public function __construct($jsonData, $secret) {
+		$this->validate($jsonData, $secret);
+		parent::__construct($jsonData);
+	}
+
+	/**
+	 * @param $jsonData
+	 * @param $secret
+	 * @return void
+	 */
+	protected function validate($jsonData, $secret) {
+		$signatureHeader = trim($_SERVER['HTTP_X_HUB_SIGNATURE']);
+		list ($algorithm, $hash) = explode('=', $signatureHeader);
+		$calculatedHash = hash_hmac($algorithm, $jsonData, $secret);
+		if ($calculatedHash !== $hash) {
+			throw new \RuntimeException('Invalid request hash - please make sure you entered the correct "secret"', 1411225210);
+		}
+	}
+
+	/**
 	 * @param string $parent
 	 */
 	public function setParent($parent) {

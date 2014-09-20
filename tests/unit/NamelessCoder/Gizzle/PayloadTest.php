@@ -12,7 +12,7 @@ class PayloadTest extends \PHPUnit_Framework_TestCase {
 	 * @provider
 	 */
 	public function testLoadPlugins() {
-		$payload = new Payload('{}');
+		$payload = new Payload('{}', '');
 		$payload->loadPlugins('NamelessCoder\\Gizzle');
 	}
 
