@@ -45,7 +45,7 @@ $gizzle->loadPlugins('MyVendor\\MyPackage');
 $response = $gizzle->process();
 
 /** @var integer $code */
-$code = $response->getExitCode();
+$code = $response->getCode();
 // code >0 indicates errors are present; value indicates exact error. Code =0 means no errors.
 
 /** @var \RuntimeException[] $errors */
