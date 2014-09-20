@@ -40,21 +40,20 @@ abstract class JsonDataMapper {
 			if (FALSE === property_exists(get_class($this), $propertyName)) {
 				continue;
 			} elseif (NULL === $propertyClass) {
-				$this->$propertyName = $propertyValue;
+				$propertyValue = $propertyValue;
 			} elseif ('DateTime' === $propertyClass) {
-				$this->$propertyName = new \DateTime($propertyValue);
+				$propertyValue = new \DateTime($propertyValue);
 			} elseif (FALSE === strpos($propertyClass, '[]')) {
-				$this->$propertyName = new $propertyClass($propertyValue);
+				$propertyValue = new $propertyClass($propertyValue);
 			} elseif (NULL !== $propertyClass) {
 				$className = substr($propertyClass, 0, -2);
 				$values = array();
 				foreach ($propertyValue as $childObjectData) {
 					$values[] = new $className($childObjectData);
 				}
-				$this->$propertyName = $values;
-			} else {
-				$this->$propertyName = $propertyValue;
+				$propertyValue = $values;
 			}
+			$this->$propertyName = $propertyValue;
 		}
 	}
 

@@ -1,6 +1,7 @@
 <?php
 namespace NamelessCoder\Gizzle\Tests\Unit;
 
+use NamelessCoder\Gizzle\Branch;
 use NamelessCoder\Gizzle\Commit;
 use NamelessCoder\Gizzle\Entity;
 use NamelessCoder\Gizzle\Payload;
@@ -12,6 +13,11 @@ use NamelessCoder\Gizzle\Tests\Fixtures\GizzlePlugins\Plugin;
  * Class PayloadTest
  */
 class PayloadTest extends \PHPUnit_Framework_TestCase {
+
+	public function testConstructorAcceptsFixtureJson() {
+		$data = file_get_contents('tests/fixtures/sample-payload.json');
+		$payload = $this->getMock('NamelessCoder\\Gizzle\\Payload', array('validate'), array($data, ''));
+	}
 
 	public function testLoadPlugins() {
 		$payload = $this->getMock('NamelessCoder\\Gizzle\\Payload', array('validate', 'loadPluginsFromPackage'), array('{}', ''));
@@ -106,6 +112,7 @@ class PayloadTest extends \PHPUnit_Framework_TestCase {
 	 */
 	public function getPropertyValueDataSets() {
 		return array(
+			array('branches', array(new Branch(), new Branch())),
 			array('parent', uniqid()),
 			array('child', uniqid()),
 			array('commits', array(new Commit(), new Commit())),

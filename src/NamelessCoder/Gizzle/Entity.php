@@ -29,7 +29,13 @@ class Entity extends JsonDataMapper {
 	protected $username = NULL;
 
 	/**
+	 * @var string
+	 */
+	protected $url = NULL;
+
+	/**
 	 * @param string $email
+	 * @return void
 	 */
 	public function setEmail($email) {
 		$this->email = $email;
@@ -44,6 +50,7 @@ class Entity extends JsonDataMapper {
 
 	/**
 	 * @param string $name
+	 * @return void
 	 */
 	public function setName($name) {
 		$this->name = $name;
@@ -58,6 +65,7 @@ class Entity extends JsonDataMapper {
 
 	/**
 	 * @param string $username
+	 * @return void
 	 */
 	public function setUsername($username) {
 		$this->username = $username;
@@ -68,6 +76,21 @@ class Entity extends JsonDataMapper {
 	 */
 	public function getUsername() {
 		return $this->username;
+	}
+
+	/**
+	 * @param string $url
+	 * @return void
+	 */
+	public function setUrl($url) {
+		$this->url = $url;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getUrl() {
+		return $this->url;
 	}
 
 }

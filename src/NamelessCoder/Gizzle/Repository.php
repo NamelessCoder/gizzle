@@ -5,11 +5,24 @@ namespace NamelessCoder\Gizzle;
  * Class Repository
  */
 class Repository extends JsonDataMapper {
+
+	/**
+	 * @var array
+	 */
+	protected $propertyMap = array(
+		'created_at' => 'created',
+		'pushed_at' => 'created',
+		'full_name' => 'name',
+		'stargazers_count' => 'stargazers'
+	);
+
 	/**
 	 * @var array
 	 */
 	protected $propertyClasses = array(
 		'owner' => 'NamelessCoder\\Gizzle\\Entity',
+		'created' => 'DateTime',
+		'pushed' => 'DateTime'
 	);
 
 	/**

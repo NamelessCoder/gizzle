@@ -1,11 +1,19 @@
 <?php
 namespace NamelessCoder\Gizzle\Tests\Unit;
+
 use NamelessCoder\Gizzle\Entity;
+use NamelessCoder\Gizzle\Repository;
 
 /**
  * Class RepositoryTest
  */
 class RepositoryTest extends \PHPUnit_Framework_TestCase {
+
+	public function testConstructorAcceptsFixtureJson() {
+		$data = file_get_contents('tests/fixtures/sample-payload.json');
+		$data = json_decode($data, JSON_OBJECT_AS_ARRAY);
+		new Repository($data['repository']);
+	}
 
 	/**
 	 * @dataProvider getPropertyValueDataSets

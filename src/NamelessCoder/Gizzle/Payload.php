@@ -20,11 +20,17 @@ class Payload extends JsonDataMapper {
 	 * @var array
 	 */
 	protected $propertyClasses = array(
+		'branches' => 'NamelessCoder\\Gizzle\\Branch[]',
 		'commits' => 'NamelessCoder\\Gizzle\\Commit[]',
 		'head' => 'NamelessCoder\\Gizzle\\Commit',
 		'sender' => 'NamelessCoder\\Gizzle\\Entity',
 		'repository' => 'NamelessCoder\\Gizzle\\Repository'
 	);
+
+	/**
+	 * @var array
+	 */
+	protected $branches = array();
 
 	/**
 	 * @var string
@@ -92,7 +98,7 @@ class Payload extends JsonDataMapper {
 	 */
 	public function __construct($jsonData, $secret) {
 		$this->validate($jsonData, $secret);
-		parent::__construct($jsonData);
+		$this->map($jsonData);
 	}
 
 	/**
@@ -169,6 +175,21 @@ class Payload extends JsonDataMapper {
 			$response->setErrors($errors);
 		}
 		return $response;
+	}
+
+	/**
+	 * @param Branch[] $branches
+	 * @return void
+	 */
+	public function setBranches($branches) {
+		$this->branches = $branches;
+	}
+
+	/**
+	 * @return Branch[]
+	 */
+	public function getBranches() {
+		return $this->branches;
 	}
 
 	/**

@@ -12,27 +12,28 @@ class Commit extends JsonDataMapper {
 	protected $propertyClasses = array(
 		'committer' => 'NamelessCoder\\Gizzle\\Entity',
 		'author' => 'NamelessCoder\\Gizzle\\Entity',
+		'timestamp ' => 'DateTime'
 	);
 
 	/**
-	 * @var string[]
+	 * @var array
 	 */
 	protected $added = array();
 
 	/**
 	 * @var Entity
 	 */
-	protected $author = null;
+	protected $author = NULL;
 
 	/**
 	 * @var Entity
 	 */
-	protected $committer = null;
+	protected $committer = NULL;
 
 	/**
 	 * @var boolean
 	 */
-	protected $distinct = false;
+	protected $distinct = FALSE;
 
 	/**
 	 * @var string
@@ -42,46 +43,46 @@ class Commit extends JsonDataMapper {
 	/**
 	 * @var string
 	 */
-	protected $message = null;
+	protected $message = NULL;
 
 	/**
-	 * @var string[]
+	 * @var array
 	 */
 	protected $modified = array();
 
 	/**
-	 * @var string[]
+	 * @var array
 	 */
 	protected $removed = array();
 
 	/**
 	 * @var \DateTime
 	 */
-	protected $timestamp = null;
+	protected $timestamp = NULL;
 
 	/**
 	 * @var string
 	 */
-	protected $url = null;
+	protected $url = NULL;
 
 	/**
-	 * @param string[] $added
+	 * @param array $added
 	 */
 	public function setAdded($added) {
 		$this->added = $added;
 	}
 
 	/**
-	 * @return string[]
+	 * @return array
 	 */
 	public function getAdded() {
 		return $this->added;
 	}
 
 	/**
-	 * @param Person $author
+	 * @param Entity $author
 	 */
-	public function setAuthor(Person $author) {
+	public function setAuthor(Entity $author) {
 		$this->author = $author;
 	}
 
@@ -149,28 +150,28 @@ class Commit extends JsonDataMapper {
 	}
 
 	/**
-	 * @param string[] $modified
+	 * @param array $modified
 	 */
 	public function setModified(array $modified) {
 		$this->modified = $modified;
 	}
 
 	/**
-	 * @return string[]
+	 * @return array
 	 */
 	public function getModified() {
 		return $this->modified;
 	}
 
 	/**
-	 * @param string[] $removed
+	 * @param array $removed
 	 */
 	public function setRemoved(array $removed) {
 		$this->removed = $removed;
 	}
 
 	/**
-	 * @return string[]
+	 * @return array
 	 */
 	public function getRemoved() {
 		return $this->removed;
