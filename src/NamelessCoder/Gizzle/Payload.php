@@ -82,6 +82,16 @@ class Payload extends JsonDataMapper {
 	protected $repository;
 
 	/**
+	 * @var PluginInterface[]
+	 */
+	protected $plugins = array();
+
+	/**
+	 * @var \RuntimeException
+	 */
+	protected $errors = array();
+
+	/**
 	 * @param string $jsonData
 	 * @param string $secret
 	 */
@@ -121,11 +131,25 @@ class Payload extends JsonDataMapper {
 	}
 
 	/**
-	 * @return self
+	 * @return Response
 	 */
 	public function process() {
-
-		return $this;
+		$errors = array();
+		$response = new Response();
+		foreach ($this->plugins as $plugin) {
+			if (TRUE === $plugin->trigger($this)) {
+				try {
+					$plugin->process($this);
+				} catch (\RuntimeException $error) {
+					$errors[] = $error;
+				}
+			}
+		}
+		if (0 < count($errors)) {
+			$response->setCode(1);
+			$response->setErrors($errors);
+		}
+		return $respone;
 	}
 
 	/**

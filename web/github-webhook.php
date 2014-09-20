@@ -12,7 +12,13 @@ $data = file_get_contents('php://input');
 try {
 	$payload = new \NamelessCoder\Gizzle\Payload($data, $secret);
 	$payload->loadPlugins('NamelessCoder\\Gizzle');
-	$payload->process();
+	$respone = $payload->process();
+	if (0 < $respone->getCode()) {
+		echo 'The following errors were reported:' . PHP_EOL;
+		foreach ($respone->getErrors() as $error) {
+			echo $error->getMessage() . ' (' . $error->getCode() . ')' . PHP_EOL;
+		}
+	}
 } catch (\RuntimeException $error) {
 	echo $error->getMessage() . ' (' . $error->getCode() . ')';
 }
