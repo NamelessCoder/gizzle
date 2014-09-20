@@ -1,0 +1,24 @@
+{
+    "name": "namelesscoder/gizzle",
+    "description": "GitHub Webhook Listener with plugin-based API for creating your own triggerered actions",
+    "license": "GPLv3",
+    "authors": [
+        {
+            "name": "Claus Due",
+            "email": "claus@namelesscoder.net"
+        }
+    ],
+	"autoload": {
+		"psr-4": {
+			"NamelessCoder\\Gizzle\\Tests\\": "tests/unit/NamelessCoder/Gizzle/",
+			"NamelessCoder\\Gizzle\\": "src/NamelessCoder/Gizzle/"
+		}
+	},
+    "minimum-stability": "dev",
+	"require-dev": {
+		"phpunit/phpunit": "4.1.*"
+	},
+    "require": {
+
+    }
+}
