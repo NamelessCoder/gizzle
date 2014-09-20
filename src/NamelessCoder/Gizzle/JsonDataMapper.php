@@ -37,7 +37,7 @@ abstract class JsonDataMapper {
 		foreach ($jsonData as $propertyName => $propertyValue) {
 			$propertyName = TRUE === isset($this->propertyMap[$propertyName]) ? $this->propertyMap[$propertyName] : $propertyName;
 			$propertyClass = TRUE === isset($this->propertyClasses[$propertyName]) ? $this->propertyClasses[$propertyName] : NULL;
-			if (FALSE === isset($this->$propertyName)) {
+			if (FALSE === property_exists(get_class($this), $propertyName)) {
 				continue;
 			} elseif (NULL === $propertyClass) {
 				$this->$propertyName = $propertyValue;
@@ -45,13 +45,15 @@ abstract class JsonDataMapper {
 				$this->$propertyName = new \DateTime($propertyValue);
 			} elseif (FALSE === strpos($propertyClass, '[]')) {
 				$this->$propertyName = new $propertyClass($propertyValue);
-			} else {
+			} elseif (NULL !== $propertyClass) {
 				$className = substr($propertyClass, 0, -2);
 				$values = array();
 				foreach ($propertyValue as $childObjectData) {
 					$values[] = new $className($childObjectData);
 				}
 				$this->$propertyName = $values;
+			} else {
+				$this->$propertyName = $propertyValue;
 			}
 		}
 	}

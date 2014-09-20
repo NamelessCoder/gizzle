@@ -10,7 +10,7 @@ class Payload extends JsonDataMapper {
 	 * @var array
 	 */
 	protected $propertyMap = array(
-		'head_commit' => 'head',
+		'commit' => 'head',
 		'compare' => 'comparisonUrl',
 		'after' => 'parent',
 		'before' => 'child'
@@ -20,10 +20,10 @@ class Payload extends JsonDataMapper {
 	 * @var array
 	 */
 	protected $propertyClasses = array(
-		'commits' => 'Commit[]',
-		'head' => 'Commit',
-		'committer' => 'Entity',
-		'repository' => 'Repository'
+		'commits' => 'NamelessCoder\\Gizzle\\Commit[]',
+		'head' => 'NamelessCoder\\Gizzle\\Commit',
+		'sender' => 'NamelessCoder\\Gizzle\\Entity',
+		'repository' => 'NamelessCoder\\Gizzle\\Repository'
 	);
 
 	/**
@@ -69,7 +69,7 @@ class Payload extends JsonDataMapper {
 	/**
 	 * @var Entity
 	 */
-	protected $pusher;
+	protected $sender;
 
 	/**
 	 * @var string
@@ -282,17 +282,17 @@ class Payload extends JsonDataMapper {
 	}
 
 	/**
-	 * @param Entity $pusher
+	 * @param Entity $sender
 	 */
-	public function setPusher(Entity $pusher) {
-		$this->pusher = $pusher;
+	public function setSender(Entity $sender) {
+		$this->sender = $sender;
 	}
 
 	/**
 	 * @return Entity
 	 */
-	public function getPusher() {
-		return $this->pusher;
+	public function getSender() {
+		return $this->sender;
 	}
 
 	/**

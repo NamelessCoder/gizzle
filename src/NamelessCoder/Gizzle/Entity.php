@@ -7,19 +7,26 @@ namespace NamelessCoder\Gizzle;
 class Entity extends JsonDataMapper {
 
 	/**
-	 * @var string
+	 * @var array
 	 */
-	private $name = NULL;
+	protected $propertyMap = array(
+		'login' => 'username'
+	);
 
 	/**
 	 * @var string
 	 */
-	private $email = NULL;
+	protected $name = NULL;
 
 	/**
 	 * @var string
 	 */
-	private $username = NULL;
+	protected $email = NULL;
+
+	/**
+	 * @var string
+	 */
+	protected $username = NULL;
 
 	/**
 	 * @param string $email

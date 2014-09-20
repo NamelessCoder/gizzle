@@ -7,54 +7,62 @@ namespace NamelessCoder\Gizzle;
 class Commit extends JsonDataMapper {
 
 	/**
+	 * @var array
+	 */
+	protected $propertyClasses = array(
+		'committer' => 'NamelessCoder\\Gizzle\\Entity',
+		'author' => 'NamelessCoder\\Gizzle\\Entity',
+	);
+
+	/**
 	 * @var string[]
 	 */
-	private $added = array();
+	protected $added = array();
 
 	/**
-	 * @var Person
+	 * @var Entity
 	 */
-	private $author = null;
+	protected $author = null;
 
 	/**
-	 * @var Person
+	 * @var Entity
 	 */
-	private $committer = null;
+	protected $committer = null;
 
 	/**
 	 * @var boolean
 	 */
-	private $distinct = false;
+	protected $distinct = false;
 
 	/**
 	 * @var string
 	 */
-	private $id;
+	protected $id;
 
 	/**
 	 * @var string
 	 */
-	private $message = null;
+	protected $message = null;
 
 	/**
 	 * @var string[]
 	 */
-	private $modified = array();
+	protected $modified = array();
 
 	/**
 	 * @var string[]
 	 */
-	private $removed = array();
+	protected $removed = array();
 
 	/**
 	 * @var \DateTime
 	 */
-	private $timestamp = null;
+	protected $timestamp = null;
 
 	/**
 	 * @var string
 	 */
-	private $url = null;
+	protected $url = null;
 
 	/**
 	 * @param string[] $added

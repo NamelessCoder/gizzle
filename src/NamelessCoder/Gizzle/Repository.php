@@ -5,106 +5,112 @@ namespace NamelessCoder\Gizzle;
  * Class Repository
  */
 class Repository extends JsonDataMapper {
+	/**
+	 * @var array
+	 */
+	protected $propertyClasses = array(
+		'owner' => 'NamelessCoder\\Gizzle\\Entity',
+	);
 
 	/**
 	 * @var \DateTime
 	 */
-	private $created = NULL;
+	protected $created = NULL;
 
 	/**
 	 * @var string
 	 */
-	private $description = NULL;
+	protected $description = NULL;
 
 	/**
 	 * @var boolean
 	 */
-	private $fork = NULL;
+	protected $fork = NULL;
 
 	/**
 	 * @var integer
 	 */
-	private $forks = NULL;
+	protected $forks = NULL;
 
 	/**
 	 * @var boolean
 	 */
-	private $hasDownloads = FALSE;
+	protected $hasDownloads = FALSE;
 
 	/**
 	 * @var boolean
 	 */
-	private $hasIssues = FALSE;
+	protected $hasIssues = FALSE;
 
 	/**
 	 * @var boolean
 	 */
-	private $hasWiki = FALSE;
+	protected $hasWiki = FALSE;
 
 	/**
 	 * @var string
 	 */
-	private $homepage = NULL;
+	protected $homepage = NULL;
 
 	/**
 	 * @var integer
 	 */
-	private $id = NULL;
+	protected $id = NULL;
 
 	/**
 	 * @var string
 	 */
-	private $language = NULL;
+	protected $language = NULL;
 
 	/**
 	 * @var string
 	 */
-	private $masterBranch = NULL;
+	protected $masterBranch = NULL;
 
 	/**
 	 * @var string
 	 */
-	private $name = NULL;
+	protected $name = NULL;
 
 	/**
 	 * @var integer
 	 */
-	private $openIssues = NULL;
+	protected $openIssues = NULL;
 
 	/**
 	 * @var boolean
 	 */
-	private $private = FALSE;
+	protected $private = FALSE;
 
 	/**
 	 * @var \DateTime
 	 */
-	private $pushedAt = NULL;
+	protected $pushed = NULL;
 
 	/**
 	 * @var integer
 	 */
-	private $size = NULL;
+	protected $size = NULL;
 
 	/**
 	 * @var integer
 	 */
-	private $stargazers = NULL;
+	protected $stargazers = NULL;
 
 	/**
 	 * @var string
 	 */
-	private $url = NULL;
+	protected $url = NULL;
 
 	/**
 	 * @var integer
 	 */
-	private $watchers = NULL;
+	protected $watchers = NULL;
 
 	/**
 	 * @var Entity
 	 */
-	private $owner = NULL;
+	protected $owner = NULL;
 
 	/**
 	 * @param \DateTime $created
