@@ -22,14 +22,13 @@ Finally, configure your GitHub repository and add the URL to your virtual host, 
 Security
 --------
 
-A default rule is implemented which completely prevents access to processing the payload data if the client does not originate from one of GitHub's official IP addresses. You can **disable** this enforcement by running:
+Gizzle uses the `secret` (a token) which you enter in GitHub while setting up the web hook. Use the same secret token when initializing your Payload class. The secret token is required and must match, or the Payload throws a RuntimeException.
 
 ```php
-$gizzle = new \NamelessCoder\Gizzle\Payload($payloadData);
-$gizzle->disableSecurityBecauseSecurityIsHandledInMyApplicationOrDaemon();
+$gizzle = new \NamelessCoder\Gizzle\Payload($payloadData, $mySecret);
 ```
 
-Yes, the method name is completely intentional - leaving this publicly accessible can, depending on which plugins you use/write, constitute a major security hole. If you require additional security such as tokens, this must be implemented around this libarry or as plugins (which should of course always be loaded **first** in your list of plugins).
+When using the shipped public file in `./web/github-webhook.php` your secret token will be read from the file `./.secret` (note: dot-file, placed outside the public web root).
 
 Running
 -------
@@ -37,7 +36,7 @@ Running
 The `./web/github-webhook.php` file which is shipped with this repository can be used as URL of your web hook when configuring it in GitHub - or you can manually process the payload from within your own application and use its URL instead:
 
 ```php
-$gizzle = new \NamelessCoder\Gizzle\Payload($payloadData);
+$gizzle = new \NamelessCoder\Gizzle\Payload($payloadData, $mySecret);
 $gizzle->loadPlugins('MyVendor\\MyPackage');
 // alternative loading 1: $gizzle->loadPlugins($arrayOfPackageNames);
 // alternative loading 2: $gizzle->loadPlugins($package1, $package2, $package3);
