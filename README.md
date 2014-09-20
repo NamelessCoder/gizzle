@@ -52,6 +52,9 @@ $code = $response->getExitCode();
 $errors = $response->getErrors();
 ```
 
+Creating plugins
+----------------
+
 To create a plugin for Gizzle you need two classes:
 
 1. The class `MyVendor\MyPackage\GizzlePlugins\PluginList` which must implement interface `NamelessCoder\Gizzle\PluginListInterface` and contain a `getPluginClassNames` method which returns an array of any number of string class names of your plugins.
