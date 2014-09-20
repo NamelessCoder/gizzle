@@ -33,7 +33,7 @@ class BranchTest extends \PHPUnit_Framework_TestCase {
 	 */
 	public function getPropertyValueDataSets() {
 		return array(
-			array('name', array(uniqid(), uniqid())),
+			array('name', uniqid()),
 			array('commit', new Commit()),
 		);
 	}
