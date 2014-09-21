@@ -56,6 +56,28 @@ $code = $response->getCode();
 $errors = $response->getErrors();
 ```
 
+Configuring plugins
+-------------------
+
+Not all plugins support configuration but those that do can be configured by placing a `Settings.yml` file in the root of your project or in any folder leading up to the file which creates the Payload instance. The first file found in a reverse search gets used and should contain all the configuration required by your plugins.
+
+The format of the configuration file is:
+
+```yaml
+Vendor\\PackageName:
+  Vendor\\PackageName\\GizzlePlugins\\OnePlugin:
+    enabled: true
+  AnotherVendor\\AnotherPackageName\\GizzlePlugins\\OtherPlugin:
+    enabled: true
+OtherVendor\\ThirdPackage:
+  OtherVendor\\ThirdPackage\\GizzlePlugins\\ThirdPlugin:
+    enabled: true
+```
+
+It is possible for any Package to return Plugins from other packages as well - which is ideal when constructing Packages which include and provide configuration for many plugins. Such a package might return plugin names which **don't belong to that Package**, and because the class name is used as key in the configuration, **it is possible to configure the same Plugin differently when it is provided by Package A and Package B.** This is done to increase reusability of smaller plugins which can serve many purposes - a good example would be a Git plugin which pushes when used in one package and pulls when used in another, because each package can provide a different configuration for the same plugin.
+
+Word of caution, though: the plugin can **only** be configured inside the scope of the Package that returned it. This means that **every** mandatory option should be present in each place the Plugin is used (in other words: you cannot configure global defaults).
+
 Creating plugins
 ----------------
 
