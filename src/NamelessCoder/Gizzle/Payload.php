@@ -1,5 +1,6 @@
 <?php
 namespace NamelessCoder\Gizzle;
+use Symfony\Component\Yaml\Yaml;
 
 /**
  * Class Payload
@@ -144,15 +145,47 @@ class Payload extends JsonDataMapper {
 	 */
 	protected function loadPluginsFromPackage($package) {
 		$plugins = array();
+		$settings = $this->loadSettings();
 		$expectedListerClassName = '\\' . $package . '\\GizzlePlugins\\PluginList';
 		if (TRUE === class_exists($expectedListerClassName)) {
+			$packageSettings = (array) TRUE === isset($settings[$package]) ? $settings[$package] : array();
 			/** @var PluginListInterface $lister */
 			$lister = new $expectedListerClassName();
-			foreach ($lister->getPluginClassNames() as $pluginClassName) {
-				$plugins[] = new $pluginClassName();
+			$lister->initialize($settings);
+			foreach ($lister->getPluginClassNames() as $class) {
+				$plugins[] = $this->loadPluginInstance(
+					$class,
+					(array) TRUE === isset($settings[$package][$class]) ? $settings[$package][$class] : array()
+				);
 			}
 		}
 		return $plugins;
+	}
+
+	/**
+	 * @param string $pluginClassName
+	 * @param array $settings
+	 * @return PluginInterface
+	 */
+	protected function loadPluginInstance($pluginClassName, array $settings) {
+		/** @var PluginInterface $plugin */
+		$plugin = new $pluginClassName();
+		$plugin->initialize($settings);
+		return $plugin;
+	}
+
+	/**
+	 * @return array
+	 */
+	protected function loadSettings() {
+		$folder = realpath(__DIR__);
+		$segments = explode('/', $folder);
+		$file = NULL;
+		while (NULL === $file && 0 < count($segments) && ($segment = array_pop($segments))) {
+			$expectedFile = '/' . implode('/', $segments) . '/' . $segment . '/Settings.yml';
+			$file = TRUE === file_exists($file) ? $file : NULL;
+		}
+		return (array) TRUE === file_exists($file) ? Yaml::parse($file) : array();
 	}
 
 	/**

@@ -7,6 +7,14 @@ namespace NamelessCoder\Gizzle;
 interface PluginInterface {
 
 	/**
+	 * Initialize the plugin with an array of settings.
+	 *
+	 * @param array $settings
+	 * @return void
+	 */
+	public function initialize(array $settings);
+
+	/**
 	 * Analyse $payload and return TRUE if this plugin should
 	 * be triggered in processing the payload.
 	 *
