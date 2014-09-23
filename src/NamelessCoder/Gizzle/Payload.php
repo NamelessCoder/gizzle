@@ -192,6 +192,12 @@ class Payload extends JsonDataMapper {
 	 * @return Response
 	 */
 	public function process() {
+		if (0 === count($this->plugins)) {
+			// load plugins which are configured in Settings.yml
+			$settings = $this->loadSettings();
+			$packages = array_keys($settings);
+			$this->loadPlugins($packages);
+		}
 		$errors = array();
 		$response = new Response();
 		foreach ($this->plugins as $plugin) {

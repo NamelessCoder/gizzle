@@ -41,9 +41,11 @@ The `./web/github-webhook.php` file which is shipped with this repository can be
 $data = file_get_contents('php://input');
 $secret = 'mysecret';
 $gizzle = new \NamelessCoder\Gizzle\Payload($data, $secret);
-$gizzle->loadPlugins('MyVendor\\MyPackage');
-// alternative loading 1: $gizzle->loadPlugins($arrayOfPackageNames);
-// alternative loading 2: $gizzle->loadPlugins($package1, $package2, $package3);
+// Plugins are then loaded from the packages used in, and in the order of, Settings.yml (see below)
+// alternative loading 1: $gizzle->loadPlugins('MyVendor\\MyPackage');
+// alternative loading 2: $gizzle->loadPlugins($arrayOfPackageNames);
+// alternative loading 3: $gizzle->loadPlugins($package1, $package2, $package3);
+// using either alternative causes the settings-based loading to be skipped, but settings are still used.
 
 /** @var \NamelessCoder\Gizzle\Response $response */
 $response = $gizzle->process();

@@ -50,6 +50,15 @@ class PayloadTest extends \PHPUnit_Framework_TestCase {
 		$this->assertEquals(0, $result->getCode());
 	}
 
+	public function testProcessLoadsSettingsForConfiguredPackagesIfPluginListEmpty() {
+		$data = file_get_contents('tests/fixtures/sample-payload.json');
+		$secret = 'dummysecret';
+		$payload = $this->getMock('NamelessCoder\\Gizzle\\Payload', array('loadSettings', 'loadPlugins'), array($data, $secret), '', FALSE);
+		$payload->expects($this->once())->method('loadSettings')->will($this->returnValue(array('foo' => 'bar')));
+		$payload->expects($this->once())->method('loadPlugins')->with(array('foo'))->will($this->returnValue(array()));
+		$payload->process();
+	}
+
 	public function testValidate() {
 		$data = file_get_contents('tests/fixtures/sample-payload.json');
 		$secret = 'dummysecret';

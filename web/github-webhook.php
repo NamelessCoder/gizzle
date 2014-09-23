@@ -11,7 +11,6 @@ $data = file_get_contents('php://input');
 
 try {
 	$payload = new \NamelessCoder\Gizzle\Payload($data, $secret);
-	$payload->loadPlugins('NamelessCoder\\Gizzle');
 	$respone = $payload->process();
 	if (0 < $respone->getCode()) {
 		echo 'The following errors were reported:' . PHP_EOL;
