@@ -168,6 +168,7 @@ class Payload extends JsonDataMapper {
 	 * @return PluginInterface
 	 */
 	protected function loadPluginInstance($pluginClassName, array $settings) {
+		$pluginClassName = '\\' . ltrim($pluginClassName, '\\');
 		/** @var PluginInterface $plugin */
 		$plugin = new $pluginClassName();
 		$plugin->initialize($settings);
