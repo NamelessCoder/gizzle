@@ -98,7 +98,9 @@ class Payload extends JsonDataMapper {
 	 * @param string $secret
 	 */
 	public function __construct($jsonData, $secret) {
-		$this->validate($jsonData, $secret);
+		if ('cli' !== php_sapi_name()) {
+			$this->validate($jsonData, $secret);
+		}
 		$this->map($jsonData);
 	}
 

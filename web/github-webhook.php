@@ -7,7 +7,11 @@ $secret = NULL;
 if (TRUE === file_exists($secretFile)) {
 	$secret = trim(file_get_contents($secretFile));
 }
-$data = file_get_contents('php://input');
+if ('cli' === php_sapi_name()) {
+	$data = file_get_contents('php://stdin');
+} else {
+	$data = file_get_contents('php://input');
+}
 
 try {
 	$payload = new \NamelessCoder\Gizzle\Payload($data, $secret);
