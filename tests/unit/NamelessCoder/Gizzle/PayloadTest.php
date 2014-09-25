@@ -72,7 +72,14 @@ class PayloadTest extends \PHPUnit_Framework_TestCase {
 		$data = file_get_contents('tests/fixtures/sample-payload.json');
 		$secret = 'dummysecret';
 		$hash = hash_hmac('sha1', $data . 'appendforinvalidchecksum', $secret);
-		$payload = $this->getMock('NamelessCoder\\Gizzle\\Payload', array('readSignatureHeader'), array($data, $secret), '', FALSE);
+		$payload = $this->getMock(
+			'NamelessCoder\\Gizzle\\Payload',
+			array('readSignatureHeader', 'isCommandLine'),
+			array($data, $secret),
+			'',
+			FALSE
+		);
+		$payload->expects($this->once())->method('isCommandLine')->will($this->returnValue(FALSE));
 		$payload->expects($this->once())->method('readSignatureHeader')->will($this->returnValue('sha1=' . $hash));
 		$this->setExpectedException('RuntimeException', '', 1411225210);
 		$payload->__construct($data, $secret);
@@ -126,6 +133,7 @@ class PayloadTest extends \PHPUnit_Framework_TestCase {
 			array('child', uniqid()),
 			array('commits', array(new Commit(), new Commit())),
 			array('comparisonUrl', uniqid()),
+			array('context', uniqid()),
 			array('created', TRUE),
 			array('deleted', TRUE),
 			array('forced', TRUE),

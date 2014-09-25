@@ -13,7 +13,13 @@ class Repository extends JsonDataMapper {
 		'created_at' => 'created',
 		'pushed_at' => 'created',
 		'full_name' => 'name',
-		'stargazers_count' => 'stargazers'
+		'stargazers_count' => 'stargazers',
+		'watchers_count' => 'watchers',
+		'default_branch' => 'masterBranch',
+		'open_issues_count' => 'openIssues',
+		'has_issues' => 'hasIssues',
+		'has_downloads' => 'hasDownloads',
+		'has_wiki' => 'hasWiki'
 	);
 
 	/**

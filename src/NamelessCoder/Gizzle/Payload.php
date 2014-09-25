@@ -103,10 +103,17 @@ class Payload extends JsonDataMapper {
 	 * @param string $secret
 	 */
 	public function __construct($jsonData, $secret) {
-		if ('cli' !== php_sapi_name()) {
+		if (FALSE === $this->isCommandLine()) {
 			$this->validate($jsonData, $secret);
 		}
 		$this->map($jsonData);
+	}
+
+	/**
+	 * @return boolean
+	 */
+	protected function isCommandLine() {
+		return 'cli' !== php_sapi_name();
 	}
 
 	/**

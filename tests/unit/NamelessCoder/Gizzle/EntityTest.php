@@ -35,6 +35,7 @@ class EntityTest extends \PHPUnit_Framework_TestCase {
 			array('email', uniqid()),
 			array('username', uniqid()),
 			array('url', uniqid()),
+			array('avatar', uniqid()),
 		);
 	}
 

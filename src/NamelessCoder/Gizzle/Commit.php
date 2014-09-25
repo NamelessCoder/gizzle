@@ -10,6 +10,7 @@ class Commit extends JsonDataMapper {
 	 * @var array
 	 */
 	protected $propertyClasses = array(
+		'parents' => 'NamelessCoder\\Gizzle\\Commit[]',
 		'committer' => 'NamelessCoder\\Gizzle\\Entity',
 		'author' => 'NamelessCoder\\Gizzle\\Entity',
 		'timestamp ' => 'DateTime'
@@ -41,6 +42,11 @@ class Commit extends JsonDataMapper {
 	protected $id;
 
 	/**
+	 * @var Commit[]
+	 */
+	protected $parents = array();
+
+	/**
 	 * @var string
 	 */
 	protected $message = NULL;
@@ -54,6 +60,11 @@ class Commit extends JsonDataMapper {
 	 * @var array
 	 */
 	protected $removed = array();
+
+	/**
+	 * @var string
+	 */
+	protected $sha1 = NULL;
 
 	/**
 	 * @var \DateTime
@@ -136,6 +147,20 @@ class Commit extends JsonDataMapper {
 	}
 
 	/**
+	 * @param array $parents
+	 */
+	public function setParents(array $parents) {
+		$this->parents = $parents;
+	}
+
+	/**
+	 * @return array
+	 */
+	public function getParents() {
+		return $this->parents;
+	}
+
+	/**
 	 * @param string $message
 	 */
 	public function setMessage($message) {
@@ -175,6 +200,20 @@ class Commit extends JsonDataMapper {
 	 */
 	public function getRemoved() {
 		return $this->removed;
+	}
+
+	/**
+	 * @param string $sha1
+	 */
+	public function setSha1($sha1) {
+		$this->sha1 = $sha1;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getSha1() {
+		return $this->sha1;
 	}
 
 	/**
