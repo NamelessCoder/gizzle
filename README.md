@@ -1,7 +1,7 @@
 Gizzle
 ======
 
-[![Build Status](https://travis-ci.org/NamelessCoder/gizzle.svg?branch=master)](https://travis-ci.org/NamelessCoder/gizzle)
+[![Build Status](https://travis-ci.org/NamelessCoder/gizzle.svg?branch=master)](https://travis-ci.org/NamelessCoder/gizzle) [![Coverage Status](https://img.shields.io/coveralls/NamelessCoder/gizzle.svg)](https://coveralls.io/r/NamelessCoder/gizzle)
 
 A tiny GitHub Webhook Listener which can be easily extended with plugins.
 
