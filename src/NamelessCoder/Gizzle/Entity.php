@@ -16,6 +16,11 @@ class Entity extends JsonDataMapper {
 	/**
 	 * @var string
 	 */
+	protected $avatar = NULL;
+
+	/**
+	 * @var string
+	 */
 	protected $name = NULL;
 
 	/**
@@ -32,6 +37,20 @@ class Entity extends JsonDataMapper {
 	 * @var string
 	 */
 	protected $url = NULL;
+
+	/**
+	 * @param string $avatar
+	 */
+	public function setAvatar($avatar) {
+		$this->avatar = $avatar;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getAvatar() {
+		return $this->avatar;
+	}
 
 	/**
 	 * @param string $email

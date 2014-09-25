@@ -36,6 +36,11 @@ class Payload extends JsonDataMapper {
 	/**
 	 * @var string
 	 */
+	protected $context = NULL;
+
+	/**
+	 * @var string
+	 */
 	protected $parent = NULL;
 
 	/**
@@ -232,6 +237,20 @@ class Payload extends JsonDataMapper {
 	 */
 	public function getBranches() {
 		return $this->branches;
+	}
+
+	/**
+	 * @param string $context
+	 */
+	public function setContext($context) {
+		$this->context = $context;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getContext() {
+		return $this->context;
 	}
 
 	/**
