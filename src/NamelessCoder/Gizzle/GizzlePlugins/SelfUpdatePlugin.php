@@ -67,7 +67,7 @@ class SelfUpdatePlugin implements PluginInterface {
 	 * @return string
 	 */
 	protected function getCommand() {
-		return 'cd .. && git pull && composer update';
+		return 'cd .. && `which git` pull && `which composer` update';
 	}
 
 }
