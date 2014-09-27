@@ -14,7 +14,7 @@ if ('cli' === php_sapi_name()) {
 }
 
 try {
-	$settingsFileArgument = $_GET['settings'];
+	$settingsFileArgument = urldecode($_GET['settings']);
 	if (TRUE === empty($settingsFileArgument)) {
 		$payload = new \NamelessCoder\Gizzle\Payload($data, $secret);
 	} else {
