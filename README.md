@@ -74,13 +74,13 @@ Not all plugins support configuration but those that do can be configured by pla
 The format of the configuration file is:
 
 ```yaml
-Vendor\\PackageName:
-  Vendor\\PackageName\\GizzlePlugins\\OnePlugin:
+Vendor\PackageName:
+  Vendor\PackageName\GizzlePlugins\OnePlugin:
     enabled: true
-  AnotherVendor\\AnotherPackageName\\GizzlePlugins\\OtherPlugin:
+  AnotherVendor\AnotherPackageName\GizzlePlugins\OtherPlugin:
     enabled: true
-OtherVendor\\ThirdPackage:
-  OtherVendor\\ThirdPackage\\GizzlePlugins\\ThirdPlugin:
+OtherVendor\ThirdPackage:
+  OtherVendor\ThirdPackage\GizzlePlugins\ThirdPlugin:
     enabled: true
 ```
 
