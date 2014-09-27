@@ -113,7 +113,7 @@ class Payload extends JsonDataMapper {
 	 * @return boolean
 	 */
 	protected function isCommandLine() {
-		return 'cli' !== php_sapi_name();
+		return 'cli' === php_sapi_name();
 	}
 
 	/**
