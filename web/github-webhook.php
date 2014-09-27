@@ -27,7 +27,7 @@ try {
 	if (0 === $response->getCode()) {
 		$output = $response->getOutput();
 		header('Content-type: application/json');
-		echo json_encode($output, JSON_HEX_QUOT);
+		echo json_encode($output, JSON_HEX_QUOT | JSON_PRETTY_PRINT);
 	} else {
 		header($_SERVER['SERVER_PROTOCOL'] . ' 500 Internal Server Error', TRUE, 500);
 		echo 'The following errors were reported:' . PHP_EOL;
