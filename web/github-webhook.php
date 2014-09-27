@@ -23,10 +23,10 @@ try {
 		$settingsFileArgument = preg_match($allowedPattern, $settingsFileArgument) ? : $settingsFileArgument; // nullify if invalid
 		$payload = new \NamelessCoder\Gizzle\Payload($data, $secret, $settingsFileArgument);
 	}
-	$respone = $payload->process();
-	if (0 < $respone->getCode()) {
+	$response = $payload->process();
+	if (0 < $response->getCode()) {
 		echo 'The following errors were reported:' . PHP_EOL;
-		foreach ($respone->getErrors() as $error) {
+		foreach ($response->getErrors() as $error) {
 			echo $error->getMessage() . ' (' . $error->getCode() . ')' . PHP_EOL;
 		}
 	}
