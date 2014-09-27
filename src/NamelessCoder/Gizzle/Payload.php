@@ -86,6 +86,11 @@ class Payload extends JsonDataMapper {
 	/**
 	 * @var Entity
 	 */
+	protected $organization;
+
+	/**
+	 * @var Entity
+	 */
 	protected $sender;
 
 	/**
@@ -378,6 +383,21 @@ class Payload extends JsonDataMapper {
 	 */
 	public function getHead() {
 		return $this->head;
+	}
+
+	/**
+	 * @param Entity $organization
+	 * @return void
+	 */
+	public function setOrganization(Entity $organization) {
+		$this->organization = $organization;
+	}
+
+	/**
+	 * @return Entity
+	 */
+	public function getOrganization() {
+		return $this->organization;
 	}
 
 	/**

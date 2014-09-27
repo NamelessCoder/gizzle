@@ -152,6 +152,7 @@ class PayloadTest extends \PHPUnit_Framework_TestCase {
 			array('forced', TRUE),
 			array('head', new Commit()),
 			array('sender', new Entity()),
+			array('organization', new Entity()),
 			array('ref', uniqid()),
 			array('repository', new Repository()),
 		);
