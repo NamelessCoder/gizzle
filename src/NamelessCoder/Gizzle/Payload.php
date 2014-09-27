@@ -219,7 +219,7 @@ class Payload extends JsonDataMapper {
 			$base = '/' . implode('/', $segments) . '/' . $segment . '/';
 			$expectedFile = $base . $this->settingsFile;
 			$expectedFile = FALSE === file_exists($expectedFile) ? $base . 'Settings.yml' : $expectedFile;
-			$file = TRUE === file_exists($file) ? $file : NULL;
+			$file = TRUE === file_exists($expectedFile) ? $expectedFile : NULL;
 		}
 		return (array) (TRUE === file_exists($file) ? Yaml::parse($file) : array());
 	}
