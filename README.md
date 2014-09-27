@@ -108,14 +108,19 @@ namespace NamelessCoder\Gizzle\GizzlePlugins;
 class ExamplePlugin implements \NamelessCoder\Gizzle\PluginInterface {
 
 	/**
+	 * Returns TRUE to trigger this Plugin if branch
+	 * is "demo", as determined by REF of Payload.
+	 *
 	 * @param Payload $payload
 	 * @return boolean
 	 */
 	public function trigger(Payload $payload) {
-		return 'demo' === $payload->getRef();
+		return 'refs/heads/demo' === $payload->getRef();
 	}
 
 	/**
+	 * Send a thank you email to commit pusher.
+	 *
 	 * @param Payload $payload
 	 * @return void
 	 * @throws \RuntimeException
