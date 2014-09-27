@@ -33,7 +33,12 @@ $secret = 'mysecret';
 $gizzle = new \NamelessCoder\Gizzle\Payload($data, $secret);
 ```
 
-**When using the shipped public file in `./web/github-webhook.php` your secret token will be read from the file `./.secret`** (note: dot-file, placed outside the public web root).
+**When using the shipped public file in `./web/github-webhook.php` your secret token will be read from the file `./.secret`** (note: dot-file, placed outside the public web root). When first installing this package or your own package which uses this package, create the file whichever way you prefer and make sure it contains your "secret" key from GitHub. For example, using the shell:
+
+```bash
+cd /path/to/gizzle-or-your-package/
+echo "mysupersecretkey" > .secret
+```
 
 Running
 -------
