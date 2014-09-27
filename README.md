@@ -33,7 +33,7 @@ $secret = 'mysecret';
 $gizzle = new \NamelessCoder\Gizzle\Payload($data, $secret);
 ```
 
-When using the shipped public file in `./web/github-webhook.php` your secret token will be read from the file `./.secret` (note: dot-file, placed outside the public web root).
+**When using the shipped public file in `./web/github-webhook.php` your secret token will be read from the file `./.secret`** (note: dot-file, placed outside the public web root).
 
 Running
 -------
