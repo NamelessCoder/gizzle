@@ -123,6 +123,13 @@ class PayloadTest extends \PHPUnit_Framework_TestCase {
 		$this->assertEquals(1411238763, $error->getCode());
 	}
 
+	public function testHasResponseAfterProcessing() {
+		$payload = $this->getMock('NamelessCoder\\Gizzle\\Payload', array('validate'), array('{}', ''));
+		$response = $payload->process();
+		$result = $payload->getResponse();
+		$this->assertEquals($response, $result);
+	}
+
 	/**
 	 * @dataProvider getPropertyValueDataSets
 	 * @param string $property

@@ -7,6 +7,11 @@ namespace NamelessCoder\Gizzle;
 class Response {
 
 	/**
+	 * @var array
+	 */
+	protected $output = array();
+
+	/**
 	 * @var \Exception[]
 	 */
 	protected $errors = array();
@@ -43,6 +48,25 @@ class Response {
 	 */
 	public function getCode() {
 		return $this->code;
+	}
+
+	/**
+	 * @return array
+	 */
+	public function getOutput() {
+		return $this->output;
+	}
+
+	/**
+	 * @param PluginInterface $plugin
+	 * @param array $output
+	 */
+	public function addOutputFromPlugin(PluginInterface $plugin, array $output) {
+		$pluginClass = get_class($plugin) . ':' . spl_object_hash($plugin);
+		if (FALSE === isset($this->output[$pluginClass])) {
+			$this->output[$pluginClass] = array();
+		}
+		$this->output[$pluginClass] = array_merge($this->output[$pluginClass], $output);
 	}
 
 }

@@ -50,6 +50,7 @@ class SelfUpdatePlugin implements PluginInterface {
 		$command = $this->getCommand();
 		// run composer update
 		$this->invokeShellCommand($command, $output);
+		$payload->getResponse()->addOutputFromPlugin($this, $output);
 	}
 
 	/**

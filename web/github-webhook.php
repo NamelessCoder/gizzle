@@ -24,12 +24,18 @@ try {
 		$payload = new \NamelessCoder\Gizzle\Payload($data, $secret, $settingsFileArgument);
 	}
 	$response = $payload->process();
-	if (0 < $response->getCode()) {
+	if (0 === $response->getCode()) {
+		$output = $response->getOutput();
+		header('Content-type: application/json');
+		echo json_encode($output, JSON_HEX_QUOT);
+	} else {
+		header($_SERVER['SERVER_PROTOCOL'] . ' 500 Internal Server Error', TRUE, 500);
 		echo 'The following errors were reported:' . PHP_EOL;
 		foreach ($response->getErrors() as $error) {
 			echo $error->getMessage() . ' (' . $error->getCode() . ')' . PHP_EOL;
 		}
 	}
 } catch (\RuntimeException $error) {
+	header($_SERVER['SERVER_PROTOCOL'] . ' 500 Internal Server Error', TRUE, 500);
 	echo $error->getMessage() . ' (' . $error->getCode() . ')';
 }

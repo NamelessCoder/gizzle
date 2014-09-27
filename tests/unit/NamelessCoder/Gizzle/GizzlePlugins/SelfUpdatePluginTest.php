@@ -2,6 +2,7 @@
 namespace FluidTYPO3\FluidTYPO3Gizzle\Tests\Unit\GizzlePlugins;
 use NamelessCoder\Gizzle\GizzlePlugins\SelfUpdatePlugin;
 use NamelessCoder\Gizzle\Payload;
+use NamelessCoder\Gizzle\Response;
 
 /**
  * Class SelfUpdatePluginTest
@@ -9,7 +10,8 @@ use NamelessCoder\Gizzle\Payload;
 class SelfUpdatePluginTest extends \PHPUnit_Framework_TestCase {
 
 	public function testGetCommandReturnsExpectedCommand() {
-		$payload = $this->getMock('NamelessCoder\\Gizzle\\Payload', array('getRef'), array(), '', FALSE);
+		$payload = $this->getMock('NamelessCoder\\Gizzle\\Payload', array('getRef', 'getResponse'), array(), '', FALSE);
+		$payload->expects($this->once())->method('getResponse')->will($this->returnValue(new Response()));
 		$mock = $this->getMock('NamelessCoder\\Gizzle\\GizzlePlugins\\SelfUpdatePlugin', array('getCommand', 'invokeShellCommand'));
 		$mock->expects($this->once())->method('invokeShellCommand')->with('ls', array());
 		$mock->expects($this->once())->method('getCommand')->will($this->returnValue('ls'));
@@ -17,7 +19,8 @@ class SelfUpdatePluginTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	public function testInvokeShellCommandReturnsShellReturnCodeAndSetsOutput() {
-		$payload = $this->getMock('NamelessCoder\\Gizzle\\Payload', array('getRef'), array(), '', FALSE);
+		$payload = $this->getMock('NamelessCoder\\Gizzle\\Payload', array('getRef', 'getResponse'), array(), '', FALSE);
+		$payload->expects($this->once())->method('getResponse')->will($this->returnValue(new Response()));
 		$mock = $this->getMock('NamelessCoder\\Gizzle\\GizzlePlugins\\SelfUpdatePlugin', array('getCommand'));
 		$mock->expects($this->once())->method('getCommand')->will($this->returnValue('ls'));
 		$mock->process($payload);
@@ -26,7 +29,8 @@ class SelfUpdatePluginTest extends \PHPUnit_Framework_TestCase {
 	public function testProcessInvokesShellCommand() {
 		$mock = $this->getMock('NamelessCoder\\Gizzle\\GizzlePlugins\\SelfUpdatePlugin', array('invokeShellCommand'));
 		$mock->expects($this->once())->method('invokeShellCommand')->will($this->returnValue(0));
-		$payload = $this->getMock('NamelessCoder\\Gizzle\\Payload', array('getRef'), array(), '', FALSE);
+		$payload = $this->getMock('NamelessCoder\\Gizzle\\Payload', array('getResponse'), array(), '', FALSE);
+		$payload->expects($this->once())->method('getResponse')->will($this->returnValue(new Response()));
 		$mock->process($payload);
 	}
 

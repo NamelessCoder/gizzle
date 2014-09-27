@@ -1,10 +1,26 @@
 <?php
 namespace NamelessCoder\Gizzle\Tests\Unit;
+use NamelessCoder\Gizzle\Response;
 
 /**
  * Class ResponseTest
  */
 class ResponseTest extends \PHPUnit_Framework_TestCase {
+
+	public function addOutputFromPluginStoresOutput() {
+		$response = new Response();
+		$plugin = $this->getMockForAbstractClass('NamelessCoder\\Gizzle\\PluginInterface');
+		$hash = get_class($plugin) . ':' . spl_object_hash($plugin);
+		$expected = array($hash => array('foo' => 'bar'));
+		$response->addOutputFromPlugin($plugin, array('foo' => 'bar'));
+		$this->assertEquals($expected, $response->getOutput());
+	}
+
+	public function testGetOutputReturnsArray() {
+		$response = new Response();
+		$result = $response->getOutput();
+		$this->assertEquals(array(), $result);
+	}
 
 	/**
 	 * @dataProvider getPropertyValueDataSets

@@ -109,10 +109,16 @@ class Payload extends JsonDataMapper {
 	protected $plugins = array();
 
 	/**
+	 * @var Response
+	 */
+	protected $response;
+
+	/**
 	 * @param string $jsonData
 	 * @param string $secret
 	 */
 	public function __construct($jsonData, $secret, $settingsFile = 'settings/SelfUpdate.yml') {
+		$this->response = new Response();
 		$this->settingsFile = $settingsFile;
 		if (FALSE === $this->isCommandLine()) {
 			$this->validate($jsonData, $secret);
@@ -227,7 +233,6 @@ class Payload extends JsonDataMapper {
 			$this->loadPlugins($packages);
 		}
 		$errors = array();
-		$response = new Response();
 		foreach ($this->plugins as $plugin) {
 			if (TRUE === $plugin->trigger($this)) {
 				try {
@@ -238,10 +243,10 @@ class Payload extends JsonDataMapper {
 			}
 		}
 		if (0 < count($errors)) {
-			$response->setCode(1);
-			$response->setErrors($errors);
+			$this->response->setCode(1);
+			$this->response->setErrors($errors);
 		}
-		return $response;
+		return $this->response;
 	}
 
 	/**
@@ -440,6 +445,13 @@ class Payload extends JsonDataMapper {
 	 */
 	public function getRepository() {
 		return $this->repository;
+	}
+
+	/**
+	 * @return Response
+	 */
+	public function getResponse() {
+		return $this->response;
 	}
 
 }
