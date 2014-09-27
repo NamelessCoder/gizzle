@@ -8,10 +8,16 @@ use NamelessCoder\Gizzle\Entity;
  */
 class CommitTest extends \PHPUnit_Framework_TestCase {
 
+	/**
+	 * @var array
+	 */
+	protected $fixture = array(
+		'id' => '123',
+		'sha1' => '123'
+	);
+
 	public function testConstructorAcceptsFixtureJson() {
-		$data = file_get_contents('tests/fixtures/sample-payload.json');
-		$data = json_decode($data, JSON_OBJECT_AS_ARRAY);
-		new Commit($data['commit']);
+		new Commit($this->fixture);
 	}
 
 	/**
@@ -20,7 +26,7 @@ class CommitTest extends \PHPUnit_Framework_TestCase {
 	 * @param mixed $value
 	 */
 	public function testGetterAndSetter($property, $value) {
-		$payload = $this->getMock('NamelessCoder\\Gizzle\\Commit', array('__construct'), array('{}', ''));
+		$payload = $this->getMock('NamelessCoder\\Gizzle\\Commit', array('__construct'), array($this->fixture, ''));
 		$getter = 'get' . ucfirst($property);
 		$setter = 'set' . ucfirst($property);
 		$payload->$setter($value);

@@ -19,6 +19,14 @@ class PayloadTest extends \PHPUnit_Framework_TestCase {
 		$payload = $this->getMock('NamelessCoder\\Gizzle\\Payload', array('validate'), array($data, ''));
 	}
 
+	public function testReadSignatureHeader() {
+		// test: execution *without* this mocked request header will fail
+		$_SERVER['HTTP_X_HUB_SIGNATURE'] = 'sha1=' . hash_hmac('sha1', '{}', '');
+		$instance = $this->getMock('NamelessCoder\\Gizzle\\Payload', array('isCommandLine'), array(), '', FALSE);
+		$instance->expects($this->once())->method('isCommandLine')->will($this->returnValue(FALSE));
+		$instance->__construct('{}', '');
+	}
+
 	public function testLoadPlugins() {
 		$payload = $this->getMock('NamelessCoder\\Gizzle\\Payload', array('validate', 'loadPluginsFromPackage'), array('{}', ''));
 		$payload->expects($this->once())->method('loadPluginsFromPackage')
@@ -63,7 +71,12 @@ class PayloadTest extends \PHPUnit_Framework_TestCase {
 		$data = file_get_contents('tests/fixtures/sample-payload.json');
 		$secret = 'dummysecret';
 		$hash = hash_hmac('sha1', $data, $secret);
-		$payload = $this->getMock('NamelessCoder\\Gizzle\\Payload', array('readSignatureHeader'), array($data, $secret), '', FALSE);
+		$payload = $this->getMock(
+			'NamelessCoder\\Gizzle\\Payload',
+			array('readSignatureHeader', 'isCommandLine'),
+			array($data, $secret)
+		);
+		$payload->expects($this->once())->method('isCommandLine')->will($this->returnValue(FALSE));
 		$payload->expects($this->once())->method('readSignatureHeader')->will($this->returnValue('sha1=' . $hash));
 		$payload->__construct($data, $secret);
 	}
