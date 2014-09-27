@@ -8,6 +8,11 @@ use Symfony\Component\Yaml\Yaml;
 class Payload extends JsonDataMapper {
 
 	/**
+	 * @var string
+	 */
+	protected $settingsFile = NULL;
+
+	/**
 	 * @var array
 	 */
 	protected $propertyMap = array(
@@ -102,7 +107,8 @@ class Payload extends JsonDataMapper {
 	 * @param string $jsonData
 	 * @param string $secret
 	 */
-	public function __construct($jsonData, $secret) {
+	public function __construct($jsonData, $secret, $settingsFile = 'settings/SelfUpdate.yml') {
+		$this->settingsFile = $settingsFile;
 		if (FALSE === $this->isCommandLine()) {
 			$this->validate($jsonData, $secret);
 		}
@@ -197,7 +203,9 @@ class Payload extends JsonDataMapper {
 		$segments = explode('/', $folder);
 		$file = NULL;
 		while (NULL === $file && 0 < count($segments) && ($segment = array_pop($segments))) {
-			$expectedFile = '/' . implode('/', $segments) . '/' . $segment . '/Settings.yml';
+			$base = '/' . implode('/', $segments) . '/' . $segment . '/';
+			$expectedFile = $base . $this->settingsFile;
+			$expectedFile = FALSE === file_exists($expectedFile) ? $base . 'Settings.yml' : $expectedFile;
 			$file = TRUE === file_exists($file) ? $file : NULL;
 		}
 		return (array) TRUE === file_exists($file) ? Yaml::parse($file) : array();

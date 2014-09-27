@@ -80,6 +80,28 @@ It is possible for any Package to return Plugins from other packages as well - w
 
 Word of caution, though: the plugin can **only** be configured inside the scope of the Package that returned it. This means that **every** mandatory option should be present in each place the Plugin is used (in other words: you cannot configure global defaults).
 
+Multiple configurations
+-----------------------
+
+You can create any number of alternative configuration files. The name or path of the settings file can be provided manually when instanciating the Payload:
+
+```php
+$settingsFile = 'Settings/SpecialSettings.yml';
+$payload = new Payload($data = '{}', $secret = '', $settingsFile);
+```
+
+You can then place any number of such additional settings files as `./Settings/*.yml` and reference them by changing the third parameter.
+
+The default implementation that ships with Gizzle - the `github-webhook.php` file inside `./web/` - uses the `$_GET['settings']` argument as third parameter after validating that it contains the only allowed characters: `a-z`, `A-Z`, `0-9` and `/`. The latter is allowed in order to let you divide configuration files into any number of sub directories and reference them by path. Additionally, the file name itself must end with `.yml`, must not be a hidden file (dot-file) and finally must be a relative path (e.g. not starting with `/`).
+
+To select which configuration gets used simply set the expected GET parameter when adding the URL as webhook in GitHub's repository settings:
+
+```
+http://mydomain.foo/github-webhook.php?settings=Settings/SpecialSettings.yml
+```
+
+You can also use this to version your settings. If for example your design practices change and you require support for more than one repository design pattern, you can easily store the legacy configuration as a different settings file and by modifying the web hook URL in each repository, support both of your repositories' patterns simultaneously. A good example of when such versioning might become necessary is when switching to/from the "git flow" pattern or in multiple production branch scenarios where new production branches are continuously added and removed.
+
 Creating plugins
 ----------------
 

@@ -14,7 +14,15 @@ if ('cli' === php_sapi_name()) {
 }
 
 try {
-	$payload = new \NamelessCoder\Gizzle\Payload($data, $secret);
+	$settingsFileArgument = $_GET['settings'];
+	if (TRUE === empty($settingsFileArgument)) {
+		$payload = new \NamelessCoder\Gizzle\Payload($data, $secret);
+	} else {
+		$allowedPattern = '/[^a-z0-9\/]+\.yml/i';
+		$settingsFileArgument = trim($settingsFileArgument, './\\'); // no absolutes or dot-files, including escaped ones.
+		$settingsFileArgument = preg_match($allowedPattern, $settingsFileArgument) ? : $settingsFileArgument; // nullify if invalid
+		$payload = new \NamelessCoder\Gizzle\Payload($data, $secret, $settingsFileArgument);
+	}
 	$respone = $payload->process();
 	if (0 < $respone->getCode()) {
 		echo 'The following errors were reported:' . PHP_EOL;
