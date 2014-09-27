@@ -161,10 +161,12 @@ class Payload extends JsonDataMapper {
 	public function loadPlugins($_) {
 		$arguments = func_get_args();
 		foreach ($arguments as $possiblePackage) {
-			if (TRUE === is_array($possiblePackage)) {
-				array_walk($possiblePackage, array($this, 'loadPluginsFromPackage'));
-			} else {
+			if (FALSE === is_array($possiblePackage)) {
 				$this->plugins += $this->loadPluginsFromPackage($possiblePackage);
+			} else {
+				foreach ($possiblePackage as $package) {
+					$this->plugins += $this->loadPluginsFromPackage($package);
+				}
 			}
 		}
 		return $this;
@@ -186,7 +188,7 @@ class Payload extends JsonDataMapper {
 			foreach ($lister->getPluginClassNames() as $class) {
 				$plugins[] = $this->loadPluginInstance(
 					$class,
-					(array) TRUE === isset($settings[$package][$class]) ? $settings[$package][$class] : array()
+					(array) (TRUE === isset($settings[$package][$class]) ? $settings[$package][$class] : array())
 				);
 			}
 		}
@@ -219,7 +221,7 @@ class Payload extends JsonDataMapper {
 			$expectedFile = FALSE === file_exists($expectedFile) ? $base . 'Settings.yml' : $expectedFile;
 			$file = TRUE === file_exists($file) ? $file : NULL;
 		}
-		return (array) TRUE === file_exists($file) ? Yaml::parse($file) : array();
+		return (array) (TRUE === file_exists($file) ? Yaml::parse($file) : array());
 	}
 
 	/**
