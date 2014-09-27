@@ -88,8 +88,7 @@ It is possible for any Package to return Plugins from other packages as well - w
 
 Word of caution, though: the plugin can **only** be configured inside the scope of the Package that returned it. This means that **every** mandatory option should be present in each place the Plugin is used (in other words: you cannot configure global defaults).
 
-Multiple configurations
------------------------
+### Multiple configurations
 
 You can create any number of alternative configuration files. The name or path of the settings file can be provided manually when instanciating the Payload:
 
