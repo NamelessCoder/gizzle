@@ -1,117 +1,79 @@
 {
-	"sha": "08c601c1c0ce3e75430cb7041624df12f72682f9",
-	"name": "NamelessCoder/gizzle",
-	"target_url": "https://travis-ci.org/NamelessCoder/gizzle/builds/35809753",
-	"context": "continuous-integration/travis-ci",
-	"description": "The Travis CI build passed",
-	"state": "success",
-	"commit": {
-		"sha": "08c601c1c0ce3e75430cb7041624df12f72682f9",
-		"commit": {
+	"ref": "refs/heads/master",
+	"before": "a94a24ac7bbd1941bb26c94a21cbf28d4cd69f26",
+	"after": "c016c84e54a3faf9acf8e2ec39717727fbbb8649",
+	"created": false,
+	"deleted": false,
+	"forced": false,
+	"base_ref": null,
+	"compare": "https://github.com/NamelessCoder/gizzle/compare/a94a24ac7bbd...c016c84e54a3",
+	"commits": [
+		{
+			"id": "c016c84e54a3faf9acf8e2ec39717727fbbb8649",
+			"distinct": true,
+			"message": "[DOC] Add coverage badge",
+			"timestamp": "2014-09-26T00:10:51+02:00",
+			"url": "https://github.com/NamelessCoder/gizzle/commit/c016c84e54a3faf9acf8e2ec39717727fbbb8649",
 			"author": {
 				"name": "Claus Due",
 				"email": "claus@namelesscoder.net",
-				"date": "2014-09-20T14:24:58Z"
+				"username": "NamelessCoder"
 			},
 			"committer": {
 				"name": "Claus Due",
 				"email": "claus@namelesscoder.net",
-				"date": "2014-09-20T14:24:58Z"
+				"username": "NamelessCoder"
 			},
-			"message": "[TASK] Ignore .secret file",
-			"tree": {
-				"sha": "62dac250bf176402d2d8b8492d0adc5879eb3ff3",
-				"url": "https://api.github.com/repos/NamelessCoder/gizzle/git/trees/62dac250bf176402d2d8b8492d0adc5879eb3ff3"
-			},
-			"url": "https://api.github.com/repos/NamelessCoder/gizzle/git/commits/08c601c1c0ce3e75430cb7041624df12f72682f9",
-			"comment_count": 0
-		},
-		"url": "https://api.github.com/repos/NamelessCoder/gizzle/commits/08c601c1c0ce3e75430cb7041624df12f72682f9",
-		"html_url": "https://github.com/NamelessCoder/gizzle/commit/08c601c1c0ce3e75430cb7041624df12f72682f9",
-		"comments_url": "https://api.github.com/repos/NamelessCoder/gizzle/commits/08c601c1c0ce3e75430cb7041624df12f72682f9/comments",
-		"author": {
-			"login": "NamelessCoder",
-			"id": 2228052,
-			"avatar_url": "https://avatars.githubusercontent.com/u/2228052?v=2",
-			"gravatar_id": "6662d8c63604570c18a8d60b176185dc",
-			"url": "https://api.github.com/users/NamelessCoder",
-			"html_url": "https://github.com/NamelessCoder",
-			"followers_url": "https://api.github.com/users/NamelessCoder/followers",
-			"following_url": "https://api.github.com/users/NamelessCoder/following{/other_user}",
-			"gists_url": "https://api.github.com/users/NamelessCoder/gists{/gist_id}",
-			"starred_url": "https://api.github.com/users/NamelessCoder/starred{/owner}{/repo}",
-			"subscriptions_url": "https://api.github.com/users/NamelessCoder/subscriptions",
-			"organizations_url": "https://api.github.com/users/NamelessCoder/orgs",
-			"repos_url": "https://api.github.com/users/NamelessCoder/repos",
-			"events_url": "https://api.github.com/users/NamelessCoder/events{/privacy}",
-			"received_events_url": "https://api.github.com/users/NamelessCoder/received_events",
-			"type": "User",
-			"site_admin": false
-		},
-		"committer": {
-			"login": "NamelessCoder",
-			"id": 2228052,
-			"avatar_url": "https://avatars.githubusercontent.com/u/2228052?v=2",
-			"gravatar_id": "6662d8c63604570c18a8d60b176185dc",
-			"url": "https://api.github.com/users/NamelessCoder",
-			"html_url": "https://github.com/NamelessCoder",
-			"followers_url": "https://api.github.com/users/NamelessCoder/followers",
-			"following_url": "https://api.github.com/users/NamelessCoder/following{/other_user}",
-			"gists_url": "https://api.github.com/users/NamelessCoder/gists{/gist_id}",
-			"starred_url": "https://api.github.com/users/NamelessCoder/starred{/owner}{/repo}",
-			"subscriptions_url": "https://api.github.com/users/NamelessCoder/subscriptions",
-			"organizations_url": "https://api.github.com/users/NamelessCoder/orgs",
-			"repos_url": "https://api.github.com/users/NamelessCoder/repos",
-			"events_url": "https://api.github.com/users/NamelessCoder/events{/privacy}",
-			"received_events_url": "https://api.github.com/users/NamelessCoder/received_events",
-			"type": "User",
-			"site_admin": false
-		},
-		"parents": [
-			{
-				"sha": "1fd825d20f35e678fed1c96b6a0b45050d21e4f9",
-				"url": "https://api.github.com/repos/NamelessCoder/gizzle/commits/1fd825d20f35e678fed1c96b6a0b45050d21e4f9",
-				"html_url": "https://github.com/NamelessCoder/gizzle/commit/1fd825d20f35e678fed1c96b6a0b45050d21e4f9"
-			}
-		]
-	},
-	"branches": [
-		{
-			"name": "master",
-			"commit": {
-				"sha": "08c601c1c0ce3e75430cb7041624df12f72682f9",
-				"url": "https://api.github.com/repos/NamelessCoder/gizzle/commits/08c601c1c0ce3e75430cb7041624df12f72682f9"
-			}
+			"added": [
+
+			],
+			"removed": [
+
+			],
+			"modified": [
+				"README.md"
+			]
 		}
 	],
+	"head_commit": {
+		"id": "c016c84e54a3faf9acf8e2ec39717727fbbb8649",
+		"distinct": true,
+		"message": "[DOC] Add coverage badge",
+		"timestamp": "2014-09-26T00:10:51+02:00",
+		"url": "https://github.com/NamelessCoder/gizzle/commit/c016c84e54a3faf9acf8e2ec39717727fbbb8649",
+		"author": {
+			"name": "Claus Due",
+			"email": "claus@namelesscoder.net",
+			"username": "NamelessCoder"
+		},
+		"committer": {
+			"name": "Claus Due",
+			"email": "claus@namelesscoder.net",
+			"username": "NamelessCoder"
+		},
+		"added": [
+
+		],
+		"removed": [
+
+		],
+		"modified": [
+			"README.md"
+		]
+	},
 	"repository": {
 		"id": 24263912,
 		"name": "gizzle",
 		"full_name": "NamelessCoder/gizzle",
 		"owner": {
-			"login": "NamelessCoder",
-			"id": 2228052,
-			"avatar_url": "https://avatars.githubusercontent.com/u/2228052?v=2",
-			"gravatar_id": "6662d8c63604570c18a8d60b176185dc",
-			"url": "https://api.github.com/users/NamelessCoder",
-			"html_url": "https://github.com/NamelessCoder",
-			"followers_url": "https://api.github.com/users/NamelessCoder/followers",
-			"following_url": "https://api.github.com/users/NamelessCoder/following{/other_user}",
-			"gists_url": "https://api.github.com/users/NamelessCoder/gists{/gist_id}",
-			"starred_url": "https://api.github.com/users/NamelessCoder/starred{/owner}{/repo}",
-			"subscriptions_url": "https://api.github.com/users/NamelessCoder/subscriptions",
-			"organizations_url": "https://api.github.com/users/NamelessCoder/orgs",
-			"repos_url": "https://api.github.com/users/NamelessCoder/repos",
-			"events_url": "https://api.github.com/users/NamelessCoder/events{/privacy}",
-			"received_events_url": "https://api.github.com/users/NamelessCoder/received_events",
-			"type": "User",
-			"site_admin": false
+			"name": "NamelessCoder",
+			"email": "claus@namelesscoder.net"
 		},
 		"private": false,
 		"html_url": "https://github.com/NamelessCoder/gizzle",
 		"description": "Extremely light-weight GitHub Webhook Listener with plugin-based API for creating your own triggerered actions",
 		"fork": false,
-		"url": "https://api.github.com/repos/NamelessCoder/gizzle",
+		"url": "https://github.com/NamelessCoder/gizzle",
 		"forks_url": "https://api.github.com/repos/NamelessCoder/gizzle/forks",
 		"keys_url": "https://api.github.com/repos/NamelessCoder/gizzle/keys{/key_id}",
 		"collaborators_url": "https://api.github.com/repos/NamelessCoder/gizzle/collaborators{/collaborator}",
@@ -147,17 +109,17 @@
 		"notifications_url": "https://api.github.com/repos/NamelessCoder/gizzle/notifications{?since,all,participating}",
 		"labels_url": "https://api.github.com/repos/NamelessCoder/gizzle/labels{/name}",
 		"releases_url": "https://api.github.com/repos/NamelessCoder/gizzle/releases{/id}",
-		"created_at": "2014-09-20T13:49:06Z",
-		"updated_at": "2014-09-20T13:53:40Z",
-		"pushed_at": "2014-09-20T14:25:04Z",
+		"created_at": 1411220946,
+		"updated_at": "2014-09-23T06:47:46Z",
+		"pushed_at": 1411683056,
 		"git_url": "git://github.com/NamelessCoder/gizzle.git",
 		"ssh_url": "git@github.com:NamelessCoder/gizzle.git",
 		"clone_url": "https://github.com/NamelessCoder/gizzle.git",
 		"svn_url": "https://github.com/NamelessCoder/gizzle",
 		"homepage": null,
 		"size": 0,
-		"stargazers_count": 0,
-		"watchers_count": 0,
+		"stargazers_count": 2,
+		"watchers_count": 2,
 		"language": "PHP",
 		"has_issues": true,
 		"has_downloads": true,
@@ -168,14 +130,20 @@
 		"open_issues_count": 0,
 		"forks": 0,
 		"open_issues": 0,
-		"watchers": 0,
-		"default_branch": "master"
+		"watchers": 2,
+		"default_branch": "master",
+		"stargazers": 2,
+		"master_branch": "master"
+	},
+	"pusher": {
+		"name": "NamelessCoder",
+		"email": "claus@namelesscoder.net"
 	},
 	"sender": {
 		"login": "NamelessCoder",
 		"id": 2228052,
 		"avatar_url": "https://avatars.githubusercontent.com/u/2228052?v=2",
-		"gravatar_id": "6662d8c63604570c18a8d60b176185dc",
+		"gravatar_id": "",
 		"url": "https://api.github.com/users/NamelessCoder",
 		"html_url": "https://github.com/NamelessCoder",
 		"followers_url": "https://api.github.com/users/NamelessCoder/followers",
