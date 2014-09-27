@@ -23,8 +23,7 @@ Finally, configure your GitHub repository and add the URL to your virtual host, 
 
 If you choose to create your own package and include `namelesscoder/gizzle` at stability `dev-masster` you can use the library from any point in your own code. Or you can create your own `./web/` directory and just symlink to, or copy the file `../vendor/namelesscoder/gizzle/web/github-webhook.php` from inside your `web` folder.
 
-Security
---------
+### Security (secret file)
 
 Gizzle uses the `secret` (a token) which you enter in GitHub while setting up the web hook. Use the same secret token when initializing your Payload class. The secret token is required and must match, or the Payload throws a RuntimeException.
 
