@@ -85,7 +85,7 @@ function setStatus(\NamelessCoder\Gizzle\Payload $payload, \Milo\Github\Api $api
 	$url = sprintf(
 		'/repos/%s/%s/statuses/%s',
 		$payload->getRepository()->getOwner()->getUsername(),
-		$payload->getRepository()->getFullName(),
+		$payload->getRepository()->getName(),
 		$payload->getHead()->getSha1()
 	);
 	switch ($state) {
