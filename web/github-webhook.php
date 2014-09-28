@@ -60,9 +60,9 @@ function processSettingsFile($settingsFile, $data, $secret, &$output, \Milo\Gith
 	$settingsFile = urldecode($settingsFile);
 	$settingsFile = trim($settingsFile, './\\'); // no absolutes or dot-files, including escaped ones.
 	$settingsFile = preg_match($allowedPattern, $settingsFile) ? : $settingsFile; // nullify if invalid
-	$response = $payload->process();
 	$payload = new \NamelessCoder\Gizzle\Payload($data, $secret, $settingsFile);
 	$payload->setApi($api);
+	$response = $payload->process();
 	setStatus($payload, $api, 'pending', $buildNumber);
 	if (0 === $response->getCode()) {
 		$output += $response->getOutput();
