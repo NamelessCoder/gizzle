@@ -54,7 +54,7 @@ class SelfUpdatePlugin extends AbstractPlugin implements PluginInterface {
 	 * @return string
 	 */
 	protected function getCommand() {
-		return 'cd ..; `which git` pull; `which composer` install --no-dev --no-ansi';
+		return 'cd ..; `which git` pull; COMPOSER_HOME="/tmp/" `which composer` install --no-dev --no-ansi';
 	}
 
 }
