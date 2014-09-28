@@ -89,10 +89,10 @@ function setStatus(\NamelessCoder\Gizzle\Payload $payload, \Milo\Github\Api $api
 		$payload->getHead()->getSha1()
 	);
 	switch ($state) {
-		case 'pending': $desription = 'Waiting to hear from Gizzle...'; break;
-		case 'success': $desription = 'Gizzle build was successful!'; break;
-		case 'error': $desription = 'Gizzle reported an error!'; break;
-		case 'failure': $desription = 'Gizzle was unable to run the build!'; break;
+		case 'pending': $description = 'Waiting to hear from Gizzle...'; break;
+		case 'success': $description = 'Gizzle build was successful!'; break;
+		case 'error': $description = 'Gizzle reported an error!'; break;
+		case 'failure': $description = 'Gizzle was unable to run the build!'; break;
 		default:
 	}
 	$data = array(
