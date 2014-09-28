@@ -1,4 +1,14 @@
 <?php
+
+/**
+ * This file belongs to the NamelessCoder/Gizzle package
+ *
+ * Copyright (c) 2014, Claus Due
+ *
+ * Released under the MIT license, of which the full text
+ * was distributed with this package in file LICENSE.txt
+ */
+
 namespace NamelessCoder\Gizzle;
 
 use NamelessCoder\Gizzle\PluginInterface;
@@ -42,6 +52,15 @@ class AbstractPlugin implements PluginInterface {
 	 * @return void
 	 */
 	public function process(Payload $payload) {
+	}
+
+	/**
+	 * @param string $name
+	 * @param mixed $defaultValue
+	 * @return mixed
+	 */
+	protected function getSettingValue($name, $defaultValue = NULL) {
+		return TRUE === isset($this->settings[$name]) ? $this->settings[$name] : $defaultValue;
 	}
 
 }

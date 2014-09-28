@@ -1,5 +1,16 @@
 <?php
+
+/**
+ * This file belongs to the NamelessCoder/Gizzle package
+ *
+ * Copyright (c) 2014, Claus Due
+ *
+ * Released under the MIT license, of which the full text
+ * was distributed with this package in file LICENSE.txt
+ */
+
 namespace FluidTYPO3\FluidTYPO3Gizzle\Tests\Unit\GizzlePlugins;
+
 use NamelessCoder\Gizzle\GizzlePlugins\SelfUpdatePlugin;
 use NamelessCoder\Gizzle\Payload;
 use NamelessCoder\Gizzle\Response;

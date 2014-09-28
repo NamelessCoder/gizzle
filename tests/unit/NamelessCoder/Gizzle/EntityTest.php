@@ -1,5 +1,16 @@
 <?php
+
+/**
+ * This file belongs to the NamelessCoder/Gizzle package
+ *
+ * Copyright (c) 2014, Claus Due
+ *
+ * Released under the MIT license, of which the full text
+ * was distributed with this package in file LICENSE.txt
+ */
+
 namespace NamelessCoder\Gizzle\Tests\Unit;
+
 use NamelessCoder\Gizzle\Entity;
 
 /**
