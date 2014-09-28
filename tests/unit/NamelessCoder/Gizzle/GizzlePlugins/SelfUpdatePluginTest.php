@@ -34,13 +34,6 @@ class SelfUpdatePluginTest extends \PHPUnit_Framework_TestCase {
 		$mock->process($payload);
 	}
 
-	public function testInitializeSetsSettings() {
-		$mock = new SelfUpdatePlugin();
-		$mock->initialize(array('foo' => 'bar'));
-		$result = $this->getObjectAttribute($mock, 'settings');
-		$this->assertEquals(array('foo' => 'bar'), $result);
-	}
-
 	/**
 	 * @dataProvider getExpectedSettingsAndTriggerResults
 	 * @param string $payloadBranch

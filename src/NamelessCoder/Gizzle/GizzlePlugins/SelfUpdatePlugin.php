@@ -1,31 +1,17 @@
 <?php
 namespace NamelessCoder\Gizzle\GizzlePlugins;
 
+use NamelessCoder\Gizzle\AbstractPlugin;
 use NamelessCoder\Gizzle\Payload;
 use NamelessCoder\Gizzle\PluginInterface;
 
 /**
  * Class SelfUpdatePlugin
  */
-class SelfUpdatePlugin implements PluginInterface {
+class SelfUpdatePlugin extends AbstractPlugin implements PluginInterface {
 
 	const OPTION_ENABLED = 'enabled';
 	const OPTION_BRANCH = 'branch';
-
-	/**
-	 * @var array
-	 */
-	protected $settings = array();
-
-	/**
-	 * Initialize the plugin with an array of settings.
-	 *
-	 * @param array $settings
-	 * @return void
-	 */
-	public function initialize(array $settings) {
-		$this->settings = $settings;
-	}
 
 	/**
 	 * This plugin will always trigger
