@@ -1,8 +1,8 @@
 {
     "name": "namelesscoder/gizzle",
     "description": "GitHub Webhook Listener with plugin-based API for creating your own triggerered actions",
-    "license": "GPLv3",
-    "version": "0.1.0",
+    "license": "MIT",
+    "version": "1.0.0",
     "authors": [
         {
             "name": "Claus Due",
