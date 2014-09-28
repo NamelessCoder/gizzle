@@ -14,7 +14,7 @@ if ('cli' === php_sapi_name()) {
 }
 
 try {
-	$settingsFileArgument = urldecode($_GET['settings']);
+	$settingsFileArgument = $_GET['settings'];
 	if (TRUE === empty($settingsFileArgument)) {
 		processSettingsFile('Settings.yml', $data, $secret);
 	} elseif (FALSE === is_array($settingsFileArgument)) {
@@ -32,9 +32,10 @@ try {
 
 function processSettingsFile($settingsFile, $data, $secret) {
 	$allowedPattern = '/[^a-z0-9\/]+\.yml/i';
-	$settingsFileArgument = trim($settingsFileArgument, './\\'); // no absolutes or dot-files, including escaped ones.
-	$settingsFileArgument = preg_match($allowedPattern, $settingsFileArgument) ? : $settingsFileArgument; // nullify if invalid
-	$payload = new \NamelessCoder\Gizzle\Payload($data, $secret, $settingsFileArgument);
+	$settingsFile = urldecode($settingsFile);
+	$settingsFile = trim($settingsFile, './\\'); // no absolutes or dot-files, including escaped ones.
+	$settingsFile = preg_match($allowedPattern, $settingsFile) ? : $settingsFile; // nullify if invalid
+	$payload = new \NamelessCoder\Gizzle\Payload($data, $secret, $settingsFile);
 	$response = $payload->process();
 	if (0 === $response->getCode()) {
 		$output = $response->getOutput();
