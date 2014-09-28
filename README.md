@@ -1,7 +1,7 @@
 Gizzle
 ======
 
-[![Build Status](https://travis-ci.org/NamelessCoder/gizzle.svg?branch=master)](https://travis-ci.org/NamelessCoder/gizzle) [![Coverage Status](https://img.shields.io/coveralls/NamelessCoder/gizzle.svg)](https://coveralls.io/r/NamelessCoder/gizzle) [![Reference Status](https://www.versioneye.com/php/namelesscoder:gizzle/reference_badge.svg?style=flat)](https://www.versioneye.com/php/namelesscoder:gizzle/references) [![Dependency Status](https://www.versioneye.com/php/namelesscoder:gizzle/1.0.0/badge.svg)](https://www.versioneye.com/php/namelesscoder:gizzle/1.0.0)
+[![Build Status](https://travis-ci.org/NamelessCoder/gizzle.svg?branch=master)](https://travis-ci.org/NamelessCoder/gizzle) [![Coverage Status](https://img.shields.io/coveralls/NamelessCoder/gizzle.svg)](https://coveralls.io/r/NamelessCoder/gizzle) [![Reference Status](https://www.versioneye.com/php/namelesscoder:gizzle/reference_badge.svg)](https://www.versioneye.com/php/namelesscoder:gizzle/references) [![Dependency Status](https://www.versioneye.com/php/namelesscoder:gizzle/1.0.0/badge.svg)](https://www.versioneye.com/php/namelesscoder:gizzle/1.0.0)
 
 A tiny GitHub Webhook Listener which can be easily extended with plugins.
 
