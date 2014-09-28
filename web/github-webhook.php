@@ -16,12 +16,12 @@ if ('cli' === php_sapi_name()) {
 try {
 	$settingsFileArgument = urldecode($_GET['settings']);
 	if (TRUE === empty($settingsFileArgument)) {
-		processSettingsFile('Settings.yml');
+		processSettingsFile('Settings.yml', $data, $secret);
 	} elseif (FALSE === is_array($settingsFileArgument)) {
-		processSettingsFile($settingsFileArgument);
+		processSettingsFile($settingsFileArgument, $data, $secret);
 	} else {
 		foreach ($settingsFileArgument as $settingsFile) {
-			processSettingsFile($settingsFile);
+			processSettingsFile($settingsFile, $data, $secret);
 		}
 	}
 } catch (\RuntimeException $error) {
