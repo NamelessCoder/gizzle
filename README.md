@@ -117,6 +117,44 @@ Which causes first `./Settings/SpecialSettings.yml` and then `./Settings/OtherSe
 
 You can also use this to version your settings. If for example your design practices change and you require support for more than one repository design pattern, you can easily store the legacy configuration as a different settings file and by modifying the web hook URL in each repository, support both of your repositories' patterns simultaneously. A good example of when such versioning might become necessary is when switching to/from the "git flow" pattern or in multiple production branch scenarios where new production branches are continuously added and removed.
 
+Updating commit status
+----------------------
+
+If you wish to make Gizzle update the HEAD commit of the Payload as it gets processed (one status per settings file that processes the Payload), Gizzle supports a GitHub personal access token which, like the `.secret` file, is placed in the project root folder and is named `.token`. A token is a 32-character string with randomized letters and numbers.
+
+To obtain a personal access token:
+
+1. In GitHub, under account settings, [generate yourself a new Access Token](https://github.com/settings/applications#personal-access-tokens).
+2. Make sure you associate this token with at least permissions to access status and access (public) repositories. If any plugins require additional permissions, each should document which - and you should add permissions as required.
+3. Copy the token and insert it in the file `.token` in the project root folder.
+4. Do not commit the token file! Instead, add it to git ignore either locally or for your project. The token is **sensitive information** and should never be shared.
+
+When present, the token is read from this file and used to initialize the [GitHub API used by Gizzle](https://github.com/milo/github-api). The API can then be used by Gizzle and Gizzle plugins to perform any action which you permit.
+
+Resources:
+
+* [Access Token generation in GitHub account](https://github.com/settings/applications#personal-access-tokens)
+* [Documentation for every possible action you can perform through this GitHub API](https://developer.github.com/v3/)
+* [Documentation for how to use the API itself](https://github.com/milo/github-api/wiki)
+
+### Usage of API from plugins
+
+The API can be accessed via the `$payload` argument that is provided to the essential methods on plugins. To access the API:
+
+```php
+$api = $payload->getApi();
+if (TRUE === empty($api->getToken()) {
+	// avoid doing anything with the API when there is
+	// no token loaded; UNLESS you are able to provide
+	// your own token from inside the plugin code.
+} else {
+	$response = $api->get('/emoji');
+	$emojis = $api->decode($response);
+}
+```
+
+Note the additional decoding step which is required when you need to read data from the response. An `stdClass` is returned with public properties allowing you to read response data - see the official GitHub v3 API reference for available data for each action.
+
 Creating plugins
 ----------------
 

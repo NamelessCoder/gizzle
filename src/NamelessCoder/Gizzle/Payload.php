@@ -1,5 +1,7 @@
 <?php
 namespace NamelessCoder\Gizzle;
+
+use Milo\Github\Api;
 use Symfony\Component\Yaml\Yaml;
 
 /**
@@ -111,7 +113,12 @@ class Payload extends JsonDataMapper {
 	/**
 	 * @var Response
 	 */
-	protected $response;
+	protected $response = NULL;
+
+	/**
+	 * @var Api
+	 */
+	protected $api = NULL;
 
 	/**
 	 * @param string $jsonData
@@ -454,6 +461,21 @@ class Payload extends JsonDataMapper {
 	 */
 	public function getResponse() {
 		return $this->response;
+	}
+
+	/**
+	 * @param Api $api
+	 * @return void
+	 */
+	public function setApi(Api $api) {
+		$this->api = $api;
+	}
+
+	/**
+	 * @return Api
+	 */
+	public function getApi() {
+		return $this->api;
 	}
 
 }

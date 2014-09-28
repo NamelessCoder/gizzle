@@ -1,6 +1,7 @@
 <?php
 namespace NamelessCoder\Gizzle\Tests\Unit;
 
+use Milo\Github\Api;
 use NamelessCoder\Gizzle\Branch;
 use NamelessCoder\Gizzle\Commit;
 use NamelessCoder\Gizzle\Entity;
@@ -162,6 +163,7 @@ class PayloadTest extends \PHPUnit_Framework_TestCase {
 			array('organization', new Entity()),
 			array('ref', uniqid()),
 			array('repository', new Repository()),
+			array('api', new Api())
 		);
 	}
 
