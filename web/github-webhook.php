@@ -88,14 +88,15 @@ function processSettingsFile($settingsFile, $data, $secret, &$output, \Milo\Gith
 
 function setStatus(\NamelessCoder\Gizzle\Payload $payload, \Milo\Github\Api $api, $state, $buildNumber) {
 	$token = $api->getToken();
-	if (TRUE === empty($token)) {
+	$head = $payload->getHead();
+	if (TRUE === empty($token) || TRUE === empty($head)) {
 		return;
 	}
 	$url = sprintf(
 		'/repos/%s/%s/statuses/%s',
 		$payload->getRepository()->getOwner()->getName(),
 		$payload->getRepository()->getName(),
-		$payload->getHead()->getId()
+		$head->getId()
 	);
 	switch ($state) {
 		case 'pending': $description = 'Waiting to hear from Gizzle...'; break;
