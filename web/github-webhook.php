@@ -86,7 +86,7 @@ function setStatus(\NamelessCoder\Gizzle\Payload $payload, \Milo\Github\Api $api
 		'/repos/%s/%s/statuses/%s',
 		$payload->getRepository()->getOwner()->getName(),
 		$payload->getRepository()->getName(),
-		$payload->getHead()->getSha1()
+		$payload->getHead()->getId()
 	);
 	switch ($state) {
 		case 'pending': $description = 'Waiting to hear from Gizzle...'; break;
