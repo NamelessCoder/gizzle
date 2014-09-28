@@ -28,12 +28,12 @@ try {
 		$api->setToken($token);
 	}
 	if (TRUE === empty($settingsFileArgument)) {
-		$payload = processSettingsFile('Settings.yml', $data, $secret, $token, $output, $api, $index);
+		$payload = processSettingsFile('Settings.yml', $data, $secret, $output, $api, $index);
 	} elseif (FALSE === is_array($settingsFileArgument)) {
-		$payload = processSettingsFile($settingsFileArgument, $data, $secret, $token, $output, $api, $index);
+		$payload = processSettingsFile($settingsFileArgument, $data, $secret, $output, $api, $index);
 	} else {
 		foreach ($settingsFileArgument as $index => $settingsFile) {
-			processSettingsFile($settingsFile, $data, $secret, $token, $output, $api, $index);
+			processSettingsFile($settingsFile, $data, $secret, $output, $api, $index);
 		}
 	}
 	header('Content-type: application/json');
