@@ -21,7 +21,8 @@ class Payload extends JsonDataMapper {
 		'commit' => 'head',
 		'compare' => 'comparisonUrl',
 		'after' => 'parent',
-		'before' => 'child'
+		'before' => 'child',
+		'head_commit' => 'head'
 	);
 
 	/**
