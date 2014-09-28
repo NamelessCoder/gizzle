@@ -3,6 +3,7 @@
     "description": "GitHub Webhook Listener with plugin-based API for creating your own triggerered actions",
     "license": "MIT",
     "version": "1.0.0",
+	"keywords": ["php", "git", "github", "webhook", "hook", "plugin"],
     "authors": [
         {
             "name": "Claus Due",
