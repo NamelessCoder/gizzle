@@ -68,7 +68,7 @@ class SelfUpdatePlugin implements PluginInterface {
 	 * @return string
 	 */
 	protected function getCommand() {
-		return 'cd .. && `which git` pull && `which composer` install --no-dev --no-ansi';
+		return 'cd ..; `which git` pull; `which composer` install --no-dev --no-ansi';
 	}
 
 }
