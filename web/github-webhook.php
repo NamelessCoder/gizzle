@@ -28,9 +28,9 @@ try {
 		$api->setToken($token);
 	}
 	if (TRUE === empty($settingsFileArgument)) {
-		$payload = processSettingsFile('Settings.yml', $data, $secret, $output, $api, $index);
+		$payload = processSettingsFile('Settings.yml', $data, $secret, $output, $api);
 	} elseif (FALSE === is_array($settingsFileArgument)) {
-		$payload = processSettingsFile($settingsFileArgument, $data, $secret, $output, $api, $index);
+		$payload = processSettingsFile($settingsFileArgument, $data, $secret, $output, $api);
 	} else {
 		foreach ($settingsFileArgument as $index => $settingsFile) {
 			processSettingsFile($settingsFile, $data, $secret, $output, $api, $index);
