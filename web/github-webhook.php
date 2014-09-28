@@ -75,7 +75,8 @@ function processSettingsFile($settingsFile, $data, $secret, &$output, \Milo\Gith
 }
 
 function setStatus(\NamelessCoder\Gizzle\Payload $payload, \Milo\Github\Api $api, $state, $buildNumber) {
-	if (TRUE === empty($api->getToken())) {
+	$token = $api->getToken();
+	if (TRUE === empty($token)) {
 		return;
 	}
 	$url = sprintf(
