@@ -16,13 +16,25 @@ if ('cli' === php_sapi_name()) {
 try {
 	$settingsFileArgument = urldecode($_GET['settings']);
 	if (TRUE === empty($settingsFileArgument)) {
-		$payload = new \NamelessCoder\Gizzle\Payload($data, $secret);
+		processSettingsFile('Settings.yml');
+	} elseif (FALSE === is_array($settingsFileArgument)) {
+		processSettingsFile($settingsFileArgument);
 	} else {
-		$allowedPattern = '/[^a-z0-9\/]+\.yml/i';
-		$settingsFileArgument = trim($settingsFileArgument, './\\'); // no absolutes or dot-files, including escaped ones.
-		$settingsFileArgument = preg_match($allowedPattern, $settingsFileArgument) ? : $settingsFileArgument; // nullify if invalid
-		$payload = new \NamelessCoder\Gizzle\Payload($data, $secret, $settingsFileArgument);
+		foreach ($settingsFileArgument as $settingsFile) {
+			processSettingsFile($settingsFile);
+		}
 	}
+} catch (\RuntimeException $error) {
+	header($_SERVER['SERVER_PROTOCOL'] . ' 500 Internal Server Error', TRUE, 500);
+	echo $error->getMessage() . ' (' . $error->getCode() . ')';
+}
+
+
+function processSettingsFile($settingsFile, $data, $secret) {
+	$allowedPattern = '/[^a-z0-9\/]+\.yml/i';
+	$settingsFileArgument = trim($settingsFileArgument, './\\'); // no absolutes or dot-files, including escaped ones.
+	$settingsFileArgument = preg_match($allowedPattern, $settingsFileArgument) ? : $settingsFileArgument; // nullify if invalid
+	$payload = new \NamelessCoder\Gizzle\Payload($data, $secret, $settingsFileArgument);
 	$response = $payload->process();
 	if (0 === $response->getCode()) {
 		$output = $response->getOutput();
@@ -35,7 +47,4 @@ try {
 			echo $error->getMessage() . ' (' . $error->getCode() . ')' . PHP_EOL;
 		}
 	}
-} catch (\RuntimeException $error) {
-	header($_SERVER['SERVER_PROTOCOL'] . ' 500 Internal Server Error', TRUE, 500);
-	echo $error->getMessage() . ' (' . $error->getCode() . ')';
 }

@@ -107,6 +107,14 @@ To select which configuration gets used simply set the expected GET parameter wh
 http://mydomain.foo/github-webhook.php?settings=Settings/SpecialSettings.yml
 ```
 
+And you can specify multiple settings files which must all be processed by specifying arguments as an array:
+
+```
+http://mydomain.foo/github-webhook.php?settings[]=Settings/SpecialSettings.yml&settings[]=Settings/OtherSettings.yml
+```
+
+Which causes first `./Settings/SpecialSettings.yml` and then `./Settings/OtherSettings.yml` to be processed in the same execution. Any error caused by one will cause the job to exit, throwing only the first error which occurred.
+
 You can also use this to version your settings. If for example your design practices change and you require support for more than one repository design pattern, you can easily store the legacy configuration as a different settings file and by modifying the web hook URL in each repository, support both of your repositories' patterns simultaneously. A good example of when such versioning might become necessary is when switching to/from the "git flow" pattern or in multiple production branch scenarios where new production branches are continuously added and removed.
 
 Creating plugins
