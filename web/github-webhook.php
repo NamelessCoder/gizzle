@@ -12,7 +12,8 @@ if (TRUE === file_exists($secretFile)) {
 	$secret = trim(file_get_contents($secretFile));
 }
 if (TRUE === file_exists($tokenFile)) {
-	$token = trim(file_get_contents($tokenFile));
+	$tokenSecret = trim(file_get_contents($tokenFile));
+	$token = new \Milo\Github\OAuth\Token($tokenSecret);
 }
 if ('cli' === php_sapi_name()) {
 	$data = file_get_contents('php://stdin');
@@ -23,7 +24,9 @@ if ('cli' === php_sapi_name()) {
 try {
 	$settingsFileArgument = $_GET['settings'];
 	$api = new \Milo\Github\Api();
-	$api->setToken($token);
+	if (NULL !== $token) {
+		$api->setToken($token);
+	}
 	if (TRUE === empty($settingsFileArgument)) {
 		$payload = processSettingsFile('Settings.yml', $data, $secret, $token, $output, $api, $index);
 	} elseif (FALSE === is_array($settingsFileArgument)) {
