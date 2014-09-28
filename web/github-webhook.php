@@ -33,6 +33,10 @@ try {
 	$output['messages'][] = $error->getMessage() . ' (' . $error->getCode() . ')';
 }
 
+if (0 === count($output['messages'])) {
+	unset($output['messages']);
+}
+
 echo json_encode($output, JSON_HEX_QUOT | JSON_PRETTY_PRINT);
 
 
