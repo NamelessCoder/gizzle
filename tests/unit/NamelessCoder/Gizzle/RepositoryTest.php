@@ -37,6 +37,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase {
 			array('description', uniqid()),
 			array('forks', rand(99,999)),
 			array('fork', TRUE),
+			array('fullName', uniqid()),
 			array('hasDownloads', TRUE),
 			array('hasIssues', TRUE),
 			array('hasWiki', TRUE),

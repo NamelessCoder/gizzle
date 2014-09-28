@@ -12,7 +12,7 @@ class Repository extends JsonDataMapper {
 	protected $propertyMap = array(
 		'created_at' => 'created',
 		'pushed_at' => 'created',
-		'full_name' => 'name',
+		'full_name' => 'fullName',
 		'stargazers_count' => 'stargazers',
 		'watchers_count' => 'watchers',
 		'default_branch' => 'masterBranch',
@@ -50,6 +50,11 @@ class Repository extends JsonDataMapper {
 	 * @var integer
 	 */
 	protected $forks = NULL;
+
+	/**
+	 * @var string
+	 */
+	protected $fullName = NULL;
 
 	/**
 	 * @var boolean
@@ -184,6 +189,20 @@ class Repository extends JsonDataMapper {
 	 */
 	public function getFork() {
 		return $this->fork;
+	}
+
+	/**
+	 * @param string $fullName
+	 */
+	public function setFullName($fullName) {
+		$this->fullName = $fullName;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getFullName() {
+		return $this->fullName;
 	}
 
 	/**
