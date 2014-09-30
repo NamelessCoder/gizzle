@@ -28,37 +28,250 @@
     <div id="content-wrapper">
       <div class="inner clearfix">
         <section id="main-content">
-          <h3>
-<a name="welcome-to-github-pages" class="anchor" href="#welcome-to-github-pages"><span class="octicon octicon-link"></span></a>Welcome to GitHub Pages.</h3>
+          <h1>
+<a name="gizzle" class="anchor" href="#gizzle"><span class="octicon octicon-link"></span></a>Gizzle</h1>
 
-<p>This automatic page generator is the easiest way to create beautiful pages for all of your projects. Author your page content here using GitHub Flavored Markdown, select a template crafted by a designer, and publish. After your page is generated, you can check out the new branch:</p>
+<p><a href="https://travis-ci.org/NamelessCoder/gizzle"><img src="https://travis-ci.org/NamelessCoder/gizzle.svg?branch=master" alt="Build Status"></a> <a href="https://coveralls.io/r/NamelessCoder/gizzle"><img src="https://img.shields.io/coveralls/NamelessCoder/gizzle.svg" alt="Coverage Status"></a> <a href="https://www.versioneye.com/php/namelesscoder:gizzle/references"><img src="https://www.versioneye.com/php/namelesscoder:gizzle/reference_badge.svg" alt="Reference Status"></a> <a href="https://www.versioneye.com/user/projects/5427fddb8200670d1400003b"><img src="https://www.versioneye.com/user/projects/5427fddb8200670d1400003b/badge.svg" alt="Dependency Status"></a> <a href="https://packagist.org/packages/namelesscoder/gizzle"><img src="https://poser.pugx.org/namelesscoder/gizzle/v/stable.svg" alt="Latest Stable Version"></a> <a href="https://packagist.org/packages/namelesscoder/gizzle"><img src="https://poser.pugx.org/namelesscoder/gizzle/downloads.svg" alt="Total Downloads"></a></p>
 
-<pre><code>$ cd your_repo_root/repo_name
-$ git fetch origin
-$ git checkout gh-pages
+<p>A tiny GitHub Webhook Listener which can be easily extended with plugins.</p>
+
+<h2>
+<a name="installing" class="anchor" href="#installing"><span class="octicon octicon-link"></span></a>Installing</h2>
+
+<p>Run:</p>
+
+<div class="highlight highlight-bash"><pre>git clone https://github.com/NamelessCoder/gizzle.git <span class="o">&amp;&amp;</span> <span class="nb">cd </span>gizzle
+composer install
+</pre></div>
+
+<p>And add a (publicly accessible!) virtual host for your favorite HTTP server pointing to <code>./web/</code> inside this folder or simply include the package in your own composer application.</p>
+
+<p>Finally, configure your GitHub repository and add the URL to your virtual host, pointing to the file <code>/github-webhook.php</code>.</p>
+
+<h3>
+<a name="from-other-packages" class="anchor" href="#from-other-packages"><span class="octicon octicon-link"></span></a>From other packages</h3>
+
+<p>If you choose to create your own package and include <code>namelesscoder/gizzle</code> at stability <code>dev-masster</code> you can use the library from any point in your own code. Or you can create your own <code>./web/</code> directory and just symlink to, or copy the file <code>../vendor/namelesscoder/gizzle/web/github-webhook.php</code> from inside your <code>web</code> folder.</p>
+
+<h3>
+<a name="security-secret-file-and-personal-token" class="anchor" href="#security-secret-file-and-personal-token"><span class="octicon octicon-link"></span></a>Security (secret file and personal token)</h3>
+
+<p>Gizzle uses the <code>secret</code> (a token) which you enter in GitHub while setting up the web hook. Use the same secret token when initializing your Payload class. The secret token is required and must match, or the Payload throws a RuntimeException.</p>
+
+<div class="highlight highlight-php"><pre><span class="nv">$data</span> <span class="o">=</span> <span class="nb">file_get_contents</span><span class="p">(</span><span class="s1">'php://input'</span><span class="p">);</span>
+<span class="nv">$secret</span> <span class="o">=</span> <span class="s1">'mysecret'</span><span class="p">;</span>
+<span class="nv">$gizzle</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">\NamelessCoder\Gizzle\Payload</span><span class="p">(</span><span class="nv">$data</span><span class="p">,</span> <span class="nv">$secret</span><span class="p">);</span>
+</pre></div>
+
+<p><strong>When using the shipped public file in <code>./web/github-webhook.php</code> your secret token will be read from the file <code>./.secret</code></strong> (note: dot-file, placed outside the public web root). When first installing this package or your own package which uses this package, create the file whichever way you prefer and make sure it contains your "secret" key from GitHub. For example, using the shell:</p>
+
+<div class="highlight highlight-bash"><pre><span class="nb">cd</span> /path/to/gizzle-or-your-package/
+<span class="nb">echo</span> <span class="s2">"mysupersecretkey"</span> &gt; .secret
+</pre></div>
+
+<p>Gizzle can also use a personal access token to "talk back" to GitHub. You can utilize this to do things like comment on the commit and update it with a status (which is displayed when the commit is part of a pull request) - and even automatically merge branches. The default implementation for every plugin will <em>automatically update the commit status with pending, success or error as the Payload execution progresses</em>, but other plugins can access the GitHub API from Gizzle plugins. All you have to do is make sure a special <code>.token</code> file exists and contains your personal access token - which, like the <code>.secret</code> file - is sensitive information you should never share. The <code>.token</code> file is created the exact same way as the <code>.secret</code> file and you can obtain a new access token to use just with Gizzle. <a href="#updating-commit-status">Read more about how in the section about the GitHub API integration</a>.</p>
+
+<h2>
+<a name="running" class="anchor" href="#running"><span class="octicon octicon-link"></span></a>Running</h2>
+
+<p>The <code>./web/github-webhook.php</code> file which is shipped with this repository can be used as URL of your web hook when configuring it in GitHub - or you can manually process the payload from within your own application and use its URL instead:</p>
+
+<div class="highlight highlight-php"><pre><span class="nv">$data</span> <span class="o">=</span> <span class="nb">file_get_contents</span><span class="p">(</span><span class="s1">'php://input'</span><span class="p">);</span>
+<span class="nv">$secret</span> <span class="o">=</span> <span class="s1">'mysecret'</span><span class="p">;</span>
+<span class="nv">$gizzle</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">\NamelessCoder\Gizzle\Payload</span><span class="p">(</span><span class="nv">$data</span><span class="p">,</span> <span class="nv">$secret</span><span class="p">);</span>
+<span class="c1">// Plugins are then loaded from the packages used in, and in the order of, Settings.yml (see below)</span>
+<span class="c1">// alternative loading 1: $gizzle-&gt;loadPlugins('MyVendor\\MyPackage');</span>
+<span class="c1">// alternative loading 2: $gizzle-&gt;loadPlugins($arrayOfPackageNames);</span>
+<span class="c1">// alternative loading 3: $gizzle-&gt;loadPlugins($package1, $package2, $package3);</span>
+<span class="c1">// using either alternative causes the settings-based loading to be skipped, but settings are still used.</span>
+
+<span class="sd">/** @var \NamelessCoder\Gizzle\Response $response */</span>
+<span class="nv">$response</span> <span class="o">=</span> <span class="nv">$gizzle</span><span class="o">-&gt;</span><span class="na">process</span><span class="p">();</span>
+
+<span class="sd">/** @var integer $code */</span>
+<span class="nv">$code</span> <span class="o">=</span> <span class="nv">$response</span><span class="o">-&gt;</span><span class="na">getCode</span><span class="p">();</span>
+<span class="c1">// code &gt;0 indicates errors are present; value indicates exact error. Code =0 means no errors.</span>
+
+<span class="sd">/** @var \RuntimeException[] $errors */</span>
+<span class="nv">$errors</span> <span class="o">=</span> <span class="nv">$response</span><span class="o">-&gt;</span><span class="na">getErrors</span><span class="p">();</span>
+</pre></div>
+
+<h2>
+<a name="configuring-plugins" class="anchor" href="#configuring-plugins"><span class="octicon octicon-link"></span></a>Configuring plugins</h2>
+
+<p>Not all plugins support configuration but those that do can be configured by placing a <code>Settings.yml</code> file in the root of your project or in any folder leading up to the file which creates the Payload instance. The first file found in a reverse search gets used and should contain all the configuration required by your plugins.</p>
+
+<p>The format of the configuration file is:</p>
+
+<div class="highlight highlight-yaml"><pre><span class="l-Scalar-Plain">Vendor\PackageName</span><span class="p-Indicator">:</span>
+  <span class="l-Scalar-Plain">Vendor\PackageName\GizzlePlugins\OnePlugin</span><span class="p-Indicator">:</span>
+    <span class="l-Scalar-Plain">enabled</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">true</span>
+  <span class="l-Scalar-Plain">AnotherVendor\AnotherPackageName\GizzlePlugins\OtherPlugin</span><span class="p-Indicator">:</span>
+    <span class="l-Scalar-Plain">enabled</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">true</span>
+<span class="l-Scalar-Plain">OtherVendor\ThirdPackage</span><span class="p-Indicator">:</span>
+  <span class="l-Scalar-Plain">OtherVendor\ThirdPackage\GizzlePlugins\ThirdPlugin</span><span class="p-Indicator">:</span>
+    <span class="l-Scalar-Plain">enabled</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">true</span>
+</pre></div>
+
+<p>It is possible for any Package to return Plugins from other packages as well - which is ideal when constructing Packages which include and provide configuration for many plugins. Such a package might return plugin names which <strong>don't belong to that Package</strong>, and because the class name is used as key in the configuration, <strong>it is possible to configure the same Plugin differently when it is provided by Package A and Package B.</strong> This is done to increase reusability of smaller plugins which can serve many purposes - a good example would be a Git plugin which pushes when used in one package and pulls when used in another, because each package can provide a different configuration for the same plugin.</p>
+
+<p>Word of caution, though: the plugin can <strong>only</strong> be configured inside the scope of the Package that returned it. This means that <strong>every</strong> mandatory option should be present in each place the Plugin is used (in other words: you cannot configure global defaults).</p>
+
+<h3>
+<a name="plugin-events" class="anchor" href="#plugin-events"><span class="octicon octicon-link"></span></a>Plugin events</h3>
+
+<p>Gizzle provides you with a way to configure for each plugin, a list of other plugins which should be executed with the same payload on special events. Currently supported is the <code>onStart</code>, <code>onSuccess</code> and <code>onError</code> events. There are two ways of configuring events; one is from inside your custom plugin classes by providing a default value for the corresponding setting (you can do so in the <code>initialize()</code> or <code>getSetting</code> methods whichever you prefer) - the other way is defining these settings in your configuration file. If providing these as a default setting value from your custom plugin simply return the exact same array that is expressed for each event in this example.</p>
+
+<p>About the example: the illustration configures the self-update plugin which runs <code>git pull</code> and <code>composer install</code> in the root folder of the package that implemented it in its configuration. The sub-plugin that's also used is <em>a ficticious plugin which sends an email to the entity pushing the commit described in the payload with cc: or bcc: defined by settings for that plugin</em> and another <em>also ficticious plugin which is able to send a message to <code>syslog</code> with a custom severity</em>. It also demonstrates how you can use this in as many nested levels as you wish, catching events at each level; in this case causing the "CRITICAL!" syslog message if self-update failed and either the pusher or the master dev-op could not be notified of the failure directly.</p>
+
+<div class="highlight highlight-yaml"><pre><span class="l-Scalar-Plain">MyVendor\MyGizzleImplementingPackage</span><span class="p-Indicator">:</span>
+  <span class="l-Scalar-Plain">NamelessCoder\Gizzle\GizzlePlugins\SelfUpdatePlugin</span><span class="p-Indicator">:</span>
+    <span class="l-Scalar-Plain">onStart</span><span class="p-Indicator">:</span>
+      <span class="c1"># send a copy to pusher only, informing that self-update began</span>
+      <span class="l-Scalar-Plain">OtherVendor\GizzleEmailPlugins\GizzlePlugins\EmailPusherPlugin</span><span class="p-Indicator">:</span>
+        <span class="l-Scalar-Plain">subject</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">Starting self-update of MyGizzleImplementingPackage</span>
+    <span class="l-Scalar-Plain">onError</span><span class="p-Indicator">:</span>
+      <span class="c1"># send a copy to pusher and bcc an address that won't be disclosed to pusher</span>
+      <span class="l-Scalar-Plain">OtherVendor\GizzleEmailPlugins\GizzlePlugins\EmailPusherPlugin</span><span class="p-Indicator">:</span>
+        <span class="l-Scalar-Plain">subject</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">Your team updated a service, please validate the result.</span>
+        <span class="l-Scalar-Plain">bcc</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">master-devops@organization.foo</span>
+        <span class="l-Scalar-Plain">onError</span><span class="p-Indicator">:</span>
+          <span class="l-Scalar-Plain">OtherVendor\MonitoringPlugins\GizzlePlugins\LogPlugin</span><span class="p-Indicator">:</span>
+            <span class="l-Scalar-Plain">message</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">CRITICAL ERROR! Man all battle stations, the server can't send mail!</span>
+            <span class="l-Scalar-Plain">severity</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">fatal</span>
+    <span class="l-Scalar-Plain">onSuccess</span><span class="p-Indicator">:</span>
+      <span class="c1"># send a copy to pusher with cc to all developers</span>
+      <span class="l-Scalar-Plain">OtherVendor\GizzleEmailPlugins\GizzlePlugins\EmailPusherPlugin</span><span class="p-Indicator">:</span>
+        <span class="l-Scalar-Plain">subject</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">MyGizzleImplementingPackage was updated!</span>
+        <span class="l-Scalar-Plain">cc</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">developers@organization.foo</span>
+</pre></div>
+
+<p>Note that these events are <em>defined on the same level as any other setting a plugin uses</em> which means the names are reserved and cannot be used as names for your own plugin settings. Defining an incorrect value (something not an array) may cause exceptions. However: contrary to how "root" plugins report errors, exceptions which are raised by a plugin that is used as event listener <em>will simply add a friendly error message to the response, allowing the next plugin to continue</em>, and so on. Whereas a "root" plugin would cause the entire Payload to stop processing.</p>
+
+<h3>
+<a name="multiple-configurations" class="anchor" href="#multiple-configurations"><span class="octicon octicon-link"></span></a>Multiple configurations</h3>
+
+<p>You can create any number of alternative configuration files. The name or path of the settings file can be provided manually when instanciating the Payload:</p>
+
+<div class="highlight highlight-php"><pre><span class="nv">$settingsFile</span> <span class="o">=</span> <span class="s1">'Settings/SpecialSettings.yml'</span><span class="p">;</span>
+<span class="nv">$payload</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Payload</span><span class="p">(</span><span class="nv">$data</span> <span class="o">=</span> <span class="s1">'{}'</span><span class="p">,</span> <span class="nv">$secret</span> <span class="o">=</span> <span class="s1">''</span><span class="p">,</span> <span class="nv">$settingsFile</span><span class="p">);</span>
+</pre></div>
+
+<p>You can then place any number of such additional settings files as <code>./Settings/*.yml</code> and reference them by changing the third parameter.</p>
+
+<p>The default implementation that ships with Gizzle - the <code>github-webhook.php</code> file inside <code>./web/</code> - uses the <code>$_GET['settings']</code> argument as third parameter after validating that it contains the only allowed characters: <code>a-z</code>, <code>A-Z</code>, <code>0-9</code> and <code>/</code>. The latter is allowed in order to let you divide configuration files into any number of sub directories and reference them by path. Additionally, the file name itself must end with <code>.yml</code>, must not be a hidden file (dot-file) and finally must be a relative path (e.g. not starting with <code>/</code>).</p>
+
+<p>To select which configuration gets used simply set the expected GET parameter when adding the URL as webhook in GitHub's repository settings:</p>
+
+<pre><code>http://mydomain.foo/github-webhook.php?settings=Settings/SpecialSettings.yml
 </code></pre>
 
-<p>If you're using the GitHub for Mac, simply sync your repository and you'll see the new branch.</p>
+<p>And you can specify multiple settings files which must all be processed by specifying arguments as an array:</p>
 
-<h3>
-<a name="designer-templates" class="anchor" href="#designer-templates"><span class="octicon octicon-link"></span></a>Designer Templates</h3>
+<pre><code>http://mydomain.foo/github-webhook.php?settings[]=Settings/SpecialSettings.yml&amp;settings[]=Settings/OtherSettings.yml
+</code></pre>
 
-<p>We've crafted some handsome templates for you to use. Go ahead and continue to layouts to browse through them. You can easily go back to edit your page before publishing. After publishing your page, you can revisit the page generator and switch to another theme. Your Page content will be preserved if it remained markdown format.</p>
+<p>Which causes first <code>./Settings/SpecialSettings.yml</code> and then <code>./Settings/OtherSettings.yml</code> to be processed in the same execution. Any error caused by one will cause the job to exit, throwing only the first error which occurred.</p>
 
-<h3>
-<a name="rather-drive-stick" class="anchor" href="#rather-drive-stick"><span class="octicon octicon-link"></span></a>Rather Drive Stick?</h3>
+<p>You can also use this to version your settings. If for example your design practices change and you require support for more than one repository design pattern, you can easily store the legacy configuration as a different settings file and by modifying the web hook URL in each repository, support both of your repositories' patterns simultaneously. A good example of when such versioning might become necessary is when switching to/from the "git flow" pattern or in multiple production branch scenarios where new production branches are continuously added and removed.</p>
 
-<p>If you prefer to not use the automatic generator, push a branch named <code>gh-pages</code> to your repository to create a page manually. In addition to supporting regular HTML content, GitHub Pages support Jekyll, a simple, blog aware static site generator written by our own Tom Preston-Werner. Jekyll makes it easy to create site-wide headers and footers without having to copy them across every page. It also offers intelligent blog support and other advanced templating features.</p>
+<h2>
+<a name="updating-commit-status" class="anchor" href="#updating-commit-status"><span class="octicon octicon-link"></span></a>Updating commit status</h2>
 
-<h3>
-<a name="authors-and-contributors" class="anchor" href="#authors-and-contributors"><span class="octicon octicon-link"></span></a>Authors and Contributors</h3>
+<p>If you wish to make Gizzle update the HEAD commit of the Payload as it gets processed (one status per settings file that processes the Payload), Gizzle supports a GitHub personal access token which, like the <code>.secret</code> file, is placed in the project root folder and is named <code>.token</code>. A token is a 32-character string with randomized letters and numbers.</p>
 
-<p>You can <a href="https://github.com/blog/821" class="user-mention">@mention</a> a GitHub username to generate a link to their profile. The resulting <code>&lt;a&gt;</code> element will link to the contributor's GitHub Profile. For example: In 2007, Chris Wanstrath (<a href="https://github.com/defunkt" class="user-mention">@defunkt</a>), PJ Hyett (<a href="https://github.com/pjhyett" class="user-mention">@pjhyett</a>), and Tom Preston-Werner (<a href="https://github.com/mojombo" class="user-mention">@mojombo</a>) founded GitHub.</p>
+<p>To obtain a personal access token:</p>
 
-<h3>
-<a name="support-or-contact" class="anchor" href="#support-or-contact"><span class="octicon octicon-link"></span></a>Support or Contact</h3>
+<ol>
+<li>In GitHub, under account settings, <a href="https://github.com/settings/applications#personal-access-tokens">generate yourself a new Access Token</a>.</li>
+<li>Make sure you associate this token with at least permissions to access status and access (public) repositories. If any plugins require additional permissions, each should document which - and you should add permissions as required.</li>
+<li>Copy the token and insert it in the file <code>.token</code> in the project root folder.</li>
+<li>Do not commit the token file! Instead, add it to git ignore either locally or for your project. The token is <strong>sensitive information</strong> and should never be shared.</li>
+</ol><p>When present, the token is read from this file and used to initialize the <a href="https://github.com/milo/github-api">GitHub API used by Gizzle</a>. The API can then be used by Gizzle and Gizzle plugins to perform any action which you permit.</p>
 
-<p>Having trouble with Pages? Check out the documentation at <a href="http://help.github.com/pages">http://help.github.com/pages</a> or contact <a href="mailto:support@github.com">support@github.com</a> and we’ll help you sort it out.</p>
+<p>Resources:</p>
+
+<ul>
+<li><a href="https://github.com/settings/applications#personal-access-tokens">Access Token generation in GitHub account</a></li>
+<li><a href="https://developer.github.com/v3/">Documentation for every possible action you can perform through this GitHub API</a></li>
+<li><a href="https://github.com/milo/github-api/wiki">Documentation for how to use the API itself</a></li>
+</ul><h3>
+<a name="usage-of-api-from-plugins" class="anchor" href="#usage-of-api-from-plugins"><span class="octicon octicon-link"></span></a>Usage of API from plugins</h3>
+
+<p>The API can be accessed via the <code>$payload</code> argument that is provided to the essential methods on plugins. To access the API:</p>
+
+<div class="highlight highlight-php"><pre><span class="nv">$api</span> <span class="o">=</span> <span class="nv">$payload</span><span class="o">-&gt;</span><span class="na">getApi</span><span class="p">();</span>
+<span class="k">if</span> <span class="p">(</span><span class="k">TRUE</span> <span class="o">===</span> <span class="k">empty</span><span class="p">(</span><span class="nv">$api</span><span class="o">-&gt;</span><span class="na">getToken</span><span class="p">())</span> <span class="p">{</span>
+    <span class="c1">// avoid doing anything with the API when there is</span>
+    <span class="c1">// no token loaded; UNLESS you are able to provide</span>
+    <span class="c1">// your own token from inside the plugin code.</span>
+<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+    <span class="nv">$response</span> <span class="o">=</span> <span class="nv">$api</span><span class="o">-&gt;</span><span class="na">get</span><span class="p">(</span><span class="s1">'/emoji'</span><span class="p">);</span>
+    <span class="nv">$emojis</span> <span class="o">=</span> <span class="nv">$api</span><span class="o">-&gt;</span><span class="na">decode</span><span class="p">(</span><span class="nv">$response</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+
+<p>Note the additional decoding step which is required when you need to read data from the response. An <code>stdClass</code> is returned with public properties allowing you to read response data - see the official GitHub v3 API reference for available data for each action.</p>
+
+<h2>
+<a name="creating-plugins" class="anchor" href="#creating-plugins"><span class="octicon octicon-link"></span></a>Creating plugins</h2>
+
+<p>To create a plugin for Gizzle you need two classes:</p>
+
+<ol>
+<li>The class <code>MyVendor\MyPackage\GizzlePlugins\PluginList</code> which must implement interface <code>NamelessCoder\Gizzle\PluginListInterface</code> and contain a <code>getPluginClassNames</code> method which returns an array of any number of string class names of your plugins.</li>
+<li>The class <code>MyVendor\MyPackage\GizzlePlugins\MyAwesomePlugin</code> (or another class name or namespace location - your choice) which implements <code>NamelessCoder\Gizzle\PluginInterface</code> and the methods it specifies.</li>
+</ol><p>You can control which plugins should be loaded from your <code>PluginList</code> class, for example toggling each plugin by some configuration option, and returning your plugin class name as part of the array of class names returned by the <code>PluginList</code>. Each plugin is then matched with the GitHub payload data to determine if it needs to be executed - and if it does, a simple method is executed inside which you have access to an entity model instance with all meta data contained in the payload as nice entity objects.</p>
+
+<p>Simply create the class, include the package name which contains the class when running $gizzle-&gt;loadPlugins().</p>
+
+<h2>
+<a name="example-plugin" class="anchor" href="#example-plugin"><span class="octicon octicon-link"></span></a>Example plugin</h2>
+
+<div class="highlight highlight-php"><pre><span class="o">&lt;?</span><span class="nx">php</span>
+<span class="k">namespace</span> <span class="nx">NamelessCoder\Gizzle\GizzlePlugins</span><span class="p">;</span>
+
+<span class="k">use</span> <span class="nx">NamelessCoder\Gizzle\PluginInterface</span><span class="p">;</span>
+<span class="k">use</span> <span class="nx">NamelessCoder\Gizzle\AbstractPlugin</span><span class="p">;</span>
+
+
+<span class="sd">/**</span>
+<span class="sd"> * Example Gizzle Plugin</span>
+<span class="sd"> *</span>
+<span class="sd"> * Sends an email to the person who pushed the commit,</span>
+<span class="sd"> * but only if the commit was made to the "demo" branch.</span>
+<span class="sd"> */</span>
+<span class="k">class</span> <span class="nc">ExamplePlugin</span> <span class="k">extends</span> <span class="nx">AbstractPlugin</span> <span class="k">implements</span> <span class="nx">PluginInterface</span> <span class="p">{</span>
+
+    <span class="sd">/**</span>
+<span class="sd">     * Returns TRUE to trigger this Plugin if branch</span>
+<span class="sd">     * is "demo", as determined by REF of Payload.</span>
+<span class="sd">     *</span>
+<span class="sd">     * @param Payload $payload</span>
+<span class="sd">     * @return boolean</span>
+<span class="sd">     */</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="nf">trigger</span><span class="p">(</span><span class="nx">Payload</span> <span class="nv">$payload</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="s1">'refs/heads/demo'</span> <span class="o">===</span> <span class="nv">$payload</span><span class="o">-&gt;</span><span class="na">getRef</span><span class="p">();</span>
+    <span class="p">}</span>
+
+    <span class="sd">/**</span>
+<span class="sd">     * Send a thank you email to commit pusher.</span>
+<span class="sd">     *</span>
+<span class="sd">     * @param Payload $payload</span>
+<span class="sd">     * @return void</span>
+<span class="sd">     * @throws \RuntimeException</span>
+<span class="sd">     */</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="nf">process</span><span class="p">(</span><span class="nx">Payload</span> <span class="nv">$payload</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nv">$pusherEmail</span> <span class="o">=</span> <span class="nv">$payload</span><span class="o">-&gt;</span><span class="na">getPusher</span><span class="p">()</span><span class="o">-&gt;</span><span class="na">getEmail</span><span class="p">();</span>
+        <span class="nv">$body</span> <span class="o">=</span> <span class="s1">'A big thank you from '</span> <span class="o">.</span> <span class="nv">$payload</span><span class="o">-&gt;</span><span class="na">getRepository</span><span class="p">()</span><span class="o">-&gt;</span><span class="na">getOwner</span><span class="p">()</span><span class="o">-&gt;</span><span class="na">getName</span><span class="p">();</span>
+        <span class="nv">$mailed</span> <span class="o">=</span> <span class="nb">mail</span><span class="p">(</span><span class="nv">$pusherEmail</span><span class="p">,</span> <span class="s1">'Thank you for contributing!'</span><span class="p">,</span> <span class="nv">$body</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="k">FALSE</span> <span class="o">===</span> <span class="nv">$mailed</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nx">\RuntimeException</span><span class="p">(</span><span class="s1">'Could not email the kind contributor at '</span> <span class="o">.</span> <span class="nv">$pusherEmail</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+<span class="p">}</span>
+</pre></div>
         </section>
 
         <aside id="sidebar">
