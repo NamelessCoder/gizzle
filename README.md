@@ -174,13 +174,17 @@ Example plugin
 <?php
 namespace NamelessCoder\Gizzle\GizzlePlugins;
 
+use NamelessCoder\Gizzle\PluginInterface;
+use NamelessCoder\Gizzle\AbstractPlugin;
+
+
 /**
  * Example Gizzle Plugin
  *
  * Sends an email to the person who pushed the commit,
  * but only if the commit was made to the "demo" branch.
  */
-class ExamplePlugin implements \NamelessCoder\Gizzle\PluginInterface {
+class ExamplePlugin extends AbstractPlugin implements PluginInterface {
 
 	/**
 	 * Returns TRUE to trigger this Plugin if branch
