@@ -23,7 +23,7 @@ Finally, configure your GitHub repository and add the URL to your virtual host, 
 
 If you choose to create your own package and include `namelesscoder/gizzle` at stability `dev-masster` you can use the library from any point in your own code. Or you can create your own `./web/` directory and just symlink to, or copy the file `../vendor/namelesscoder/gizzle/web/github-webhook.php` from inside your `web` folder.
 
-### Security (secret file)
+### Security (secret file and personal token)
 
 Gizzle uses the `secret` (a token) which you enter in GitHub while setting up the web hook. Use the same secret token when initializing your Payload class. The secret token is required and must match, or the Payload throws a RuntimeException.
 
@@ -39,6 +39,8 @@ $gizzle = new \NamelessCoder\Gizzle\Payload($data, $secret);
 cd /path/to/gizzle-or-your-package/
 echo "mysupersecretkey" > .secret
 ```
+
+Gizzle can also use a personal access token to "talk back" to GitHub. You can utilize this to do things like comment on the commit and update it with a status (which is displayed when the commit is part of a pull request) - and even automatically merge branches. The default implementation for every plugin will _automatically update the commit status with pending, success or error as the Payload execution progresses_, but other plugins can access the GitHub API from Gizzle plugins. All you have to do is make sure a special `.token` file exists and contains your personal access token - which, like the `.secret` file - is sensitive information you should never share. The `.token` file is created the exact same way as the `.secret` file and you can obtain a new access token to use just with Gizzle. [Read more about how in the section about the GitHub API integration](#updating-commit-status).
 
 Running
 -------
