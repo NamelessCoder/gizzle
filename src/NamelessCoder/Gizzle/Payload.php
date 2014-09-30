@@ -203,12 +203,26 @@ class Payload extends JsonDataMapper {
 			/** @var PluginListInterface $lister */
 			$lister = new $expectedListerClassName();
 			$lister->initialize($settings);
-			foreach ($lister->getPluginClassNames() as $class) {
-				$plugins[] = $this->loadPluginInstance(
-					$class,
-					(array) (TRUE === isset($settings[$package][$class]) ? $settings[$package][$class] : array())
-				);
-			}
+			$pluginClassNames = $lister->getPluginClassNames();
+			$pluginClassNames = array_combine($pluginClassNames, array_fill(0, count($pluginClassNames), array()));
+			$pluginSettings = (array) (TRUE === isset($settings[$package]) ? $settings[$package] : $pluginClassNames);
+			$packagePlugins = $this->loadPluginInstances($pluginSettings);
+			$plugins = array_merge($plugins, $packagePlugins);
+		}
+		return $plugins;
+	}
+
+	/**
+	 * @param array $pluginClassNamesAndSettings
+	 * @return array
+	 */
+	protected function loadPluginInstances(array $pluginClassNamesAndSettings) {
+		$plugins = array();
+		foreach ($pluginClassNamesAndSettings as $class => $settings) {
+			$plugins[] = $this->loadPluginInstance(
+				$class,
+				(array) $settings
+			);
 		}
 		return $plugins;
 	}
@@ -252,21 +266,60 @@ class Payload extends JsonDataMapper {
 			$packages = array_keys($settings);
 			$this->loadPlugins($packages);
 		}
+		$this->executePlugins($this->plugins);
+		return $this->response;
+	}
+
+	/**
+	 * @param PluginInterface[] $plugins
+	 */
+	protected function executePlugins(array $plugins) {
 		$errors = array();
-		foreach ($this->plugins as $plugin) {
+		foreach ($plugins as $plugin) {
 			if (TRUE === $plugin->trigger($this)) {
-				try {
-					$plugin->process($this);
-				} catch (\RuntimeException $error) {
-					$errors[] = $error;
-				}
+				$pluginErrors = $this->executePlugin($plugin);
+				$errors = array_merge($errors, $pluginErrors);
 			}
 		}
 		if (0 < count($errors)) {
 			$this->response->setCode(1);
 			$this->response->setErrors($errors);
 		}
-		return $this->response;
+	}
+
+	/**
+	 * @param PluginInterface $plugin
+	 * @return array
+	 */
+	protected function executePlugin(PluginInterface $plugin) {
+		$errors = array();
+		try {
+			$this->dispatchPluginEvent($plugin, AbstractPlugin::OPTION_EVENTS_ONSTART);
+			$plugin->process($this);
+			$this->dispatchPluginEvent($plugin, AbstractPlugin::OPTION_EVENTS_ONSUCCESS);
+		} catch (\RuntimeException $error) {
+			$this->dispatchPluginEvent($plugin, AbstractPlugin::OPTION_EVENTS_ONSTART);
+			$errors[] = $error;
+		}
+		return $errors;
+	}
+
+	/**
+	 * @param PluginInterface $plugin
+	 * @param string $eventSetting
+	 */
+	protected function dispatchPluginEvent(PluginInterface $plugin, $eventSetting) {
+		$events = $plugin->getSetting($eventSetting);
+		if (TRUE === is_array($events)) {
+			$plugins = $this->loadPluginInstances($events);
+			foreach ($plugins as $eventPlugin) {
+				try {
+					$this->executePlugin($eventPlugin);
+				} catch (\RuntimeException $error) {
+					$this->response->addOutputFromPlugin($plugin, array('Event error! Message: ' . $error->getMessage()));
+				}
+			}
+		}
 	}
 
 	/**

@@ -52,4 +52,10 @@ class AbstractPluginTest extends \PHPUnit_Framework_TestCase {
 		$this->assertEquals('expected', $result);
 	}
 
+	public function testGetSettingDelegatesToGetSettingValue() {
+		$mock = $this->getMockForAbstractClass('NamelessCoder\\Gizzle\\AbstractPlugin', array(), '', FALSE, FALSE, TRUE, array('getSettingValue'));
+		$mock->expects($this->once())->method('getSettingValue')->with('foobar');
+		$mock->getSetting('foobar');
+	}
+
 }

@@ -11,13 +11,14 @@
 
 namespace NamelessCoder\Gizzle\Tests\Fixtures\GizzlePlugins;
 
+use NamelessCoder\Gizzle\AbstractPlugin;
 use NamelessCoder\Gizzle\Payload;
 use NamelessCoder\Gizzle\PluginInterface;
 
 /**
  * Class ErrorPlugin
  */
-class ErrorPlugin implements PluginInterface {
+class ErrorPlugin extends AbstractPlugin implements PluginInterface {
 
 	/**
 	 * Initialize the plugin with an array of settings.

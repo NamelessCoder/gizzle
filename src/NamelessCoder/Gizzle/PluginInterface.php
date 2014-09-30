@@ -42,4 +42,11 @@ interface PluginInterface {
 	 */
 	public function process(Payload $payload);
 
+	/**
+	 * Returns a setting value
+	 *
+	 * @return void
+	 */
+	public function getSetting($name);
+
 }

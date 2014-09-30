@@ -18,6 +18,10 @@ use NamelessCoder\Gizzle\PluginInterface;
  */
 class AbstractPlugin implements PluginInterface {
 
+	const OPTION_EVENTS_ONSTART = 'onStart';
+	const OPTION_EVENTS_ONSUCCESS = 'onSuccess';
+	const OPTION_EVENTS_ONERROR = 'onError';
+
 	/**
 	 * @var array
 	 */
@@ -52,6 +56,15 @@ class AbstractPlugin implements PluginInterface {
 	 * @return void
 	 */
 	public function process(Payload $payload) {
+	}
+
+	/**
+	 * Returns a setting value.
+	 *
+	 * @return mixed
+	 */
+	public function getSetting($name) {
+		return $this->getSettingValue($name);
 	}
 
 	/**

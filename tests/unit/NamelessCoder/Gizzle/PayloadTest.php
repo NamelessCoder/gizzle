@@ -12,11 +12,14 @@
 namespace NamelessCoder\Gizzle\Tests\Unit;
 
 use Milo\Github\Api;
+use NamelessCoder\Gizzle\AbstractPlugin;
 use NamelessCoder\Gizzle\Branch;
 use NamelessCoder\Gizzle\Commit;
 use NamelessCoder\Gizzle\Entity;
 use NamelessCoder\Gizzle\Payload;
 use NamelessCoder\Gizzle\Repository;
+use NamelessCoder\Gizzle\Response;
+use NamelessCoder\Gizzle\Tests\Fixtures\GizzlePlugins\AccessiblePlugin;
 use NamelessCoder\Gizzle\Tests\Fixtures\GizzlePlugins\ErrorPlugin;
 use NamelessCoder\Gizzle\Tests\Fixtures\GizzlePlugins\Plugin;
 
@@ -36,6 +39,40 @@ class PayloadTest extends \PHPUnit_Framework_TestCase {
 		$instance = $this->getMock('NamelessCoder\\Gizzle\\Payload', array('isCommandLine'), array(), '', FALSE);
 		$instance->expects($this->once())->method('isCommandLine')->will($this->returnValue(FALSE));
 		$instance->__construct('{}', '');
+	}
+
+	public function testDispatchPluginEventExecutesEventPlugins() {
+		$plugin = new AccessiblePlugin();
+		$plugin->initialize(array(
+			AbstractPlugin::OPTION_EVENTS_ONSTART => array(
+				get_class($plugin) => array()
+			)
+		));
+		$payload = $this->getMock('NamelessCoder\\Gizzle\\Payload', array('loadPluginInstances', 'executePlugin'), array('{}', ''));
+		$payload->expects($this->once())->method('loadPluginInstances')
+			->with($plugin->getSetting(AbstractPlugin::OPTION_EVENTS_ONSTART))->will($this->returnValue(array($plugin)));
+		$payload->expects($this->once())->method('executePlugin')->with($plugin);
+		$method = new \ReflectionMethod($payload, 'dispatchPluginEvent');
+		$method->setAccessible(TRUE);
+		$method->invoke($payload, $plugin, AbstractPlugin::OPTION_EVENTS_ONSTART);
+	}
+
+	public function testDispatchPluginEventWithExceptionAddsToResponse() {
+		$plugin = new AccessiblePlugin();
+		$plugin->initialize(array(
+			AbstractPlugin::OPTION_EVENTS_ONSTART => array(
+				get_class($plugin) => array()
+			)
+		));
+		$exception = new \RuntimeException();
+		$payload = $this->getMock('NamelessCoder\\Gizzle\\Payload', array('loadPluginInstances', 'executePlugin'), array('{}', ''));
+		$payload->expects($this->once())->method('loadPluginInstances')
+			->with($plugin->getSetting(AbstractPlugin::OPTION_EVENTS_ONSTART))->will($this->returnValue(array($plugin)));
+		$payload->expects($this->once())->method('executePlugin')->with($plugin)->will($this->throwException($exception));
+		$method = new \ReflectionMethod($payload, 'dispatchPluginEvent');
+		$method->setAccessible(TRUE);
+		$method->invoke($payload, $plugin, AbstractPlugin::OPTION_EVENTS_ONSTART);
+		$this->assertNotEmpty($payload->getResponse()->getOutput());
 	}
 
 	public function testLoadPlugins() {

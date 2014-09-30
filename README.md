@@ -88,6 +88,37 @@ It is possible for any Package to return Plugins from other packages as well - w
 
 Word of caution, though: the plugin can **only** be configured inside the scope of the Package that returned it. This means that **every** mandatory option should be present in each place the Plugin is used (in other words: you cannot configure global defaults).
 
+### Plugin events
+
+Gizzle provides you with a way to configure for each plugin, a list of other plugins which should be executed with the same payload on special events. Currently supported is the `onStart`, `onSuccess` and `onError` events. There are two ways of configuring events; one is from inside your custom plugin classes by providing a default value for the corresponding setting (you can do so in the `initialize()` or `getSetting` methods whichever you prefer) - the other way is defining these settings in your configuration file. If providing these as a default setting value from your custom plugin simply return the exact same array that is expressed for each event in this example.
+
+About the example: the illustration configures the self-update plugin which runs `git pull` and `composer install` in the root folder of the package that implemented it in its configuration. The sub-plugin that's also used is _a ficticious plugin which sends an email to the entity pushing the commit described in the payload with cc: or bcc: defined by settings for that plugin_ and another _also ficticious plugin which is able to send a message to `syslog` with a custom severity_. It also demonstrates how you can use this in as many nested levels as you wish, catching events at each level; in this case causing the "CRITICAL!" syslog message if self-update failed and either the pusher or the master devlop could not be notified of the failure directly.
+
+```yaml
+MyVendor\MyGizzleImplementingPackage:
+  NamelessCoder\Gizzle\GizzlePlugins\SelfUpdatePlugin:
+    onStart:
+      # send a copy to pusher only, informing that self-update began
+      OtherVendor\GizzleEmailPlugins\GizzlePlugins\EmailPusherPlugin:
+        subject: Starting self-update of MyGizzleImplementingPackage
+    onError:
+      # send a copy to pusher and bcc an address that won't be disclosed to pusher
+      OtherVendor\GizzleEmailPlugins\GizzlePlugins\EmailPusherPlugin:
+        subject: Your team updated a service, please validate the result.
+        bcc: master-devops@organization.foo
+        onError:
+          OtherVendor\MonitoringPlugins\GizzlePlugins\LogPlugin:
+            message: CRITICAL ERROR! Man all battle stations, the server can't send mail!
+            severity: fatal
+    onSuccess:
+      # send a copy to pusher with cc to all developers
+      OtherVendor\GizzleEmailPlugins\GizzlePlugins\EmailPusherPlugin:
+        subject: MyGizzleImplementingPackage was updated!
+        cc: developers@organization.foo
+```
+
+Note that these events are _defined on the same level as any other setting a plugin uses_ which means the names are reserved and cannot be used as names for your own plugin settings. Defining an incorrect value (something not an array) may cause exceptions. However: contrary to how "root" plugins report errors, exceptions which are raised by a plugin that is used as event listener _will simply add a friendly error message to the response, allowing the next plugin to continue_, and so on. Whereas a "root" plugin would cause the entire Payload to stop processing.
+
 ### Multiple configurations
 
 You can create any number of alternative configuration files. The name or path of the settings file can be provided manually when instanciating the Payload:
