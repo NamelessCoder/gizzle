@@ -9,10 +9,12 @@
  * was distributed with this package in file LICENSE.txt
  */
 
-require_once '../vendor/autoload.php';
+define('GIZZLE_HOME', rtrim(realpath('../'), '/'), '/');
 
-$secretFile = '../.secret';
-$tokenFile = '../.token';
+require_once GIZZLE_HOME . 'vendor/autoload.php';
+
+$secretFile = GIZZLE_HOME . '.secret';
+$tokenFile = GIZZLE_HOME . '.token';
 $secret = $token = NULL;
 $output = array(
 	'messages' => array()

@@ -28,7 +28,20 @@ use NamelessCoder\Gizzle\Tests\Fixtures\GizzlePlugins\Plugin;
  */
 class PayloadTest extends \PHPUnit_Framework_TestCase {
 
+	protected function setUpConstant() {
+		if (FALSE === defined('GIZZLE_HOME')) {
+			define('GIZZLE_HOME', __DIR__);
+		}
+	}
+
+	public function testConstructorThrowsRuntimeExceptionIfGizzleHomeConstantNotDefined() {
+		$data = file_get_contents('tests/fixtures/sample-payload.json');
+		$this->setExpectedException('RuntimeException');
+		$payload = $this->getMock('NamelessCoder\\Gizzle\\Payload', array('validate'), array($data, ''));
+	}
+
 	public function testConstructorAcceptsFixtureJson() {
+		$this->setUpConstant();
 		$data = file_get_contents('tests/fixtures/sample-payload.json');
 		$payload = $this->getMock('NamelessCoder\\Gizzle\\Payload', array('validate'), array($data, ''));
 	}

@@ -132,10 +132,23 @@ class Payload extends JsonDataMapper {
 	protected $api = NULL;
 
 	/**
+	 * Payload creation
+	 *
+	 * Contains first-entry validations and error throwing
+	 * if an inconsistent environment is detected, preventing
+	 * usage of Payload outside the real (or a properly
+	 * emulated) context.
+	 *
+	 * CLI usage is exempt from validating the payload data
+	 * using SHA1 hashing; HTTP requests are not.
+	 *
 	 * @param string $jsonData
 	 * @param string $secret
 	 */
 	public function __construct($jsonData, $secret, $settingsFile = 'settings/SelfUpdate.yml') {
+		if (FALSE === defined('GIZZLE_HOME') || FALSE === is_dir(GIZZLE_HOME)) {
+			throw new \RuntimeException('Constant GIZZLE_HOME must be set to a valid directory path, Payload rejected.', 1412207023);
+		}
 		$this->response = new Response();
 		$this->settingsFile = $settingsFile;
 		if (FALSE === $this->isCommandLine()) {
