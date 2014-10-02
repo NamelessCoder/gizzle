@@ -9,7 +9,7 @@
  * was distributed with this package in file LICENSE.txt
  */
 
-define('GIZZLE_HOME', rtrim(realpath('../'), '/'), '/');
+define('GIZZLE_HOME', rtrim(realpath('../'), '/') . '/');
 
 require_once GIZZLE_HOME . 'vendor/autoload.php';
 
