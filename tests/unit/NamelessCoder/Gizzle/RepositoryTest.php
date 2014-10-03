@@ -51,6 +51,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase {
 			array('hasDownloads', TRUE),
 			array('hasIssues', TRUE),
 			array('hasWiki', TRUE),
+			array('hasPages', TRUE),
 			array('homepage', uniqid()),
 			array('id', rand(99,999)),
 			array('language', uniqid()),
@@ -62,6 +63,9 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase {
 			array('size', rand(99,999)),
 			array('stargazers', rand(99,999)),
 			array('url', uniqid()),
+			array('cloneUrl', uniqid()),
+			array('gitUrl', uniqid()),
+			array('sshUrl', uniqid()),
 			array('watchers', rand(99,999)),
 			array('owner', new Entity()),
 		);

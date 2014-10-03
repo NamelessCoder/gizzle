@@ -23,13 +23,18 @@ class Repository extends JsonDataMapper {
 		'created_at' => 'created',
 		'pushed_at' => 'created',
 		'full_name' => 'fullName',
+		'forks_count' => 'forks',
 		'stargazers_count' => 'stargazers',
 		'watchers_count' => 'watchers',
 		'default_branch' => 'masterBranch',
 		'open_issues_count' => 'openIssues',
 		'has_issues' => 'hasIssues',
 		'has_downloads' => 'hasDownloads',
-		'has_wiki' => 'hasWiki'
+		'has_wiki' => 'hasWiki',
+		'has_pages' => 'hasPages',
+		'clone_url' => 'cloneUrl',
+		'git_url' => 'gitUrl',
+		'ssh_url' => 'sshUrl',
 	);
 
 	/**
@@ -80,6 +85,11 @@ class Repository extends JsonDataMapper {
 	 * @var boolean
 	 */
 	protected $hasWiki = FALSE;
+
+	/**
+	 * @var boolean
+	 */
+	protected $hasPages = FALSE;
 
 	/**
 	 * @var string
@@ -135,6 +145,21 @@ class Repository extends JsonDataMapper {
 	 * @var string
 	 */
 	protected $url = NULL;
+
+	/**
+	 * @var string
+	 */
+	protected $cloneUrl = NULL;
+
+	/**
+	 * @var string
+	 */
+	protected $gitUrl = NULL;
+
+	/**
+	 * @var string
+	 */
+	protected $sshUrl = NULL;
 
 	/**
 	 * @var integer
@@ -255,6 +280,20 @@ class Repository extends JsonDataMapper {
 	 */
 	public function getHasWiki() {
 		return $this->hasWiki;
+	}
+
+	/**
+	 * @param boolean $hasPages
+	 */
+	public function setHasPages($hasPages) {
+		$this->hasPages = $hasPages;
+	}
+
+	/**
+	 * @return boolean
+	 */
+	public function getHasPages() {
+		return $this->hasPages;
 	}
 
 	/**
@@ -409,6 +448,48 @@ class Repository extends JsonDataMapper {
 	 */
 	public function getUrl() {
 		return $this->url;
+	}
+
+	/**
+	 * @param string $cloneUrl
+	 */
+	public function setCloneUrl($cloneUrl) {
+		$this->cloneUrl = $cloneUrl;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getCloneUrl() {
+		return $this->cloneUrl;
+	}
+
+	/**
+	 * @param string $gitUrl
+	 */
+	public function setGitUrl($gitUrl) {
+		$this->gitUrl = $gitUrl;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getGitUrl() {
+		return $this->gitUrl;
+	}
+
+	/**
+	 * @param string $sshUrl
+	 */
+	public function setSshUrl($sshUrl) {
+		$this->sshUrl = $sshUrl;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getSshUrl() {
+		return $this->sshUrl;
 	}
 
 	/**
