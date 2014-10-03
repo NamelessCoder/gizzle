@@ -222,6 +222,7 @@ class PayloadTest extends \PHPUnit_Framework_TestCase {
 			array('sender', new Entity()),
 			array('organization', new Entity()),
 			array('ref', uniqid()),
+			array('refName', uniqid()),
 			array('repository', new Repository()),
 			array('api', new Api())
 		);

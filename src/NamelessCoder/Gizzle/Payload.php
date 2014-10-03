@@ -32,7 +32,8 @@ class Payload extends JsonDataMapper {
 		'compare' => 'comparisonUrl',
 		'after' => 'parent',
 		'before' => 'child',
-		'head_commit' => 'head'
+		'head_commit' => 'head',
+		'ref_name' => 'refName'
 	);
 
 	/**
@@ -89,32 +90,37 @@ class Payload extends JsonDataMapper {
 	/**
 	 * @var boolean
 	 */
-	protected $forced;
+	protected $forced = NULL;
 
 	/**
 	 * @var Commit
 	 */
-	protected $head;
+	protected $head = NULL;
 
 	/**
 	 * @var Entity
 	 */
-	protected $organization;
+	protected $organization = NULL;
 
 	/**
 	 * @var Entity
 	 */
-	protected $sender;
+	protected $sender = NULL;
 
 	/**
 	 * @var string
 	 */
-	protected $ref;
+	protected $ref = NULL;
+
+	/**
+	 * @var string
+	 */
+	protected $refName = NULL;
 
 	/**
 	 * @var Repository
 	 */
-	protected $repository;
+	protected $repository = NULL;
 
 	/**
 	 * @var PluginInterface[]
@@ -517,6 +523,20 @@ class Payload extends JsonDataMapper {
 	 */
 	public function getRef() {
 		return $this->ref;
+	}
+
+	/**
+	 * @param string $refName
+	 */
+	public function setRefName($refName) {
+		$this->refName = $refName;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getRefName() {
+		return $this->refName;
 	}
 
 	/**
