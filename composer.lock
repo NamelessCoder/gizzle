@@ -4,27 +4,27 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "d5e8f252031b477883140c366e8d17c8",
+    "hash": "f1d8587611a015654551ee9542d0b6e8",
     "packages": [
         {
             "name": "milo/github-api",
-            "version": "v1.2.1",
+            "version": "v1.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/milo/github-api.git",
-                "reference": "4e61e272ac71cf0420cd17de5b43cf2c04819be2"
+                "reference": "8f0dd499aa1ed381f9917f25919cab6422becb8c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/milo/github-api/zipball/4e61e272ac71cf0420cd17de5b43cf2c04819be2",
-                "reference": "4e61e272ac71cf0420cd17de5b43cf2c04819be2",
+                "url": "https://api.github.com/repos/milo/github-api/zipball/8f0dd499aa1ed381f9917f25919cab6422becb8c",
+                "reference": "8f0dd499aa1ed381f9917f25919cab6422becb8c",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.4.0"
             },
             "require-dev": {
-                "nette/tester": "~1.2.0"
+                "nette/tester": "~1.3.0"
             },
             "suggest": {
                 "ext-curl": "Allows you to use Http\\CurlClient"
@@ -47,7 +47,7 @@
                 }
             ],
             "description": "Github API easy access",
-            "time": "2014-07-09 19:58:30"
+            "time": "2014-10-02 20:57:16"
         },
         {
             "name": "symfony/yaml",
@@ -497,12 +497,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "5a0bc4dcbb7340c0a9a9bc3507854a67c564edc4"
+                "reference": "ed40f21c7418d2f0c16ae4d0ee1e7c832dfa40b3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/5a0bc4dcbb7340c0a9a9bc3507854a67c564edc4",
-                "reference": "5a0bc4dcbb7340c0a9a9bc3507854a67c564edc4",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/ed40f21c7418d2f0c16ae4d0ee1e7c832dfa40b3",
+                "reference": "ed40f21c7418d2f0c16ae4d0ee1e7c832dfa40b3",
                 "shasum": ""
             },
             "require": {
@@ -563,7 +563,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2014-10-16 16:53:00"
+            "time": "2014-10-17 09:27:56"
         },
         {
             "name": "phpunit/phpunit-mock-objects",
