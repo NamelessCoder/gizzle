@@ -53,8 +53,6 @@ try {
 	$output['messages'][] = $error->getMessage() . ' (' . $error->getCode() . ')';
 	if (TRUE === isset($payload)) {
 		setStatus($payload, $api, 'error', $buildNumber);
-	} else {
-		setStatus($payload, $api, 'failure', $buildNumber);
 	}
 }
 
