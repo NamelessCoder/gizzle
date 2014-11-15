@@ -52,9 +52,9 @@ abstract class JsonDataMapper {
 			} elseif (NULL === $propertyClass) {
 				$propertyValue = $propertyValue;
 			} elseif ('DateTime' === $propertyClass) {
-				$propertyValue = \DateTime::createFromFormat('U', $propertyValue);
+				$propertyValue = NULL === $propertyValue ? NULL : \DateTime::createFromFormat('U', $propertyValue);
 			} elseif (FALSE === strpos($propertyClass, '[]')) {
-				$propertyValue = new $propertyClass($propertyValue);
+				$propertyValue = NULL === $propertyValue ? NULL : new $propertyClass($propertyValue);
 			} elseif (NULL !== $propertyClass) {
 				$className = substr($propertyClass, 0, -2);
 				$values = array();
