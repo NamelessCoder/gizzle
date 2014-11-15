@@ -96,6 +96,11 @@ class Commit extends JsonDataMapper {
 	protected $url = NULL;
 
 	/**
+	 * @var string
+	 */
+	protected $ref = NULL;
+
+	/**
 	 * @var Repository
 	 */
 	protected $repository = NULL;
@@ -281,6 +286,21 @@ class Commit extends JsonDataMapper {
 	 */
 	public function setRepository(Repository $repository) {
 		$this->repository = $repository;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getRef() {
+		return $this->ref;
+	}
+
+	/**
+	 * @param string $ref
+	 * @return void
+	 */
+	public function setRef($ref) {
+		$this->ref = $ref;
 	}
 
 }

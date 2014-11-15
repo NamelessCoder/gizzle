@@ -62,7 +62,8 @@ class CommitTest extends \PHPUnit_Framework_TestCase {
 			array('removed', array(uniqid(), uniqid())),
 			array('timestamp', \DateTime::createFromFormat('U', time())),
 			array('url', uniqid()),
-			array('repository', new Repository())
+			array('repository', new Repository()),
+			array('ref', 'ref')
 		);
 	}
 
