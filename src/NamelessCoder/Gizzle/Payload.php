@@ -33,7 +33,8 @@ class Payload extends JsonDataMapper {
 		'after' => 'parent',
 		'before' => 'child',
 		'head_commit' => 'head',
-		'ref_name' => 'refName'
+		'ref_name' => 'refName',
+		'pull_request' => 'pullRequest'
 	);
 
 	/**
@@ -44,8 +45,14 @@ class Payload extends JsonDataMapper {
 		'commits' => 'NamelessCoder\\Gizzle\\Commit[]',
 		'head' => 'NamelessCoder\\Gizzle\\Commit',
 		'sender' => 'NamelessCoder\\Gizzle\\Entity',
-		'repository' => 'NamelessCoder\\Gizzle\\Repository'
+		'repository' => 'NamelessCoder\\Gizzle\\Repository',
+		'pullRequest' => 'NamelessCoder\\Gizzle\\PullRequest'
 	);
+
+	/**
+	 * @var string
+	 */
+	protected $action = NULL;
 
 	/**
 	 * @var array
@@ -121,6 +128,11 @@ class Payload extends JsonDataMapper {
 	 * @var Repository
 	 */
 	protected $repository = NULL;
+
+	/**
+	 * @var PullRequest
+	 */
+	protected $pullRequest = NULL;
 
 	/**
 	 * @var PluginInterface[]
@@ -342,6 +354,21 @@ class Payload extends JsonDataMapper {
 	}
 
 	/**
+	 * @return string
+	 */
+	public function getAction() {
+		return $this->action;
+	}
+
+	/**
+	 * @param string $action
+	 * @return void
+	 */
+	public function setAction($action) {
+		$this->action = $action;
+	}
+
+	/**
 	 * @param Branch[] $branches
 	 * @return void
 	 */
@@ -551,6 +578,21 @@ class Payload extends JsonDataMapper {
 	 */
 	public function getRepository() {
 		return $this->repository;
+	}
+
+	/**
+	 * @return PullRequest
+	 */
+	public function getPullRequest() {
+		return $this->pullRequest;
+	}
+
+	/**
+	 * @param PullRequest $pullRequest
+	 * @return void
+	 */
+	public function setPullRequest(PullRequest $pullRequest) {
+		$this->pullRequest = $pullRequest;
 	}
 
 	/**

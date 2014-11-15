@@ -13,10 +13,12 @@ namespace NamelessCoder\Gizzle\Tests\Unit;
 
 use Milo\Github\Api;
 use NamelessCoder\Gizzle\AbstractPlugin;
+use NamelessCoder\Gizzle\Base;
 use NamelessCoder\Gizzle\Branch;
 use NamelessCoder\Gizzle\Commit;
 use NamelessCoder\Gizzle\Entity;
 use NamelessCoder\Gizzle\Payload;
+use NamelessCoder\Gizzle\PullRequest;
 use NamelessCoder\Gizzle\Repository;
 use NamelessCoder\Gizzle\Response;
 use NamelessCoder\Gizzle\Tests\Fixtures\GizzlePlugins\AccessiblePlugin;
@@ -209,6 +211,7 @@ class PayloadTest extends \PHPUnit_Framework_TestCase {
 	 */
 	public function getPropertyValueDataSets() {
 		return array(
+			array('action', 'action'),
 			array('branches', array(new Branch(), new Branch())),
 			array('parent', uniqid()),
 			array('child', uniqid()),
@@ -224,7 +227,8 @@ class PayloadTest extends \PHPUnit_Framework_TestCase {
 			array('ref', uniqid()),
 			array('refName', uniqid()),
 			array('repository', new Repository()),
-			array('api', new Api())
+			array('api', new Api()),
+			array('pullRequest', new PullRequest())
 		);
 	}
 

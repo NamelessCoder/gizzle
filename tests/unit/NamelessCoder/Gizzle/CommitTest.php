@@ -13,6 +13,7 @@ namespace NamelessCoder\Gizzle\Tests\Unit;
 
 use NamelessCoder\Gizzle\Commit;
 use NamelessCoder\Gizzle\Entity;
+use NamelessCoder\Gizzle\Repository;
 
 /**
  * Class CommitTest
@@ -37,7 +38,7 @@ class CommitTest extends \PHPUnit_Framework_TestCase {
 	 * @param mixed $value
 	 */
 	public function testGetterAndSetter($property, $value) {
-		$payload = $this->getMock('NamelessCoder\\Gizzle\\Commit', array('__construct'), array($this->fixture, ''));
+		$payload = new Commit();
 		$getter = 'get' . ucfirst($property);
 		$setter = 'set' . ucfirst($property);
 		$payload->$setter($value);
@@ -61,6 +62,7 @@ class CommitTest extends \PHPUnit_Framework_TestCase {
 			array('removed', array(uniqid(), uniqid())),
 			array('timestamp', \DateTime::createFromFormat('U', time())),
 			array('url', uniqid()),
+			array('repository', new Repository())
 		);
 	}
 

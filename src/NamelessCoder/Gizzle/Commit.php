@@ -19,11 +19,20 @@ class Commit extends JsonDataMapper {
 	/**
 	 * @var array
 	 */
+	protected $propertyMap = array(
+		'repo' => 'repository',
+		'sha' => 'sha1'
+	);
+
+	/**
+	 * @var array
+	 */
 	protected $propertyClasses = array(
 		'parents' => 'NamelessCoder\\Gizzle\\Commit[]',
 		'committer' => 'NamelessCoder\\Gizzle\\Entity',
 		'author' => 'NamelessCoder\\Gizzle\\Entity',
-		'timestamp ' => 'DateTime'
+		'timestamp ' => 'DateTime',
+		'repository' => 'NamelessCoder\\Gizzle\\Repository'
 	);
 
 	/**
@@ -85,6 +94,11 @@ class Commit extends JsonDataMapper {
 	 * @var string
 	 */
 	protected $url = NULL;
+
+	/**
+	 * @var Repository
+	 */
+	protected $repository = NULL;
 
 	/**
 	 * @param array $added
@@ -252,6 +266,21 @@ class Commit extends JsonDataMapper {
 	 */
 	public function getUrl() {
 		return $this->url;
+	}
+
+	/**
+	 * @return Repository
+	 */
+	public function getRepository() {
+		return $this->repository;
+	}
+
+	/**
+	 * @param Repository $repository
+	 * @return void
+	 */
+	public function setRepository(Repository $repository) {
+		$this->repository = $repository;
 	}
 
 }
