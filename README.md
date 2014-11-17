@@ -168,7 +168,7 @@ Resources:
 
 * [Access Token generation in GitHub account](https://github.com/settings/applications#personal-access-tokens)
 * [Documentation for every possible action you can perform through this GitHub API](https://developer.github.com/v3/)
-* [Documentation for how to use the API itself](https://github.com/milo/github-api/wiki)
+* [Documentation for how to use the PHP `Api` class to access the GitHub API](https://github.com/milo/github-api/wiki)
 
 ### Usage of API from plugins
 
