@@ -21,7 +21,7 @@ Finally, configure your GitHub repository and add the URL to your virtual host, 
 
 ### From other packages
 
-If you choose to create your own package and include `namelesscoder/gizzle` at stability `dev-masster` you can use the library from any point in your own code. Or you can create your own `./web/` directory and just symlink to, or copy the file `../vendor/namelesscoder/gizzle/web/github-webhook.php` from inside your `web` folder.
+If you choose to create your own package and require `namelesscoder/gizzle` you can use the library from any point in your own code. Or you can create your own `./web/` directory and just symlink to, or copy the file `../vendor/namelesscoder/gizzle/web/github-webhook.php` from inside your `web` folder.
 
 ### Security (secret file and personal token)
 
