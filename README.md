@@ -186,19 +186,21 @@ if (TRUE === empty($api->getToken()) {
 }
 ```
 
-Note the additional decoding step which is required when you need to read data from the response. An `stdClass` is returned with public properties allowing you to read response data - see the official GitHub v3 API reference for available data for each action.
+Every resource type in Github has its own URL and some resource types support different parameters depending on the context - for example, a Github "comment" can be created in several different contexts and each has requirements for required properties. Study the [Github API v3 developer documentation](https://developer.github.com/v3/) for the details about each resource.
+
+Note the additional decoding step which is required when you need to read data from the response. An `stdClass` is returned with public properties allowing you to read response data - see the official GitHub v3 API reference for available data for each action. If you need another data type, manually use `json_decode($response->getContent());` and pass any special `JSON_*` options you require.
+
+> Tip: If the API returns data which contains for example commits, repositories, entities etc. and the data type is `array`, Gizzle's domain model supports mapping such data (recursively) by simply passing the array of properties into the constructor: `$commit = new Commit($commitDataAsArray);`.
 
 Creating plugins
 ----------------
 
 To create a plugin for Gizzle you need two classes:
 
-1. The class `MyVendor\MyPackage\GizzlePlugins\PluginList` which must implement interface `NamelessCoder\Gizzle\PluginListInterface` and contain a `getPluginClassNames` method which returns an array of any number of string class names of your plugins.
-2. The class `MyVendor\MyPackage\GizzlePlugins\MyAwesomePlugin` (or another class name or namespace location - your choice) which implements `NamelessCoder\Gizzle\PluginInterface` and the methods it specifies.
+1. The class `MyVendor\MyPackage\GizzlePlugins\MyAwesomePlugin` (or another class name or namespace location - your choice) which implements `NamelessCoder\Gizzle\PluginInterface` and the methods it specifies.
+2. Optionally also the class `MyVendor\MyPackage\GizzlePlugins\PluginList` which must implement interface `NamelessCoder\Gizzle\PluginListInterface` and contain a `getPluginClassNames` method which returns an array of any number of string class names of your plugins. This class gets used when users reference your plugin collection using your package name - it is not required if your plugins are solely intended to be used from a `Settings.yml` context (as described above).
 
-You can control which plugins should be loaded from your `PluginList` class, for example toggling each plugin by some configuration option, and returning your plugin class name as part of the array of class names returned by the `PluginList`. Each plugin is then matched with the GitHub payload data to determine if it needs to be executed - and if it does, a simple method is executed inside which you have access to an entity model instance with all meta data contained in the payload as nice entity objects.
-
-Simply create the class, include the package name which contains the class when running $gizzle->loadPlugins().
+When users load your plugins by package name, your PluginList class is asked to return the class names of plugins and it is here you have your option to change which class names are returned for example depending on configuration. However, when users implement your plugin directly in `Settings.yml` or by manually instanciating it, your PluginList class does not get used. This means that _if your plugin only should be used directly from settings or manually inside other plugins, you do not need the PluginList class - which is why it is marked optional_.
 
 Example plugin
 --------------
