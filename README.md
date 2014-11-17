@@ -12,6 +12,15 @@ Run:
 
 ```bash
 composer require namelesscoder/gizzle
+```
+
+Assuming your project uses the composer class loader you then have access to using Gizzle's classes in your project.
+
+### Virtual Host
+
+If you wish to use the default receiving script, symlink the `web` folder from Gizzle:
+
+```bash
 ln -s vendor/namelesscoder/gizzle/web
 ```
 
@@ -19,9 +28,7 @@ And add a (publicly accessible!) virtual host for your favorite HTTP server poin
 
 Finally, configure your GitHub repository and add the URL to your Gizzle project pointing to the file `/github-webhook.php`.
 
-### From other packages
-
-If you choose to create your own package and require `namelesscoder/gizzle` you can use the library from any point in your own code. Or you can create your own `./web/` directory and just symlink to, or copy the file `../vendor/namelesscoder/gizzle/web/github-webhook.php` from inside your `web` folder.
+You can of course create your own receiving script instead of `github-webhook.php` if you need additional features. The default receiving script supports the features described in this README.
 
 ### Security (secret file and personal token)
 
