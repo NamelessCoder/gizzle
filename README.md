@@ -195,7 +195,7 @@ Note the additional decoding step which is required when you need to read data f
 Creating plugins
 ----------------
 
-To create a plugin for Gizzle you need two classes:
+To create a plugin for Gizzle you need one mandatory class and optionally a lister class (which gets shared by all plugins in your package):
 
 1. The class `MyVendor\MyPackage\GizzlePlugins\MyAwesomePlugin` (or another class name or namespace location - your choice) which implements `NamelessCoder\Gizzle\PluginInterface` and the methods it specifies.
 2. Optionally also the class `MyVendor\MyPackage\GizzlePlugins\PluginList` which must implement interface `NamelessCoder\Gizzle\PluginListInterface` and contain a `getPluginClassNames` method which returns an array of any number of string class names of your plugins. This class gets used when users reference your plugin collection using your package name - it is not required if your plugins are solely intended to be used from a `Settings.yml` context (as described above).
