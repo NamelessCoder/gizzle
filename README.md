@@ -11,13 +11,13 @@ Installing
 Run:
 
 ```bash
-git clone https://github.com/NamelessCoder/gizzle.git && cd gizzle
-composer install
+composer require namelesscoder/gizzle
+ln -s vendor/namelesscoder/gizzle/web
 ```
 
 And add a (publicly accessible!) virtual host for your favorite HTTP server pointing to `./web/` inside this folder or simply include the package in your own composer application.
 
-Finally, configure your GitHub repository and add the URL to your virtual host, pointing to the file `/github-webhook.php`.
+Finally, configure your GitHub repository and add the URL to your Gizzle project pointing to the file `/github-webhook.php`.
 
 ### From other packages
 
