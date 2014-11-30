@@ -1,4 +1,4 @@
-<phpunit bootstrap="./bootstrap.php"
+<phpunit bootstrap="tests/bootstrap.php"
          backupGlobals="false"
          backupStaticAttributes="false"
          colors="true"
@@ -14,14 +14,14 @@
          verbose="false">
     <testsuites>
         <testsuite name="gizzle">
-            <directory>.</directory>
+            <directory>tests</directory>
         </testsuite>
     </testsuites>
     <filter>
         <whitelist>
             <addUncoveredFilesFromWhitelist>true</addUncoveredFilesFromWhitelist>
             <processUncoveredFilesFromWhitelist>true</processUncoveredFilesFromWhitelist>
-            <directory>../src/NamelessCoder/Gizzle</directory>
+            <directory>src/NamelessCoder/Gizzle</directory>
         </whitelist>
     </filter>
 </phpunit>

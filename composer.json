@@ -3,27 +3,26 @@
     "description": "GitHub Webhook Listener with plugin-based API for creating your own triggerered actions",
     "license": "MIT",
     "version": "1.2.1",
-	"keywords": ["php", "git", "github", "webhook", "hook", "plugin"],
+    "keywords": ["php", "git", "github", "webhook", "hook", "plugin"],
     "authors": [
         {
             "name": "Claus Due",
             "email": "claus@namelesscoder.net"
         }
     ],
-	"autoload": {
-		"psr-4": {
-			"NamelessCoder\\Gizzle\\Tests\\Fixtures\\": "tests/fixtures/NamelessCoder/Gizzle/",
-			"NamelessCoder\\Gizzle\\Tests\\Unit\\": "tests/unit/NamelessCoder/Gizzle/",
-			"NamelessCoder\\Gizzle\\": "src/NamelessCoder/Gizzle/"
-		}
-	},
-    "minimum-stability": "dev",
-	"require-dev": {
-		"phpunit/phpunit": "4.3.*",
-		"satooshi/php-coveralls": "dev-master"
-	},
+    "autoload": {
+        "psr-4": {
+            "NamelessCoder\\Gizzle\\Tests\\Fixtures\\": "tests/fixtures/NamelessCoder/Gizzle/",
+            "NamelessCoder\\Gizzle\\Tests\\Unit\\": "tests/unit/NamelessCoder/Gizzle/",
+            "NamelessCoder\\Gizzle\\": "src/NamelessCoder/Gizzle/"
+        }
+    },
+    "require-dev": {
+        "phpunit/phpunit": "@stable",
+        "satooshi/php-coveralls": "@stable"
+    },
     "require": {
-		"milo/github-api": "~1.3.0",
-		"symfony/yaml": "2.5.6"
+        "milo/github-api": "*@stable",
+        "symfony/yaml": "*@stable"
     }
 }
