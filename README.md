@@ -1,7 +1,7 @@
 Gizzle
 ======
 
-[![Build Status](https://img.shields.io/travis/NamelessCoder/gizzle.svg)](https://jenkins.fluidtypo3.org/job/gizzle) [![Coverage Status](https://img.shields.io/coveralls/NamelessCoder/gizzle.svg?style=flat-square)](https://coveralls.io/r/NamelessCoder/gizzle) [![Dependency Status](https://img.shields.io/versioneye/d/NamelessCoder/gizzle.svg?style=flat-square)](https://www.versioneye.com/user/projects/5427fddb8200670d1400003b) [![Latest Stable Version](https://img.shields.io/packagist/v/NamelessCoder/gizzle.svg?style=flat-square)](https://packagist.org/packages/namelesscoder/gizzle) [![Total Downloads](https://img.shields.io/packagist/dt/NamelessCoder/gizzle.svg?style=flat-square)](https://packagist.org/packages/namelesscoder/gizzle)
+[![Build Status](https://img.shields.io/travis/NamelessCoder/gizzle.svg)](https://jenkins.fluidtypo3.org/job/gizzle) [![Coverage Status](https://img.shields.io/coveralls/NamelessCoder/gizzle.svg?style=flat-square)](https://coveralls.io/r/NamelessCoder/gizzle) [![Latest Stable Version](https://img.shields.io/packagist/v/NamelessCoder/gizzle.svg?style=flat-square)](https://packagist.org/packages/namelesscoder/gizzle) [![Total Downloads](https://img.shields.io/packagist/dt/NamelessCoder/gizzle.svg?style=flat-square)](https://packagist.org/packages/namelesscoder/gizzle)
 
 A tiny GitHub Webhook Listener written in PHP which can be easily extended with plugins.
 
