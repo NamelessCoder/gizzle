@@ -5,8 +5,8 @@ Gizzle
 
 A tiny GitHub Webhook Listener written in PHP which can be easily extended with plugins.
 
-Installing
-----------
+Installing Gizzle
+-----------------
 
 Run:
 
@@ -34,23 +34,16 @@ You can of course create your own receiving script instead of `github-webhook.ph
 
 Gizzle uses the `secret` (a token) which you enter in GitHub while setting up the web hook. Use the same secret token when initializing your Payload class. The secret token is required and must match, or the Payload throws a RuntimeException.
 
-```php
-$data = file_get_contents('php://input');
-$secret = 'mysecret';
-$gizzle = new \NamelessCoder\Gizzle\Payload($data, $secret);
-```
-
 **When using the shipped public file in `./web/github-webhook.php` your secret token will be read from the file `./.secret`** (note: dot-file, placed outside the public web root). When first installing this package or your own package which uses this package, create the file whichever way you prefer and make sure it contains your "secret" key from GitHub. For example, using the shell:
 
 ```bash
-cd /path/to/gizzle-or-your-package/
 echo "mysupersecretkey" > .secret
 ```
 
 Gizzle can also use a personal access token to "talk back" to GitHub. You can utilize this to do things like comment on the commit and update it with a status (which is displayed when the commit is part of a pull request) - and even automatically merge branches. The default implementation for every plugin will _automatically update the commit status with pending, success or error as the Payload execution progresses_, but other plugins can access the GitHub API from Gizzle plugins. All you have to do is make sure a special `.token` file exists and contains your personal access token - which, like the `.secret` file - is sensitive information you should never share. The `.token` file is created the exact same way as the `.secret` file and you can obtain a new access token to use just with Gizzle. [Read more about how in the section about the GitHub API integration](#updating-commit-status).
 
-Running
--------
+Running Gizzle
+--------------
 
 The `./web/github-webhook.php` file which is shipped with this repository can be used as URL of your web hook when configuring it in GitHub - or you can manually process the payload from within your own application and use its URL instead:
 
@@ -58,11 +51,13 @@ The `./web/github-webhook.php` file which is shipped with this repository can be
 $data = file_get_contents('php://input');
 $secret = 'mysecret';
 $gizzle = new \NamelessCoder\Gizzle\Payload($data, $secret);
-// Plugins are then loaded from the packages used in, and in the order of, Settings.yml (see below)
-// alternative loading 1: $gizzle->loadPlugins('MyVendor\\MyPackage');
-// alternative loading 2: $gizzle->loadPlugins($arrayOfPackageNames);
-// alternative loading 3: $gizzle->loadPlugins($package1, $package2, $package3);
-// using either alternative causes the settings-based loading to be skipped, but settings are still used.
+
+// Plugins are then loaded from the packages used in, and in the order of, file `settings/Settings.yml` (see below)
+// * alternative loading 1: $gizzle->loadPlugins('MyVendor\\MyPackage');
+// * alternative loading 2: $gizzle->loadPlugins($arrayOfPackageNames);
+// * alternative loading 3: $gizzle->loadPlugins($package1, $package2, $package3);
+// using either alternative causes the all plugins returned by the PluginList to be ran. Settings are still applied
+// but not used for determining plugins to run and in which order, as it is when running a settings file.
 
 /** @var \NamelessCoder\Gizzle\Response $response */
 $response = $gizzle->process();
@@ -157,27 +152,8 @@ Which causes first `./Settings/SpecialSettings.yml` and then `./Settings/OtherSe
 
 You can also use this to version your settings. If for example your design practices change and you require support for more than one repository design pattern, you can easily store the legacy configuration as a different settings file and by modifying the web hook URL in each repository, support both of your repositories' patterns simultaneously. A good example of when such versioning might become necessary is when switching to/from the "git flow" pattern or in multiple production branch scenarios where new production branches are continuously added and removed.
 
-Updating commit status
-----------------------
-
-If you wish to make Gizzle update the HEAD commit of the Payload as it gets processed (one status per settings file that processes the Payload), Gizzle supports a GitHub personal access token which, like the `.secret` file, is placed in the project root folder and is named `.token`. A token is a 32-character string with randomized letters and numbers.
-
-To obtain a personal access token:
-
-1. In GitHub, under account settings, [generate yourself a new Access Token](https://github.com/settings/applications#personal-access-tokens).
-2. Make sure you associate this token with at least permissions to access status and access (public) repositories. If any plugins require additional permissions, each should document which - and you should add permissions as required.
-3. Copy the token and insert it in the file `.token` in the project root folder.
-4. Do not commit the token file! Instead, add it to git ignore either locally or for your project. The token is **sensitive information** and should never be shared.
-
-When present, the token is read from this file and used to initialize the [GitHub API used by Gizzle](https://github.com/milo/github-api). The API can then be used by Gizzle and Gizzle plugins to perform any action which you permit.
-
-Resources:
-
-* [Access Token generation in GitHub account](https://github.com/settings/applications#personal-access-tokens)
-* [Documentation for every possible action you can perform through this GitHub API](https://developer.github.com/v3/)
-* [Documentation for how to use the PHP `Api` class to access the GitHub API](https://github.com/milo/github-api/wiki)
-
-### Usage of API from plugins
+Usage of API from plugins
+-------------------------
 
 The API can be accessed via the `$payload` argument that is provided to the essential methods on plugins. To access the API:
 
@@ -199,6 +175,25 @@ Note the additional decoding step which is required when you need to read data f
 
 > Tip: If the API returns data which contains for example commits, repositories, entities etc. and the data type is `array`, Gizzle's domain model supports mapping such data (recursively) by simply passing the array of properties into the constructor: `$commit = new Commit($commitDataAsArray);`.
 
+### Updating commit status
+
+If you wish to make Gizzle update the HEAD commit of the Payload as it gets processed (one status per settings file that processes the Payload), Gizzle supports a GitHub personal access token which, like the `.secret` file, is placed in the project root folder and is named `.token`. A token is a 32-character string with randomized letters and numbers.
+
+To obtain a personal access token:
+
+1. In GitHub, under account settings, [generate yourself a new Access Token](https://github.com/settings/applications#personal-access-tokens).
+2. Make sure you associate this token with at least permissions to access status and access (public) repositories. If any plugins require additional permissions, each should document which - and you should add permissions as required.
+3. Copy the token and insert it in the file `.token` in the project root folder.
+4. Do not commit the token file! Instead, add it to git ignore either locally or for your project. The token is **sensitive information** and should never be shared.
+
+When present, the token is read from this file and used to initialize the [GitHub API used by Gizzle](https://github.com/milo/github-api). The API can then be used by Gizzle and Gizzle plugins to perform any action which you permit.
+
+Additional resources for using the Github API:
+
+* [Access Token generation in GitHub account](https://github.com/settings/applications#personal-access-tokens)
+* [Documentation for every possible action you can perform through this GitHub API](https://developer.github.com/v3/)
+* [Documentation for how to use the PHP `Api` class to access the GitHub API](https://github.com/milo/github-api/wiki)
+
 Creating plugins
 ----------------
 
@@ -209,8 +204,7 @@ To create a plugin for Gizzle you need one mandatory class and optionally a list
 
 When users load your plugins by package name, your PluginList class is asked to return the class names of plugins and it is here you have your option to change which class names are returned for example depending on configuration. However, when users implement your plugin directly in `Settings.yml` or by manually instanciating it, your PluginList class does not get used. This means that _if your plugin only should be used directly from settings or manually inside other plugins, you do not need the PluginList class - which is why it is marked optional_.
 
-Example plugin
---------------
+### Example plugin
 
 ```php
 <?php
