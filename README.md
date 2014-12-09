@@ -26,9 +26,11 @@ ln -s vendor/namelesscoder/gizzle/web
 
 And add a (publicly accessible!) virtual host for your favorite HTTP server pointing to `./web/` inside this folder or simply include the package in your own composer application.
 
-Finally, configure your GitHub repository and add the URL to your Gizzle project pointing to the file `/github-webhook.php`.
+Finally, configure your GitHub repository and add the URL to your Gizzle project pointing to the file `/github-webhook.php` as requested through HTTP (file `web/github-webhook.php` in filesystem) or configure your virtual host to serve the `github-webhook.php` filename as default file.
 
-You can of course create your own receiving script instead of `github-webhook.php` if you need additional features. The default receiving script supports the features described in this README.
+You can of course create your own receiving script instead of `github-webhook.php` if you need additional features.
+
+> Note! the default receiving script only supports the features described in this README file.
 
 ### Security (secret file and personal token)
 
