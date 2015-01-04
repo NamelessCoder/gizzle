@@ -17,6 +17,7 @@ use NamelessCoder\Gizzle\Base;
 use NamelessCoder\Gizzle\Branch;
 use NamelessCoder\Gizzle\Commit;
 use NamelessCoder\Gizzle\Entity;
+use NamelessCoder\Gizzle\Message;
 use NamelessCoder\Gizzle\Payload;
 use NamelessCoder\Gizzle\PullRequest;
 use NamelessCoder\Gizzle\Repository;
@@ -229,6 +230,197 @@ class PayloadTest extends \PHPUnit_Framework_TestCase {
 			array('repository', new Repository()),
 			array('api', new Api()),
 			array('pullRequest', new PullRequest())
+		);
+	}
+
+	public function testSendMessageStoresMessage() {
+		$payload = $this->getMock('NamelessCoder\\Gizzle\\Payload', array('loadPluginsFromPackage', 'validate'), array('{}', ''));
+		$message = new Message('Test');
+		$payload->sendMessage($message);
+		$this->assertContains($message, $this->getObjectAttribute($payload, 'messages'));
+	}
+
+	public function testSendMessageIgnoresDuplicates() {
+		$payload = $this->getMock('NamelessCoder\\Gizzle\\Payload', array('loadPluginsFromPackage', 'validate'), array('{}', ''));
+		$message = new Message('Test');
+		$payload->sendMessage($message);
+		$payload->sendMessage($message);
+		$messages = $this->getObjectAttribute($payload, 'messages');
+		$this->assertContains($message, $messages);
+		$this->assertCount(1, $messages);
+	}
+
+	public function testSendMessageSetsPullRequestToPayloadPullRequestIfPullRequestAndCommitNotSpecified() {
+		$payload = $this->getMock('NamelessCoder\\Gizzle\\Payload', array('loadPluginsFromPackage', 'validate'), array('{}', ''));
+		$pullRequest = new PullRequest();
+		$payload->setPullRequest($pullRequest);
+		$message = new Message('Test');
+		$payload->sendMessage($message);
+		$messages = $this->getObjectAttribute($payload, 'messages');
+		$id = spl_object_hash($message);
+		$this->assertEquals($pullRequest, $messages[$id]->getPullRequest());
+	}
+
+	public function testSendMessageSetsCommitToPayloadHeadIfPayloadNotForPullRequestAndPullRequestAndCommitNotSpecified() {
+		$payload = $this->getMock('NamelessCoder\\Gizzle\\Payload', array('loadPluginsFromPackage', 'validate'), array('{}', ''));
+		$head = new Commit();
+		$payload->setHead($head);
+		$message = new Message('Test');
+		$payload->sendMessage($message);
+		$messages = $this->getObjectAttribute($payload, 'messages');
+		$id = spl_object_hash($message);
+		$this->assertEquals($head, $messages[$id]->getCommit());
+		$this->assertNull($messages[$id]->getPullRequest());
+	}
+
+	public function testSendMessageSetsCommitAndPullRequestWithPriorityForPullRequest() {
+		$payload = $this->getMock('NamelessCoder\\Gizzle\\Payload', array('loadPluginsFromPackage', 'validate'), array('{}', ''));
+		$head = new Commit();
+		$pullRequest = new PullRequest();
+		$payload->setHead($head);
+		$payload->setPullRequest($pullRequest);
+		$message = new Message('Test');
+		$id = spl_object_hash($message);
+		$payload->sendMessage($message);
+		$messages = $this->getObjectAttribute($payload, 'messages');
+		$this->assertEquals($pullRequest, $messages[$id]->getPullRequest());
+		$this->assertNull($messages[$id]->getCommit());
+	}
+
+	/**
+	 * @param Message $message
+	 * @param string $expected
+	 * @dataProvider getGenerateSummaryOfMessageTestValues
+	 */
+	public function testGenerateSummaryOfMessage(Message $message, $expected) {
+		$payload = $this->getMock('NamelessCoder\\Gizzle\\Payload', array('loadPluginsFromPackage', 'validate'), array('{}', ''));
+		$payload->sendMessage($message);
+		$method = new \ReflectionMethod('NamelessCoder\\Gizzle\\Payload', 'generateSummaryOfMessage');
+		$method->setAccessible(TRUE);
+		$result = $method->invokeArgs($payload, array($message));
+		$this->assertEquals($expected, $result);
+	}
+
+	public function testGenerateSummaryOfMessages() {
+		$payload = $this->getMock('NamelessCoder\\Gizzle\\Payload', array('loadPluginsFromPackage', 'validate'), array('{}', ''));
+		$messageDataSets = $this->getGenerateSummaryOfMessageTestValues();
+		$expected = '';
+		$messags = array();
+		foreach ($messageDataSets as $messageData) {
+			$payload->sendMessage($messageData[0]);
+			$expected .= $messageData[1] . PHP_EOL . PHP_EOL;
+			$messages[] = $messageData[0];
+		}
+		$method = new \ReflectionMethod('NamelessCoder\\Gizzle\\Payload', 'generateSummaryOfMessages');
+		$method->setAccessible(TRUE);
+		$result = $method->invokeArgs($payload, array($messages));
+		$this->assertEquals($expected, $result);
+	}
+
+	/**
+	 * @param Message $message
+	 * @param string $expected
+	 * @dataProvider getDispatchMessageTestValues
+	 */
+	public function testDispatchMessage(Message $message, $expected) {
+		$payload = $this->getMock('NamelessCoder\\Gizzle\\Payload', array('loadPluginsFromPackage', 'getApi'), array('{}', ''));
+		$api = $this->getMock('Milo\\GitHub\\Api', array('post'));
+		$payload->expects($this->once())->method('getApi')->willReturn($api);
+		if (TRUE === $message->getCommit() instanceof Commit || TRUE === $message->getPullRequest() instanceof PullRequest) {
+			$api->expects($this->once())->method('post')->with($this->anything(), json_encode($expected));
+		} else {
+			$api->expects($this->never())->method('post');
+		}
+		$method = new \ReflectionMethod('NamelessCoder\\Gizzle\\Payload', 'dispatchMessage');
+		$method->setAccessible(TRUE);
+		$method->invokeArgs($payload, array($message));
+	}
+
+	/**
+	 * @return array
+	 */
+	public function getDispatchMessageTestValues() {
+		$commit = new Commit();
+		$commit->setId(321);
+		$commit->setUrl('url');
+		$pullRequest = new PullRequest();
+		$pullRequest->setId(456);
+		$pullRequest->setUrlReviewComments('urlreviewcomments');
+		$pullRequest->setUrlComments('urlcomments');
+		$withCommit = new Message('Message');
+		$withCommit->setCommit($commit);
+		$withCommitAndPath = new Message('Message', '/path/to/file', 123);
+		$withCommitAndPath->setCommit($commit);
+		$withPullRequest = new Message('Message');
+		$withPullRequest->setPullRequest($pullRequest);
+		$withPullRequestAndCommit = new Message('Message');
+		$withPullRequestAndCommit->setPullRequest($pullRequest);
+		$withPullRequestAndCommit->setCommit($commit);
+		return array(
+			array(new Message('Message'), array('body' => 'Message')),
+			array(new Message('Message', '/path/to/file', 123), array('body' => 'Message')),
+			array($withCommit, array('body' => 'Message', 'sha1' => 321)),
+			array($withCommitAndPath, array('body' => 'Message', 'commit_id' => 321, 'path' => '/path/to/file', 'position' => 123)),
+			array($withPullRequest, array('body' => 'Message', 'sha1' => 456)),
+			array($withPullRequestAndCommit, array('body' => 'Message', 'sha1' => 321))
+		);
+	}
+
+	/**
+	 * @return array
+	 */
+	public function getGenerateSummaryOfMessageTestValues() {
+		$pullRequest = new PullRequest();
+		$pullRequest->setId('123');
+		$withPullRequest = new Message('Test message with pull request');
+		$withPullRequest->setPullRequest($pullRequest);
+		$commit = new Commit();
+		$commit->setId('456');
+		$withCommit = new Message('Test message with commit');
+		$withCommit->setCommit($commit);
+		$withCommitAndPath = clone $withCommit;
+		$withCommitAndPath->setPath('/path/to/file');
+		$withCommitAndPath->setPosition(789);
+		return array(
+			array($withPullRequest, 'Pull Request: 123' . PHP_EOL . 'Test message with pull request'),
+			array($withCommit, 'Commit: 456' . PHP_EOL . 'Test message with commit'),
+			array($withCommitAndPath, 'Commit: 456' . PHP_EOL . 'File: /path/to/file' . PHP_EOL . 'Line: 789' . PHP_EOL . 'Test message with commit'),
+		);
+	}
+
+	/**
+	 * @param integer $numberOfMessages
+	 * @param integer $limit
+	 * @param Message $customMessage
+	 * @param integer $expectedNumberOfMessages
+	 * @dataProvider getDispatchMessagesTestValues
+	 */
+	public function testDispatchMessages($numberOfMessages, $limit, $customMessage, $expectedNumberOfMessages) {
+		$payload = $this->getMock(
+			'NamelessCoder\\Gizzle\\Payload',
+			array('loadSettings', 'dispatchMessage'),
+			array('{}', '')
+		);
+		$payload->expects($this->exactly($expectedNumberOfMessages))->method('dispatchMessage');
+		$payload->expects($this->any())->method('loadSettings')->willReturn(array(Payload::OPTION_MAX_MESSAGES => Payload::OPTION_MAX_MESSAGES_DEFAULT));
+		while (0 < $numberOfMessages) {
+			$payload->sendMessage(new Message('Message #' . $numberOfMessages));
+			--$numberOfMessages;
+		}
+		$payload->dispatchMessages($limit, $customMessage);
+	}
+
+	/**
+	 * @return array
+	 */
+	public function getDispatchMessagesTestValues() {
+		return array(
+			array(1, NULL, NULL, 1),
+			array(2, NULL, NULL, 2),
+			array(3, 3, NULL, 3),
+			array(4, 3, NULL, 1),
+			array(10, 3, NULL, 1),
+			array(10, 3, new Message('Custom overflow'), 1),
 		);
 	}
 

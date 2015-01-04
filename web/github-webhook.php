@@ -71,17 +71,18 @@ function processSettingsFile($settingsFile, $data, $secret, &$output, \Milo\Gith
 	$settingsFile = preg_match($allowedPattern, $settingsFile) ? : $settingsFile; // nullify if invalid
 	$payload = new \NamelessCoder\Gizzle\Payload($data, $secret, $settingsFile);
 	$payload->setApi($api);
-	$response = $payload->process();
 	setStatus($payload, $api, 'pending', $buildNumber);
+	$response = $payload->process();
+	$payload->dispatchMessages();
 	if (0 === $response->getCode()) {
 		$output += $response->getOutput();
 		setStatus($payload, $api, 'success', $buildNumber);
 	} else {
-		setStatus($payload, $api, 'error', $buildNumber);
 		$output['messages'][] = 'The following errors were reported:';
 		foreach ($response->getErrors() as $error) {
 			$output['messages'][] = $error->getMessage() . ' (' . $error->getCode() . ')' . PHP_EOL;
 		}
+		setStatus($payload, $api, 'error', $buildNumber);
 	}
 	return $payload;
 }

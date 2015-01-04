@@ -101,6 +101,7 @@ Gizzle provides you with a way to configure for each plugin, a list of other plu
 About the example: the illustration configures the self-update plugin which runs `git pull` and `composer install` in the root folder of the package that implemented it in its configuration. The sub-plugin that's also used is _a ficticious plugin which sends an email to the entity pushing the commit described in the payload with cc: or bcc: defined by settings for that plugin_ and another _also ficticious plugin which is able to send a message to `syslog` with a custom severity_. It also demonstrates how you can use this in as many nested levels as you wish, catching events at each level; in this case causing the "CRITICAL!" syslog message if self-update failed and either the pusher or the master dev-op could not be notified of the failure directly.
 
 ```yaml
+maxMessages: 3
 MyVendor\MyGizzleImplementingPackage:
   NamelessCoder\Gizzle\GizzlePlugins\SelfUpdatePlugin:
     onStart:
@@ -123,7 +124,9 @@ MyVendor\MyGizzleImplementingPackage:
         cc: developers@organization.foo
 ```
 
-Note that these events are _defined on the same level as any other setting a plugin uses_ which means the names are reserved and cannot be used as names for your own plugin settings. Defining an incorrect value (something not an array) may cause exceptions. However: contrary to how "root" plugins report errors, exceptions which are raised by a plugin that is used as event listener _will simply add a friendly error message to the response, allowing the next plugin to continue_, and so on. Whereas a "root" plugin would cause the entire Payload to stop processing.
+Gizzle's own few settings can be configured in each settings file by under the `NamelessCoder\Gizzle` scope.
+
+Note that the events are _defined on the same level as any other setting a plugin uses_ which means the names are reserved and cannot be used as names for your own plugin settings. Defining an incorrect value (something not an array) may cause exceptions. However: contrary to how "root" plugins report errors, exceptions which are raised by a plugin that is used as event listener _will simply add a friendly error message to the response, allowing the next plugin to continue_, and so on. Whereas a "root" plugin would cause the entire Payload to stop processing.
 
 ### Multiple configurations
 
@@ -195,6 +198,33 @@ Additional resources for using the Github API:
 * [Access Token generation in GitHub account](https://github.com/settings/applications#personal-access-tokens)
 * [Documentation for every possible action you can perform through this GitHub API](https://developer.github.com/v3/)
 * [Documentation for how to use the PHP `Api` class to access the GitHub API](https://github.com/milo/github-api/wiki)
+
+### Adding comments to Commits or Pull Requests (or files therein)
+
+Gizzle includes a simple Message object which can be used to send comments to GitHub and attach them to a commit or a pull request, or a line in a specific file in a commit or pull request. Contrary to manually dispatching such messages using the GitHub API (which is still possible!), using the Message object allows you to control the flow of messages and avoids duplicate comments. For example, Messages become spooled and you can set a maximum allowed number of Messages in the spool in order to prevent flooding. If the limit is exceeded (for the current Payload and regardless of how many settings files are being processed), Gizzle will replace all spooled Messages with a single Message informing that there were too many items to report, along with a *summary* of the Messages that were generated.
+
+To create and dispatch a new Message that ends up as a comment on GitHub, all you need is access to the `Payload` instance:
+
+```php
+$message = new Namelesscoder\Gizzle\Message(
+	'This is an inline message for a line in a file',
+	'/path/to/file.txt',
+	123
+);
+$message->setCommit($payload->getHead());
+$payload->sendMessage($message);
+```
+
+And to create a more general comment that gets added to the "Discussion" tab in GitHub's pull request view:
+
+```php
+$message = new Namelesscoder\Gizzle\Message(
+	'This is a comment for the pull request itself'
+);
+$message->setPullRequest($payload->getPullRequest());
+```
+
+The spooled Message instances are then processed *last*, after all plugins have finished executing.
 
 Creating plugins
 ----------------

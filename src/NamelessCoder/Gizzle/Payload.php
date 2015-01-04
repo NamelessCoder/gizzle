@@ -12,12 +12,18 @@
 namespace NamelessCoder\Gizzle;
 
 use Milo\Github\Api;
+use Milo\Github\Http\Response as ApiResponse;
 use Symfony\Component\Yaml\Yaml;
 
 /**
  * Class Payload
+ *
+ * For general usage instructions, see README.md
  */
 class Payload extends JsonDataMapper {
+
+	const OPTION_MAX_MESSAGES = 'maxMessages';
+	const OPTION_MAX_MESSAGES_DEFAULT = 3;
 
 	/**
 	 * @var string
@@ -148,6 +154,11 @@ class Payload extends JsonDataMapper {
 	 * @var Api
 	 */
 	protected $api = NULL;
+
+	/**
+	 * @var Message[]
+	 */
+	protected $messages = array();
 
 	/**
 	 * Payload creation
@@ -351,6 +362,102 @@ class Payload extends JsonDataMapper {
 				}
 			}
 		}
+	}
+
+	/**
+	 * @param integer $limit
+	 * @param Message $overflowMessage
+	 */
+	public function dispatchMessages($limit = NULL, Message $overflowMessage = NULL) {
+		if (NULL === $limit) {
+			$settings = $this->loadSettings();
+			$limit = TRUE === isset($settings[self::OPTION_MAX_MESSAGES]) ? $settings[self::OPTION_MAX_MESSAGES] : self::OPTION_MAX_MESSAGES_DEFAULT;
+		}
+		$numberOfMessages = count($this->messages);
+		if ($limit >= $numberOfMessages) {
+			foreach ($this->messages as $message) {
+				$this->dispatchMessage($message);
+			}
+		} else {
+			if (NULL === $overflowMessage) {
+				$summary = $this->generateSummaryOfMessages();
+				$messageString = 'Too many messages were triggered (%s - limit was %s). Summary: ' . PHP_EOL . PHP_EOL;
+				$messageString = sprintf($messageString, $numberOfMessages, $limit, $summary);
+				$overflowMessage = new Message($messageString);
+			}
+			$this->dispatchMessage($overflowMessage);
+		}
+	}
+
+	/**
+	 * @param Message $message
+	 * @return ApiResponse|NULL
+	 */
+	protected function dispatchMessage(Message $message) {
+		$api = $this->getApi();
+		$data = $message->toGitHubApiDataArray();
+		$commit = $message->getCommit();
+		$pullRequest = $message->getPullRequest();
+		$url = NULL;
+		if (TRUE === $pullRequest instanceof PullRequest && NULL === $commit) {
+			$url = $pullRequest->getUrlComments();
+		} elseif (TRUE === $pullRequest instanceof PullRequest && TRUE === $commit instanceof Commit) {
+			$url = $pullRequest->getUrlReviewComments();
+		} elseif (TRUE === $commit instanceof Commit) {
+			$url = $commit->getUrl();
+		}
+		if (NULL !== $url) {
+			return $api->post($url, json_encode($data));
+		}
+		return NULL;
+	}
+
+	/**
+	 * @param Message $message
+	 */
+	public function sendMessage(Message $message) {
+		$lacksCommitAndPullRequest = (NULL === $message->getCommit() && NULL === $message->getPullRequest());
+		if (TRUE === $lacksCommitAndPullRequest && TRUE === $this->pullRequest instanceof PullRequest) {
+			$message->setPullRequest($this->pullRequest);
+		} elseif (TRUE === $lacksCommitAndPullRequest && TRUE === $this->head instanceof Commit) {
+			$message->setCommit($this->head);
+		}
+		$id = spl_object_hash($message);
+		$this->messages[$id] = $message;
+	}
+
+	/**
+	 * @return string
+	 */
+	protected function generateSummaryOfMessages() {
+		$summary = '';
+		foreach ($this->messages as $message) {
+			$summary .= $this->generateSummaryOfMessage($message) . PHP_EOL . PHP_EOL;
+		}
+		return $summary;
+	}
+
+	/**
+	 * @param Message $message
+	 * @return string
+	 */
+	protected function generateSummaryOfMessage(Message $message) {
+		$commit = $message->getCommit();
+		$pullRequest = $message->getPullRequest();
+		$preamble = '';
+		if (TRUE === $commit instanceof Commit) {
+			$preamble = 'Commit: ' . $commit->getId();
+			$path = $message->getPath();
+			if (NULL !== $path) {
+				$preamble .= PHP_EOL;
+				$preamble .= 'File: ' . $path . PHP_EOL;
+				$preamble .= 'Line: ' . $message->getPosition();
+			}
+		} elseif (TRUE === $pullRequest instanceof PullRequest) {
+			$preamble = 'Pull Request: ' . $pullRequest->getId();
+		}
+		$summary = $preamble . PHP_EOL . $message->getBody();
+		return $summary;
 	}
 
 	/**
