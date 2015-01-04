@@ -203,6 +203,12 @@ Additional resources for using the Github API:
 
 Gizzle includes a simple Message object which can be used to send comments to GitHub and attach them to a commit or a pull request, or a line in a specific file in a commit or pull request. Contrary to manually dispatching such messages using the GitHub API (which is still possible!), using the Message object allows you to control the flow of messages and avoids duplicate comments. For example, Messages become spooled and you can set a maximum allowed number of Messages in the spool in order to prevent flooding. If the limit is exceeded (for the current Payload and regardless of how many settings files are being processed), Gizzle will replace all spooled Messages with a single Message informing that there were too many items to report, along with a *summary* of the Messages that were generated.
 
+Although these Messages allow an almost instant feedback to the user who for example creates a pull request, it is **not intended to be a replacement for a continuous integration solution*. The ideal type of feedback to return using Messages is formalities checking: commit message style, pull request composition (e.g. warning to squash all commits) and brief code style checking. Note that access to the actual contents of files requires reading the contents of each file either from a manually checked out repository or using GitHub's raw data URLs (which you manually download to a temporary file if the utility you use does not support URL targets for checking).
+
+You can utilise this simple way to provide almost instant feedback on formalities for users who submit pull requests through GitHub's web interface. However: you should consider fitting your repository with actual git hooks which perform these checks *before* the user pushes to remotes or even creates a commit. *Such hooks are not processed when pull requests are created through GitHub's web interface* - but it does provide excellent and instant feedback to any user making changes locally in a cloned repository.
+
+For an example of how such hooks can be implemented, see [https://github.com/FluidTYPO3/fluidtypo3-development](https://github.com/FluidTYPO3/fluidtypo3-development) which contains examples for validating the commit message, running unit tests and style checks and contains a script which maintains the hooks (instead of requiring the user to copy each one when they're updated).
+
 To create and dispatch a new Message that ends up as a comment on GitHub, all you need is access to the `Payload` instance:
 
 ```php
@@ -222,6 +228,26 @@ $message = new Namelesscoder\Gizzle\Message(
 	'This is a comment for the pull request itself'
 );
 $message->setPullRequest($payload->getPullRequest());
+$payload->sendMessage($message);
+```
+
+And finally, if both a pull request and commit are specified, Gizzle assumes your intention is to create an inline review comment for that commit in the pull request:
+
+```php
+foreach ($payload->getCommits() as $commit) {
+	// Example loop. An implementation like this one would for example
+	// pull information from $commit and validate the message or read
+	// a list of files changed and run a code style check directly on
+	// GitHub's "raw" hosted file or download the file and then check it.
+	$message = new Namelesscoder\Gizzle\Message(
+		'This is an inline review comment',
+		'/path/to/file',
+		123
+	);
+	$message->setPullRequest($payload->getPullRequest());
+	$message->setCommit($commit);
+	$payload->sendMessage($message);
+}
 ```
 
 The spooled Message instances are then processed *last*, after all plugins have finished executing.
