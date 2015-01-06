@@ -127,7 +127,7 @@ class Commit extends JsonDataMapper {
 	}
 
 	/**
-	 * @return Person
+	 * @return Entity
 	 */
 	public function getAuthor() {
 		return $this->author;

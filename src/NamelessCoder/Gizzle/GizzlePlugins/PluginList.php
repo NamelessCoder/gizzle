@@ -12,7 +12,6 @@
 namespace NamelessCoder\Gizzle\GizzlePlugins;
 
 use NamelessCoder\Gizzle\PluginListInterface;
-use string;
 
 /**
  * Class PluginList
@@ -36,7 +35,7 @@ class PluginList implements PluginListInterface {
 	/**
 	 * Get all class names of plugins delivered from implementer package.
 	 *
-	 * @return string[]
+	 * @return array
 	 */
 	public function getPluginClassNames() {
 		return array(

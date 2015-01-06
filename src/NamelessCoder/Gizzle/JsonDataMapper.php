@@ -49,12 +49,10 @@ abstract class JsonDataMapper {
 			$propertyClass = TRUE === isset($this->propertyClasses[$propertyName]) ? $this->propertyClasses[$propertyName] : NULL;
 			if (FALSE === property_exists(get_class($this), $propertyName)) {
 				continue;
-			} elseif (NULL === $propertyClass) {
-				$propertyValue = $propertyValue;
 			} elseif ('DateTime' === $propertyClass) {
-				$propertyValue = NULL === $propertyValue ? NULL : \DateTime::createFromFormat('U', $propertyValue);
-			} elseif (FALSE === strpos($propertyClass, '[]')) {
-				$propertyValue = NULL === $propertyValue ? NULL : new $propertyClass($propertyValue);
+				$propertyValue = \DateTime::createFromFormat('U', (integer) $propertyValue);
+			} elseif (NULL !== $propertyClass && FALSE === strpos($propertyClass, '[]')) {
+				$propertyValue = new $propertyClass($propertyValue);
 			} elseif (NULL !== $propertyClass) {
 				$className = substr($propertyClass, 0, -2);
 				$values = array();

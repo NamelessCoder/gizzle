@@ -173,6 +173,8 @@ class Payload extends JsonDataMapper {
 	 *
 	 * @param string $jsonData
 	 * @param string $secret
+	 * @param string $settingsFile
+	 * @throws \RuntimeException
 	 */
 	public function __construct($jsonData, $secret, $settingsFile = 'settings/SelfUpdate.yml') {
 		if (FALSE === defined('GIZZLE_HOME') || FALSE === is_dir(GIZZLE_HOME)) {
@@ -244,7 +246,7 @@ class Payload extends JsonDataMapper {
 			$packageSettings = (array) TRUE === isset($settings[$package]) ? $settings[$package] : array();
 			/** @var PluginListInterface $lister */
 			$lister = new $expectedListerClassName();
-			$lister->initialize($settings);
+			$lister->initialize($packageSettings);
 			$pluginClassNames = $lister->getPluginClassNames();
 			$pluginClassNames = array_combine($pluginClassNames, array_fill(0, count($pluginClassNames), array()));
 			$pluginSettings = (array) (TRUE === isset($settings[$package]) ? $settings[$package] : $pluginClassNames);

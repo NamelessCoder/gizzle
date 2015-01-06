@@ -11,8 +11,6 @@
 
 namespace NamelessCoder\Gizzle;
 
-use NamelessCoder\Gizzle\PluginInterface;
-
 /**
  * Class AbstractPlugin
  */
@@ -61,6 +59,7 @@ class AbstractPlugin implements PluginInterface {
 	/**
 	 * Returns a setting value.
 	 *
+	 * @param string $name
 	 * @return mixed
 	 */
 	public function getSetting($name) {

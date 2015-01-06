@@ -45,7 +45,8 @@ interface PluginInterface {
 	/**
 	 * Returns a setting value
 	 *
-	 * @return void
+	 * @param string $name
+	 * @return mixed
 	 */
 	public function getSetting($name);
 
