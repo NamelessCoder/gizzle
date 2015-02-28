@@ -1,7 +1,7 @@
 <phpunit bootstrap="tests/bootstrap.php"
          backupGlobals="false"
          backupStaticAttributes="false"
-         colors="true"
+         colors="false"
          convertErrorsToExceptions="true"
          convertWarningsToExceptions="true"
          forceCoversAnnotation="false"
@@ -10,7 +10,6 @@
          stopOnFailure="false"
          stopOnIncomplete="false"
          stopOnSkipped="false"
-         strict="false"
          verbose="false">
     <testsuites>
         <testsuite name="gizzle">
@@ -21,7 +20,7 @@
         <whitelist>
             <addUncoveredFilesFromWhitelist>true</addUncoveredFilesFromWhitelist>
             <processUncoveredFilesFromWhitelist>true</processUncoveredFilesFromWhitelist>
-            <directory>src/NamelessCoder/Gizzle</directory>
+            <directory>src</directory>
         </whitelist>
     </filter>
 </phpunit>

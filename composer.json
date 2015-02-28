@@ -12,13 +12,13 @@
     ],
     "autoload": {
         "psr-4": {
-            "NamelessCoder\\Gizzle\\": "src/NamelessCoder/Gizzle/"
+            "NamelessCoder\\Gizzle\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "NamelessCoder\\Gizzle\\Tests\\Fixtures\\": "tests/fixtures/NamelessCoder/Gizzle/",
-            "NamelessCoder\\Gizzle\\Tests\\Unit\\": "tests/unit/NamelessCoder/Gizzle/"
+            "NamelessCoder\\Gizzle\\Tests\\Fixtures\\": "tests/fixtures/",
+            "NamelessCoder\\Gizzle\\Tests\\Unit\\": "tests/unit/"
         }
     },
     "require-dev": {
