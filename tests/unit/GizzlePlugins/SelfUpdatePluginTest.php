@@ -12,7 +12,6 @@
 namespace FluidTYPO3\FluidTYPO3Gizzle\Tests\Unit\GizzlePlugins;
 
 use NamelessCoder\Gizzle\GizzlePlugins\SelfUpdatePlugin;
-use NamelessCoder\Gizzle\Payload;
 use NamelessCoder\Gizzle\Response;
 
 /**
