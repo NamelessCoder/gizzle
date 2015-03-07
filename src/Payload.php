@@ -196,6 +196,10 @@ class Payload extends JsonDataMapper {
 	}
 
 	/**
+	 * Validates the data in $jsonData by checking that
+	 * the hash of that data matches the hash calculated
+	 * with the "secret" file that Gizzle uses.
+	 *
 	 * @param $jsonData
 	 * @param $secret
 	 * @return void
@@ -210,6 +214,9 @@ class Payload extends JsonDataMapper {
 	}
 
 	/**
+	 * Returns the value of the HTTP_X_HUB_SIGNATURE
+	 * header included in payloads coming from GitHub.
+	 *
 	 * @return string|NULL
 	 */
 	protected function readSignatureHeader() {
@@ -217,6 +224,10 @@ class Payload extends JsonDataMapper {
 	}
 
 	/**
+	 * Wrapper method to load plugins from an arbitrary
+	 * source definition - either a string package name,
+	 * or an array of string package names.
+	 *
 	 * @param mixed $_
 	 * @return self
 	 */
@@ -235,6 +246,13 @@ class Payload extends JsonDataMapper {
 	}
 
 	/**
+	 * Create and initialize all plugin classes from the
+	 * package specified in the input argument. Similar
+	 * to loading a list of plugin classes, but uses the
+	 * special PluginList class from that package in order
+	 * to determine which plugins should be activated and
+	 * to deliver default settings values for those plugins.
+	 *
 	 * @param string $package
 	 * @return PluginInterface[]
 	 */
@@ -257,6 +275,11 @@ class Payload extends JsonDataMapper {
 	}
 
 	/**
+	 * Create and initialize all plugin classes based on an
+	 * input array in which the keys are the class names of
+	 * plugins and the values are an array of settings for
+	 * that particular plugin instance.
+	 *
 	 * @param array $pluginClassNamesAndSettings
 	 * @return array
 	 */
@@ -272,6 +295,9 @@ class Payload extends JsonDataMapper {
 	}
 
 	/**
+	 * Create and initialize a single plugin instance
+	 * based on class name and settings.
+	 *
 	 * @param string $pluginClassName
 	 * @param array $settings
 	 * @return PluginInterface
@@ -285,6 +311,11 @@ class Payload extends JsonDataMapper {
 	}
 
 	/**
+	 * Loads the settings specified in the `.yml` file
+	 * that this Gizzle instance was instructed to use.
+	 * If the file does not exist, no settings are loaded
+	 * and no error message given.
+	 *
 	 * @return array
 	 */
 	protected function loadSettings() {
@@ -301,6 +332,10 @@ class Payload extends JsonDataMapper {
 	}
 
 	/**
+	 * Run Gizzle plugins specified in configuration
+	 * or input arguments. Return a Response object
+	 * containing feedback from all plugins.
+	 *
 	 * @return Response
 	 */
 	public function process() {
