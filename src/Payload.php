@@ -350,6 +350,67 @@ class Payload extends JsonDataMapper {
 	}
 
 	/**
+	 * Store a message about the pull request identified
+	 * in the argument.
+	 *
+	 * @param PullRequest $pullRequest
+	 * @param string $message
+	 * @return void
+	 */
+	public function storePullRequestComment(PullRequest $pullRequest, $message) {
+		$url = $pullRequest->getUrlComments();
+		$parameters = array(
+			'body' => $message,
+		);
+		$this->getApi()->post($url, json_encode($parameters));
+	}
+
+	/**
+	 * Store a standard GitHub comment about a commit, be
+	 * it part of a pull request or not. Any commit, including
+	 * merge commits, can be commented.
+	 *
+	 * @param Commit $commit
+	 * @param string $message
+	 * @return void
+	 */
+	public function storeCommitComment(Commit $commit, $message) {
+		$url = $commit->getUrl();
+		$parameters = array(
+			'sha1' => $commit->getSha1(),
+			'body' => $message
+		);
+		$this->getApi()->post($url, json_encode($parameters));
+	}
+
+	/**
+	 * Store a pull request specific validation of a single
+	 * line in a commit.
+	 *
+	 * Use this method to quickly add comments about any line
+	 * in a commit that is part of the pull request, both of
+	 * which must be provided. The message requires a file
+	 * path (repository root relative) and line number.
+	 *
+	 * @param PullRequest $pullRequest
+	 * @param Commit $commit
+	 * @param string $message
+	 * @param string $file
+	 * @param integer $line
+	 * @return void
+	 */
+	public function storeCommitValidation(PullRequest $pullRequest, Commit $commit, $message, $file, $line) {
+		$url = $pullRequest->getUrlReviewComments();
+		$parameters = array(
+			'commit_id' => $commit->getId(),
+			'body' => $message,
+			'path' => $file,
+			'position' => $line
+		);
+		$this->getApi()->post($url, json_encode($parameters));
+	}
+
+	/**
 	 * @param PluginInterface[] $plugins
 	 */
 	protected function executePlugins(array $plugins) {

@@ -424,4 +424,50 @@ class PayloadTest extends \PHPUnit_Framework_TestCase {
 		);
 	}
 
+	/**
+	 * @return void
+	 */
+	public function testStoreCommitComment() {
+		$commit = new Commit();
+		$commit->setUrl('fakeurl');
+		$commit->setSha1('fakesha1');
+		$expected = json_encode(array('sha1' => 'fakesha1', 'body' => 'fakemessage'));
+		$api = $this->getMock('Milo\\GitHub\\Api', array('post'));
+		$payload = $this->getMock('NamelessCoder\\Gizzle\\Payload', array('getApi'), array('{}', ''));
+		$payload->expects($this->once())->method('getApi')->willReturn($api);
+		$api->expects($this->once())->method('post')->with('fakeurl', $expected);
+		$payload->storeCommitComment($commit, 'fakemessage');
+	}
+
+	/**
+	 * @return void
+	 */
+	public function testStoreCommitValidation() {
+		$commit = new Commit();
+		$commit->setUrl('fakeurl');
+		$commit->setId('fakesha1');
+		$pullRequest = new PullRequest();
+		$pullRequest->setUrlReviewComments('fakeurl');
+		$expected = json_encode(array('commit_id' => 'fakesha1', 'body' => 'fakemessage', 'path' => '/a/b/c', 'position' => 123));
+		$api = $this->getMock('Milo\\GitHub\\Api', array('post'));
+		$payload = $this->getMock('NamelessCoder\\Gizzle\\Payload', array('getApi'), array('{}', ''));
+		$payload->expects($this->once())->method('getApi')->willReturn($api);
+		$api->expects($this->once())->method('post')->with('fakeurl', $expected);
+		$payload->storeCommitValidation($pullRequest, $commit, 'fakemessage', '/a/b/c', 123);
+	}
+
+	/**
+	 * @return void
+	 */
+	public function testStorePullRequestComment() {
+		$pullRequest = new PullRequest();
+		$pullRequest->setUrlComments('fakeurl');
+		$expected = json_encode(array('body' => 'fakemessage'));
+		$api = $this->getMock('Milo\\GitHub\\Api', array('post'));
+		$payload = $this->getMock('NamelessCoder\\Gizzle\\Payload', array('getApi'), array('{}', ''));
+		$payload->expects($this->once())->method('getApi')->willReturn($api);
+		$api->expects($this->once())->method('post')->with('fakeurl', $expected);
+		$payload->storePullRequestComment($pullRequest, 'fakemessage');
+	}
+
 }
