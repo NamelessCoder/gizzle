@@ -39,7 +39,8 @@ class PluginList implements PluginListInterface {
 	 */
 	public function getPluginClassNames() {
 		return array(
-			'NamelessCoder\\Gizzle\\GizzlePlugins\\SelfUpdatePlugin'
+			'NamelessCoder\\Gizzle\\GizzlePlugins\\SelfUpdatePlugin',
+			'NamelessCoder\\Gizzle\\GizzlePlugins\\CommentPlugin',
 		);
 	}
 
