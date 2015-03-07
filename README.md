@@ -218,7 +218,7 @@ For an example of how such hooks can be implemented, see [https://github.com/Flu
 To create and dispatch a new Message that ends up as a comment on GitHub, all you need is access to the `Payload` instance:
 
 ```php
-$message = new Namelesscoder\Gizzle\Message(
+$message = new NamelessCoder\Gizzle\Message(
 	'This is an inline message for a line in a file',
 	'/path/to/file.txt',
 	123
@@ -230,7 +230,7 @@ $payload->sendMessage($message);
 And to create a more general comment that gets added to the "Discussion" tab in GitHub's pull request view:
 
 ```php
-$message = new Namelesscoder\Gizzle\Message(
+$message = new NamelessCoder\Gizzle\Message(
 	'This is a comment for the pull request itself'
 );
 $message->setPullRequest($payload->getPullRequest());
@@ -245,7 +245,7 @@ foreach ($payload->getCommits() as $commit) {
 	// pull information from $commit and validate the message or read
 	// a list of files changed and run a code style check directly on
 	// GitHub's "raw" hosted file or download the file and then check it.
-	$message = new Namelesscoder\Gizzle\Message(
+	$message = new NamelessCoder\Gizzle\Message(
 		'This is an inline review comment',
 		'/path/to/file',
 		123
