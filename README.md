@@ -122,6 +122,12 @@ MyVendor\MyGizzleImplementingPackage:
       OtherVendor\GizzleEmailPlugins\GizzlePlugins\EmailPusherPlugin:
         subject: MyGizzleImplementingPackage was updated!
         cc: developers@organization.foo
+    onFinish:
+      # event executed after the error/success event regardless of outcome
+      # comment on HEAD commit that Gizzle finished processing; include output lines/errors.
+      NamelessCoder\Gizzle\GizzlePlugins\CommentPlugin:
+        comment: Finished processing
+        commit: true
 ```
 
 Gizzle's own few settings can be configured in each settings file by under the `NamelessCoder\Gizzle` scope.

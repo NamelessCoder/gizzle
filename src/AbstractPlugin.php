@@ -19,6 +19,7 @@ class AbstractPlugin implements PluginInterface {
 	const OPTION_EVENTS_ONSTART = 'onStart';
 	const OPTION_EVENTS_ONSUCCESS = 'onSuccess';
 	const OPTION_EVENTS_ONERROR = 'onError';
+	const OPTION_EVENTS_ONFINISH = 'onFinish';
 
 	/**
 	 * @var array

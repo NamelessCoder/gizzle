@@ -380,6 +380,7 @@ class Payload extends JsonDataMapper {
 			$this->dispatchPluginEvent($plugin, AbstractPlugin::OPTION_EVENTS_ONERROR);
 			$errors[] = $error;
 		}
+		$this->dispatchPluginEvent($plugin, AbstractPlugin::OPTION_EVENTS_ONFINISH);
 		return $errors;
 	}
 
