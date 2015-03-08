@@ -2,7 +2,7 @@
     "name": "namelesscoder/gizzle",
     "description": "GitHub Webhook Listener with plugin-based API for creating your own triggerered actions",
     "license": "MIT",
-    "version": "1.5.1",
+    "version": "1.5.2",
     "keywords": ["php", "git", "github", "webhook", "hook", "plugin"],
     "authors": [
         {
