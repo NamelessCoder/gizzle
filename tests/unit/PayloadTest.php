@@ -305,7 +305,7 @@ class PayloadTest extends \PHPUnit_Framework_TestCase {
 		$payload = $this->getMock('NamelessCoder\\Gizzle\\Payload', array('loadPluginsFromPackage', 'validate'), array('{}', ''));
 		$messageDataSets = $this->getGenerateSummaryOfMessageTestValues();
 		$expected = '';
-		$messags = array();
+		$messages = array();
 		foreach ($messageDataSets as $messageData) {
 			$payload->sendMessage($messageData[0]);
 			$expected .= $messageData[1] . PHP_EOL . PHP_EOL;
@@ -323,14 +323,11 @@ class PayloadTest extends \PHPUnit_Framework_TestCase {
 	 * @dataProvider getDispatchMessageTestValues
 	 */
 	public function testDispatchMessage(Message $message, $expected) {
-		$payload = $this->getMock('NamelessCoder\\Gizzle\\Payload', array('loadPluginsFromPackage', 'getApi'), array('{}', ''));
+		$payload = $this->getMock('NamelessCoder\\Gizzle\\Payload', array('loadPluginsFromPackage', 'getApi', 'getRepository'), array('{}', ''));
 		$api = $this->getMock('Milo\\GitHub\\Api', array('post'));
+		$payload->expects($this->any())->method('getRepository')->willReturn(new Repository());
 		$payload->expects($this->once())->method('getApi')->willReturn($api);
-		if (TRUE === $message->getCommit() instanceof Commit || TRUE === $message->getPullRequest() instanceof PullRequest) {
-			$api->expects($this->once())->method('post')->with($this->anything(), json_encode($expected));
-		} else {
-			$api->expects($this->never())->method('post');
-		}
+		$api->expects($this->once())->method('post')->with($this->anything(), json_encode($expected));
 		$method = new \ReflectionMethod('NamelessCoder\\Gizzle\\Payload', 'dispatchMessage');
 		$method->setAccessible(TRUE);
 		$method->invokeArgs($payload, array($message));
@@ -342,11 +339,8 @@ class PayloadTest extends \PHPUnit_Framework_TestCase {
 	public function getDispatchMessageTestValues() {
 		$commit = new Commit();
 		$commit->setId(321);
-		$commit->setUrl('url');
 		$pullRequest = new PullRequest();
 		$pullRequest->setId(456);
-		$pullRequest->setUrlReviewComments('urlreviewcomments');
-		$pullRequest->setUrlComments('urlcomments');
 		$withCommit = new Message('Message');
 		$withCommit->setCommit($commit);
 		$withCommitAndPath = new Message('Message', '/path/to/file', 123);
@@ -359,10 +353,10 @@ class PayloadTest extends \PHPUnit_Framework_TestCase {
 		return array(
 			array(new Message('Message'), array('body' => 'Message')),
 			array(new Message('Message', '/path/to/file', 123), array('body' => 'Message')),
-			array($withCommit, array('body' => 'Message', 'sha1' => 321)),
+			array($withCommit, array('body' => 'Message')),
 			array($withCommitAndPath, array('body' => 'Message', 'commit_id' => 321, 'path' => '/path/to/file', 'position' => 123)),
 			array($withPullRequest, array('body' => 'Message', 'sha1' => 456)),
-			array($withPullRequestAndCommit, array('body' => 'Message', 'sha1' => 321))
+			array($withPullRequestAndCommit, array('body' => 'Message'))
 		);
 	}
 
@@ -429,13 +423,13 @@ class PayloadTest extends \PHPUnit_Framework_TestCase {
 	 */
 	public function testStoreCommitComment() {
 		$commit = new Commit();
-		$commit->setUrl('fakeurl');
-		$commit->setSha1('fakesha1');
-		$expected = json_encode(array('sha1' => 'fakesha1', 'body' => 'fakemessage'));
+		$commit->setId('fakesha1');
+		$expected = json_encode(array('body' => 'fakemessage'));
 		$api = $this->getMock('Milo\\GitHub\\Api', array('post'));
-		$payload = $this->getMock('NamelessCoder\\Gizzle\\Payload', array('getApi'), array('{}', ''));
+		$payload = $this->getMock('NamelessCoder\\Gizzle\\Payload', array('getApi', 'getRepository'), array('{}', ''));
+		$payload->expects($this->any())->method('getRepository')->willReturn(new Repository());
 		$payload->expects($this->once())->method('getApi')->willReturn($api);
-		$api->expects($this->once())->method('post')->with('fakeurl', $expected);
+		$api->expects($this->once())->method('post')->with($this->anything(), $expected);
 		$payload->storeCommitComment($commit, 'fakemessage');
 	}
 
@@ -447,12 +441,12 @@ class PayloadTest extends \PHPUnit_Framework_TestCase {
 		$commit->setUrl('fakeurl');
 		$commit->setId('fakesha1');
 		$pullRequest = new PullRequest();
-		$pullRequest->setUrlReviewComments('fakeurl');
 		$expected = json_encode(array('commit_id' => 'fakesha1', 'body' => 'fakemessage', 'path' => '/a/b/c', 'position' => 123));
 		$api = $this->getMock('Milo\\GitHub\\Api', array('post'));
-		$payload = $this->getMock('NamelessCoder\\Gizzle\\Payload', array('getApi'), array('{}', ''));
+		$payload = $this->getMock('NamelessCoder\\Gizzle\\Payload', array('getApi', 'getRepository'), array('{}', ''));
+		$payload->expects($this->any())->method('getRepository')->willReturn(new Repository());
 		$payload->expects($this->once())->method('getApi')->willReturn($api);
-		$api->expects($this->once())->method('post')->with('fakeurl', $expected);
+		$api->expects($this->once())->method('post')->with($this->anything(), $expected);
 		$payload->storeCommitValidation($pullRequest, $commit, 'fakemessage', '/a/b/c', 123);
 	}
 
@@ -461,12 +455,11 @@ class PayloadTest extends \PHPUnit_Framework_TestCase {
 	 */
 	public function testStorePullRequestComment() {
 		$pullRequest = new PullRequest();
-		$pullRequest->setUrlComments('fakeurl');
 		$expected = json_encode(array('body' => 'fakemessage'));
 		$api = $this->getMock('Milo\\GitHub\\Api', array('post'));
 		$payload = $this->getMock('NamelessCoder\\Gizzle\\Payload', array('getApi'), array('{}', ''));
 		$payload->expects($this->once())->method('getApi')->willReturn($api);
-		$api->expects($this->once())->method('post')->with('fakeurl', $expected);
+		$api->expects($this->once())->method('post')->with($this->anything(), $expected);
 		$payload->storePullRequestComment($pullRequest, 'fakemessage');
 	}
 

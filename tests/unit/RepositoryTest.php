@@ -31,11 +31,11 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase {
 	 * @param mixed $value
 	 */
 	public function testGetterAndSetter($property, $value) {
-		$payload = $this->getMock('NamelessCoder\\Gizzle\\Repository', array('__construct'), array('{}', ''));
+		$repository = $this->getMock('NamelessCoder\\Gizzle\\Repository', array('dummy'));
 		$getter = 'get' . ucfirst($property);
 		$setter = 'set' . ucfirst($property);
-		$payload->$setter($value);
-		$this->assertEquals($value, $payload->$getter());
+		$repository->$setter($value);
+		$this->assertEquals($value, $repository->$getter());
 	}
 
 	/**
@@ -45,7 +45,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase {
 		return array(
 			array('created', \DateTime::createFromFormat('U', time() - rand(0, 9999))),
 			array('description', uniqid()),
-			array('forks', rand(99,999)),
+			array('forks', rand(99, 999)),
 			array('fork', TRUE),
 			array('fullName', uniqid()),
 			array('hasDownloads', TRUE),
@@ -53,22 +53,38 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase {
 			array('hasWiki', TRUE),
 			array('hasPages', TRUE),
 			array('homepage', uniqid()),
-			array('id', rand(99,999)),
+			array('id', rand(99, 999)),
 			array('language', uniqid()),
 			array('name', uniqid()),
 			array('masterBranch', uniqid()),
 			array('private', TRUE),
-			array('openIssues', rand(99,999)),
+			array('openIssues', rand(99, 999)),
 			array('pushed', \DateTime::createFromFormat('U', time() - rand(0, 9999))),
-			array('size', rand(99,999)),
-			array('stargazers', rand(99,999)),
+			array('size', rand(99, 999)),
+			array('stargazers', rand(99, 999)),
 			array('url', uniqid()),
 			array('cloneUrl', uniqid()),
 			array('gitUrl', uniqid()),
 			array('sshUrl', uniqid()),
-			array('watchers', rand(99,999)),
+			array('watchers', rand(99, 999)),
 			array('owner', new Entity()),
 		);
+	}
+
+	/**
+	 * @return void
+	 */
+	public function testSetAndGetApiUrls() {
+		$repository = new Repository();
+		$urls = array(
+			Repository::API_URL_COMMENTS => 'test1',
+			Repository::API_URL_ASSIGNEES => 'test2'
+		);
+		$repository->setApiUrls($urls);
+		foreach ($urls as $url => $value) {
+			$result = $repository->resolveApiUrl($url);
+			$this->assertEquals($value, $result);
+		}
 	}
 
 }

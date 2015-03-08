@@ -358,7 +358,7 @@ class Payload extends JsonDataMapper {
 	 * @return void
 	 */
 	public function storePullRequestComment(PullRequest $pullRequest, $message) {
-		$url = $pullRequest->getUrlComments();
+		$url = $pullRequest->resolveApiUrl(PullRequest::API_URL_COMMENTS);
 		$parameters = array(
 			'body' => $message,
 		);
@@ -375,9 +375,9 @@ class Payload extends JsonDataMapper {
 	 * @return void
 	 */
 	public function storeCommitComment(Commit $commit, $message) {
-		$url = $commit->getUrl();
+		$url = $this->getRepository()->resolveApiUrl(Repository::API_URL_COMMITS);
+		$url = str_replace('{/sha}', '/' . $commit->getId(), $url);
 		$parameters = array(
-			'sha1' => $commit->getSha1(),
 			'body' => $message
 		);
 		$this->getApi()->post($url, json_encode($parameters));
@@ -400,7 +400,7 @@ class Payload extends JsonDataMapper {
 	 * @return void
 	 */
 	public function storeCommitValidation(PullRequest $pullRequest, Commit $commit, $message, $file, $line) {
-		$url = $pullRequest->getUrlReviewComments();
+		$url = $pullRequest->resolveApiUrl(PullRequest::API_URL_REVIEW_COMMENTS);
 		$parameters = array(
 			'commit_id' => $commit->getId(),
 			'body' => $message,
@@ -496,16 +496,13 @@ class Payload extends JsonDataMapper {
 		$pullRequest = $message->getPullRequest();
 		$url = NULL;
 		if (TRUE === $pullRequest instanceof PullRequest && NULL === $commit) {
-			$url = $pullRequest->getUrlComments();
+			$url = $pullRequest->resolveApiUrl(PullRequest::API_URL_COMMENTS);
 		} elseif (TRUE === $pullRequest instanceof PullRequest && TRUE === $commit instanceof Commit) {
-			$url = $pullRequest->getUrlReviewComments();
+			$url = $pullRequest->resolveApiUrl(PullRequest::API_URL_REVIEW_COMMENTS);
 		} elseif (TRUE === $commit instanceof Commit) {
-			$url = $commit->getUrl();
+			$url = $this->getRepository()->resolveApiUrl(Repository::API_URL_COMMITS);
 		}
-		if (NULL !== $url) {
-			return $api->post($url, json_encode($data));
-		}
-		return NULL;
+		return $api->post($url, json_encode($data));
 	}
 
 	/**
@@ -513,10 +510,12 @@ class Payload extends JsonDataMapper {
 	 */
 	public function sendMessage(Message $message) {
 		$lacksCommitAndPullRequest = (NULL === $message->getCommit() && NULL === $message->getPullRequest());
-		if (TRUE === $lacksCommitAndPullRequest && TRUE === $this->pullRequest instanceof PullRequest) {
-			$message->setPullRequest($this->pullRequest);
-		} elseif (TRUE === $lacksCommitAndPullRequest && TRUE === $this->head instanceof Commit) {
-			$message->setCommit($this->head);
+		$pullRequest = $this->getPullRequest();
+		$head = $this->getHead();
+		if (TRUE === $lacksCommitAndPullRequest && $pullRequest instanceof PullRequest) {
+			$message->setPullRequest($pullRequest);
+		} elseif (TRUE === $lacksCommitAndPullRequest && TRUE === $head instanceof Commit) {
+			$message->setCommit($head);
 		}
 		$id = spl_object_hash($message);
 		$this->messages[$id] = $message;

@@ -16,6 +16,43 @@ namespace NamelessCoder\Gizzle;
  */
 class Repository extends JsonDataMapper {
 
+	const API_URL_URL = 'url';
+	const API_URL_FORKS = 'forks_url';
+	const API_URL_KEYS = 'keys_url';
+	const API_URL_COLLABORATORS = 'collaborators_url';
+	const API_URL_TEAMS = 'teams_url';
+	const API_URL_HOOKS = 'hooks_url';
+	const API_URL_ISSUE_EVENTS = 'issue_events_url';
+	const API_URL_EVENTS = 'events_url';
+	const API_URL_ASSIGNEES = 'assignees_url';
+	const API_URL_BRANCHES = 'branches_url';
+	const API_URL_TAGS = 'tags_url';
+	const API_URL_BLOBS = 'blobs_url';
+	const API_URL_GIT_TAGS = 'git_tags_url';
+	const API_URL_GIT_REFS = 'git_refs_url';
+	const API_URL_TREES = 'trees_url';
+	const API_URL_STATUSES = 'statuses_url';
+	const API_URL_LANGUAGES = 'languages_url';
+	const API_URL_STARGAZERS = 'stargazers_url';
+	const API_URL_CONTRIBUTORS = 'contributors_url';
+	const API_URL_SUBSCRIBERS = 'subscribers_url';
+	const API_URL_SUBSCRIPTION = 'subscription_url';
+	const API_URL_COMMITS = 'commits_url';
+	const API_URL_GIT_COMMITS = 'git_commits_url';
+	const API_URL_COMMENTS = 'comments_url';
+	const API_URL_ISSUE_COMMENT = 'issue_comment_url';
+	const API_URL_CONTENTS = 'contents_url';
+	const API_URL_COMPARE = 'compare_url';
+	const API_URL_MERGES = 'merges_url';
+	const API_URL_ARCHIVE = 'archive_url';
+	const API_URL_DOWNLOADS = 'downloads_url';
+	const API_URL_ISSUES = 'issues_url';
+	const API_URL_PULLS = 'pulls_url';
+	const API_URL_MILESTONES = 'milestones_url';
+	const API_URL_NOTIFICATIONS = 'notifications_url';
+	const API_URL_LABELS = 'labels_url';
+	const API_URL_RELEASES = 'releases_url';
+
 	/**
 	 * @var array
 	 */

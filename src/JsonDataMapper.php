@@ -27,6 +27,39 @@ abstract class JsonDataMapper {
 	protected $propertyClasses = array();
 
 	/**
+	 * @var array
+	 */
+	protected $apiUrls = array();
+
+	/**
+	 * @param string $urlIdentifier
+	 * @return string|NULL
+	 */
+	public function resolveApiUrl($urlIdentifier) {
+		return TRUE === isset($this->apiUrls[$urlIdentifier]) ? $this->apiUrls[$urlIdentifier] : NULL;
+	}
+
+	/**
+	 * Setter to fill each entity with API URLs which
+	 * are recognised according to self::API_URL_*
+	 * names in the $apiUrls array.
+	 *
+	 * @param array $apiUrls
+	 * @return void
+	 */
+	public function setApiUrls(array $apiUrls) {
+		$classReflection = new \ReflectionClass($this);
+		$constants = $classReflection->getConstants();
+		foreach ($apiUrls as $apiUrlIdentifier => $value) {
+			if (TRUE === in_array($apiUrlIdentifier, $constants)) {
+				unset($apiUrls[$apiUrlIdentifier]);
+				$this->apiUrls[$apiUrlIdentifier] = $value;
+			}
+		}
+		return $apiUrls;
+	}
+
+	/**
 	 * @param mixed $jsonData
 	 */
 	public function __construct($jsonData = array()) {
@@ -44,6 +77,7 @@ abstract class JsonDataMapper {
 		if (FALSE === is_array($jsonData)) {
 			throw new \RuntimeException('Invalid JSON data received by ' . get_class($this), 1411216651);
 		}
+		$jsonData = $this->setApiUrls($jsonData);
 		foreach ($jsonData as $propertyName => $propertyValue) {
 			$propertyName = TRUE === isset($this->propertyMap[$propertyName]) ? $this->propertyMap[$propertyName] : $propertyName;
 			$propertyClass = TRUE === isset($this->propertyClasses[$propertyName]) ? $this->propertyClasses[$propertyName] : NULL;

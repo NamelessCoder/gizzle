@@ -64,16 +64,6 @@ class PullRequestTest extends \PHPUnit_Framework_TestCase {
 			array('mergedBy', new Entity()),
 			array('reviewComments', rand()),
 			array('title', 'title'),
-			array('url', 'url'),
-			array('urlComments', 'urlComments'),
-			array('urlCommits', 'urlCommits'),
-			array('urlDiff', 'urlDiff'),
-			array('urlHtml', 'urlHtml'),
-			array('urlIssue', 'urlIssue'),
-			array('urlPatch', 'urlPatch'),
-			array('urlReviewComment', 'urlReviewComment'),
-			array('urlReviewComments', 'urlReviewComments'),
-			array('urlStatuses', 'urlStatuses'),
 			array('user', new Entity())
 		);
 	}

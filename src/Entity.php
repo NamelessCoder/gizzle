@@ -16,6 +16,10 @@ namespace NamelessCoder\Gizzle;
  */
 class Entity extends JsonDataMapper {
 
+	const API_URL_URL = 'url';
+	const API_URL_HTML = 'html_url';
+	const API_URL_FOLLOWERS = 'followers_url';
+
 	/**
 	 * @var array
 	 */
@@ -42,11 +46,6 @@ class Entity extends JsonDataMapper {
 	 * @var string
 	 */
 	protected $username = NULL;
-
-	/**
-	 * @var string
-	 */
-	protected $url = NULL;
 
 	/**
 	 * @param string $avatar
@@ -105,21 +104,6 @@ class Entity extends JsonDataMapper {
 	 */
 	public function getUsername() {
 		return $this->username;
-	}
-
-	/**
-	 * @param string $url
-	 * @return void
-	 */
-	public function setUrl($url) {
-		$this->url = $url;
-	}
-
-	/**
-	 * @return string
-	 */
-	public function getUrl() {
-		return $this->url;
 	}
 
 }

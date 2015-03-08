@@ -80,7 +80,7 @@ class MessageTest extends \PHPUnit_Framework_TestCase {
 		return array(
 			array(new Message('Message'), array('body' => 'Message')),
 			array(new Message('Message', '/path/to/file', 123), array('body' => 'Message')),
-			array($withCommit, array('body' => 'Message', 'sha1' => 321)),
+			array($withCommit, array('body' => 'Message')),
 			array($withCommitAndPath, array('body' => 'Message', 'path' => '/path/to/file', 'position' => 123, 'commit_id' => 321)),
 			array($withPullRequest, array('body' => 'Message', 'sha1' => 456))
 		);

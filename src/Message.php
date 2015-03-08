@@ -147,9 +147,7 @@ class Message {
 			'body' => $this->body
 		);
 		if (TRUE === $this->commit instanceof Commit) {
-			if (NULL === $this->path) {
-				$data['sha1'] = $this->commit->getId();
-			} else {
+			if (NULL !== $this->path) {
 				$data['commit_id'] = $this->commit->getId();
 				$data['path'] = $this->path;
 				$data['position'] = $this->position;

@@ -16,14 +16,19 @@ namespace NamelessCoder\Gizzle;
  */
 class PullRequest extends JsonDataMapper {
 
+	const API_URL_HTML = 'html_url';
+	const API_URL_DIFF = 'diff_url';
+	const API_URL_PATCH = 'patch_url';
+	const API_URL_ISSUE = 'issue_url';
+	const API_URL_COMMITS = 'commits_url';
+	const API_URL_COMMENTS = 'comments_url';
+	const API_URL_STATUSES = 'statuses_url';
+	const API_URL_REVIEW_COMMENTS = 'review_comments_URL';
+
 	/**
 	 * @var array
 	 */
 	protected $propertyMap = array(
-		'html_url' => 'urlHtml',
-		'diff_url' => 'urlDiff',
-		'patch_url' => 'urlPatch',
-		'issue_url' => 'urlIssue',
 		'created_at' => 'dateCreated',
 		'updated_at' => 'dateUpdated',
 		'closed_at' => 'dateClosed',
@@ -33,10 +38,6 @@ class PullRequest extends JsonDataMapper {
 		'merged_by' => 'mergedBy',
 		'review_comments' => 'reviewComments',
 		'changed_files' => 'changedFiles',
-		'commits_url' => 'urlCommits',
-		'comments_url' => 'urlComments',
-		'statuses_url' => 'urlStatuses',
-		'review_comments_url' => 'urlReviewComments',
 	);
 
 	/**
@@ -143,56 +144,6 @@ class PullRequest extends JsonDataMapper {
 	 * @var Entity
 	 */
 	protected $assignee = NULL;
-
-	/**
-	 * @var string
-	 */
-	protected $url = NULL;
-
-	/**
-	 * @var string
-	 */
-	protected $urlHtml = NULL;
-
-	/**
-	 * @var string
-	 */
-	protected $urlDiff = NULL;
-
-	/**
-	 * @var string
-	 */
-	protected $urlPatch = NULL;
-
-	/**
-	 * @var string
-	 */
-	protected $urlIssue = NULL;
-
-	/**
-	 * @var string
-	 */
-	protected $urlCommits = NULL;
-
-	/**
-	 * @var string
-	 */
-	protected $urlComments = NULL;
-
-	/**
-	 * @var string
-	 */
-	protected $urlStatuses = NULL;
-
-	/**
-	 * @var string
-	 */
-	protected $urlReviewComments = NULL;
-
-	/**
-	 * @var string
-	 */
-	protected $urlReviewComment = NULL;
 
 	/**
 	 * @var string
@@ -587,156 +538,6 @@ class PullRequest extends JsonDataMapper {
 	 */
 	public function setTitle($title) {
 		$this->title = $title;
-	}
-
-	/**
-	 * @return string
-	 */
-	public function getUrl() {
-		return $this->url;
-	}
-
-	/**
-	 * @param string $url
-	 * @return void
-	 */
-	public function setUrl($url) {
-		$this->url = $url;
-	}
-
-	/**
-	 * @return string
-	 */
-	public function getUrlComments() {
-		return $this->urlComments;
-	}
-
-	/**
-	 * @param string $urlComments
-	 * @return void
-	 */
-	public function setUrlComments($urlComments) {
-		$this->urlComments = $urlComments;
-	}
-
-	/**
-	 * @return string
-	 */
-	public function getUrlCommits() {
-		return $this->urlCommits;
-	}
-
-	/**
-	 * @param string $urlCommits
-	 * @return void
-	 */
-	public function setUrlCommits($urlCommits) {
-		$this->urlCommits = $urlCommits;
-	}
-
-	/**
-	 * @return string
-	 */
-	public function getUrlDiff() {
-		return $this->urlDiff;
-	}
-
-	/**
-	 * @param string $urlDiff
-	 * @return void
-	 */
-	public function setUrlDiff($urlDiff) {
-		$this->urlDiff = $urlDiff;
-	}
-
-	/**
-	 * @return string
-	 */
-	public function getUrlHtml() {
-		return $this->urlHtml;
-	}
-
-	/**
-	 * @param string $urlHtml
-	 * @return void
-	 */
-	public function setUrlHtml($urlHtml) {
-		$this->urlHtml = $urlHtml;
-	}
-
-	/**
-	 * @return string
-	 */
-	public function getUrlIssue() {
-		return $this->urlIssue;
-	}
-
-	/**
-	 * @param string $urlIssue
-	 * @return void
-	 */
-	public function setUrlIssue($urlIssue) {
-		$this->urlIssue = $urlIssue;
-	}
-
-	/**
-	 * @return string
-	 */
-	public function getUrlPatch() {
-		return $this->urlPatch;
-	}
-
-	/**
-	 * @param string $urlPatch
-	 * @return void
-	 */
-	public function setUrlPatch($urlPatch) {
-		$this->urlPatch = $urlPatch;
-	}
-
-	/**
-	 * @return string
-	 */
-	public function getUrlReviewComment() {
-		return $this->urlReviewComment;
-	}
-
-	/**
-	 * @param string $urlReviewComment
-	 * @return void
-	 */
-	public function setUrlReviewComment($urlReviewComment) {
-		$this->urlReviewComment = $urlReviewComment;
-	}
-
-	/**
-	 * @return string
-	 */
-	public function getUrlReviewComments() {
-		return $this->urlReviewComments;
-	}
-
-	/**
-	 * @param string $urlReviewComments
-	 * @return void
-	 */
-	public function setUrlReviewComments($urlReviewComments) {
-		$this->urlReviewComments = $urlReviewComments;
-	}
-
-	/**
-	 * @return string
-	 */
-	public function getUrlStatuses() {
-		return $this->urlStatuses;
-	}
-
-	/**
-	 * @param string $urlStatuses
-	 * @return void
-	 */
-	public function setUrlStatuses($urlStatuses) {
-		$this->urlStatuses = $urlStatuses;
 	}
 
 	/**
