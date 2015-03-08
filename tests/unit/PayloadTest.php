@@ -84,7 +84,7 @@ class PayloadTest extends \PHPUnit_Framework_TestCase {
 		$payload = $this->getMock('NamelessCoder\\Gizzle\\Payload', array('loadPluginInstances', 'executePlugin'), array('{}', ''));
 		$payload->expects($this->once())->method('loadPluginInstances')
 			->with($plugin->getSetting(AbstractPlugin::OPTION_EVENTS_ONSTART))->will($this->returnValue(array($plugin)));
-		$payload->expects($this->once())->method('executePlugin')->with($plugin)->will($this->throwException($exception));
+		$payload->expects($this->once())->method('executePlugin')->with($plugin, FALSE)->willReturn($exception);
 		$method = new \ReflectionMethod($payload, 'dispatchPluginEvent');
 		$method->setAccessible(TRUE);
 		$method->invoke($payload, $plugin, AbstractPlugin::OPTION_EVENTS_ONSTART);

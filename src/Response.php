@@ -16,26 +16,32 @@ namespace NamelessCoder\Gizzle;
  */
 class Response {
 
+	const OK = 0;
+	const ERROR = 1;
+
 	/**
 	 * @var array
 	 */
 	protected $output = array();
 
 	/**
-	 * @var \Exception[]
+	 * @var \RuntimeException[]
 	 */
 	protected $errors = array();
 
 	/**
 	 * @var integer
 	 */
-	protected $code = 0;
+	protected $code = self::OK;
 
 	/**
-	 * @param \Exception[] $errors
+	 * @param \RuntimeException[] $errors
+	 * @return $this
 	 */
 	public function setErrors(array $errors) {
 		$this->errors = $errors;
+		$this->code = self::ERROR;
+		return $this;
 	}
 
 	/**
@@ -47,10 +53,11 @@ class Response {
 
 	/**
 	 * @param integer $code
-	 * @return void
+	 * @return $this
 	 */
 	public function setCode($code) {
 		$this->code = $code;
+		return $this;
 	}
 
 	/**
@@ -77,6 +84,16 @@ class Response {
 			$this->output[$pluginClass] = array();
 		}
 		$this->output[$pluginClass] = array_merge($this->output[$pluginClass], $output);
+	}
+
+	/**
+	 * @param \RuntimeException $error
+	 * @return $this
+	 */
+	public function addError(\RuntimeException $error) {
+		$this->errors[] = $error;
+		$this->code = self::OK === $this->code ? self::ERROR : self::OK;
+		return $this;
 	}
 
 }

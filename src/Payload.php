@@ -414,35 +414,32 @@ class Payload extends JsonDataMapper {
 	 * @param PluginInterface[] $plugins
 	 */
 	protected function executePlugins(array $plugins) {
-		$errors = array();
 		foreach ($plugins as $plugin) {
 			if (TRUE === $plugin->trigger($this)) {
-				$pluginErrors = $this->executePlugin($plugin);
-				$errors = array_merge($errors, $pluginErrors);
+				$this->executePlugin($plugin, TRUE);
 			}
-		}
-		if (0 < count($errors)) {
-			$this->response->setCode(1);
-			$this->response->setErrors($errors);
 		}
 	}
 
 	/**
 	 * @param PluginInterface $plugin
-	 * @return array
+	 * @param boolean $storeError
+	 * @return boolean|\RuntimeException
 	 */
-	protected function executePlugin(PluginInterface $plugin) {
-		$errors = array();
+	protected function executePlugin(PluginInterface $plugin, $storeError = FALSE) {
+		$result = TRUE;
 		try {
 			$this->dispatchPluginEvent($plugin, AbstractPlugin::OPTION_EVENTS_ONSTART);
 			$plugin->process($this);
 			$this->dispatchPluginEvent($plugin, AbstractPlugin::OPTION_EVENTS_ONSUCCESS);
-		} catch (\RuntimeException $error) {
+		} catch (\RuntimeException $result) {
 			$this->dispatchPluginEvent($plugin, AbstractPlugin::OPTION_EVENTS_ONERROR);
-			$errors[] = $error;
+			if (TRUE === $storeError) {
+				$this->response->addError($result);
+			}
 		}
 		$this->dispatchPluginEvent($plugin, AbstractPlugin::OPTION_EVENTS_ONFINISH);
-		return $errors;
+		return $result;
 	}
 
 	/**
@@ -454,10 +451,10 @@ class Payload extends JsonDataMapper {
 		if (TRUE === is_array($events)) {
 			$plugins = $this->loadPluginInstances($events);
 			foreach ($plugins as $eventPlugin) {
-				try {
-					$this->executePlugin($eventPlugin);
-				} catch (\RuntimeException $error) {
-					$this->response->addOutputFromPlugin($plugin, array('Event error! Message: ' . $error->getMessage()));
+				$error = $this->executePlugin($eventPlugin, FALSE);
+				if (TRUE === $error instanceof \RuntimeException) {
+					$this->response->addOutputFromPlugin($plugin, array('Event error: ' . $eventSetting));
+					$this->response->addOutputFromPlugin($plugin, array($error->getMessage()));
 				}
 			}
 		}
