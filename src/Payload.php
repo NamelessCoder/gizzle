@@ -712,6 +712,9 @@ class Payload extends JsonDataMapper {
 	 * @return Commit
 	 */
 	public function getHead() {
+		if (TRUE === $this->repository instanceof Repository) {
+			$this->head->setRepository($this->repository);
+		}
 		return $this->head;
 	}
 

@@ -470,4 +470,20 @@ class PayloadTest extends \PHPUnit_Framework_TestCase {
 		$payload->storePullRequestComment($pullRequest, 'fakemessage');
 	}
 
+	/**
+	 * @return void
+	 */
+	public function testGetHeadAssignsRepositoryToHead() {
+		$payload = $this->getMock('NamelessCoder\\Gizzle\\Payload', array('getApi'), array('{}', ''));
+		$repository = new Repository();
+		$repository->setId('test-repository');
+		$payload->setRepository($repository);
+		$head = new Commit();
+		$head->setId('test-commit');
+		$this->assertNull($head->getRepository());
+		$payload->setHead($head);
+		$this->assertSame($head, $payload->getHead());
+		$this->assertSame($repository, $payload->getHead()->getRepository());
+	}
+
 }
