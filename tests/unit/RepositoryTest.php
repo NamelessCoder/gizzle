@@ -62,10 +62,6 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase {
 			array('pushed', \DateTime::createFromFormat('U', time() - rand(0, 9999))),
 			array('size', rand(99, 999)),
 			array('stargazers', rand(99, 999)),
-			array('url', uniqid()),
-			array('cloneUrl', uniqid()),
-			array('gitUrl', uniqid()),
-			array('sshUrl', uniqid()),
 			array('watchers', rand(99, 999)),
 			array('owner', new Entity()),
 		);

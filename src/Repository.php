@@ -17,6 +17,9 @@ namespace NamelessCoder\Gizzle;
 class Repository extends JsonDataMapper {
 
 	const API_URL_URL = 'url';
+	const API_URL_SSH = 'ssh_url';
+	const API_URL_GIT = 'git_url';
+	const API_URL_CLONE = 'clone_url';
 	const API_URL_FORKS = 'forks_url';
 	const API_URL_KEYS = 'keys_url';
 	const API_URL_COLLABORATORS = 'collaborators_url';
@@ -177,26 +180,6 @@ class Repository extends JsonDataMapper {
 	 * @var integer
 	 */
 	protected $stargazers = NULL;
-
-	/**
-	 * @var string
-	 */
-	protected $url = NULL;
-
-	/**
-	 * @var string
-	 */
-	protected $cloneUrl = NULL;
-
-	/**
-	 * @var string
-	 */
-	protected $gitUrl = NULL;
-
-	/**
-	 * @var string
-	 */
-	protected $sshUrl = NULL;
 
 	/**
 	 * @var integer
@@ -471,62 +454,6 @@ class Repository extends JsonDataMapper {
 	 */
 	public function getStargazers() {
 		return $this->stargazers;
-	}
-
-	/**
-	 * @param string $url
-	 */
-	public function setUrl($url) {
-		$this->url = $url;
-	}
-
-	/**
-	 * @return string
-	 */
-	public function getUrl() {
-		return $this->url;
-	}
-
-	/**
-	 * @param string $cloneUrl
-	 */
-	public function setCloneUrl($cloneUrl) {
-		$this->cloneUrl = $cloneUrl;
-	}
-
-	/**
-	 * @return string
-	 */
-	public function getCloneUrl() {
-		return $this->cloneUrl;
-	}
-
-	/**
-	 * @param string $gitUrl
-	 */
-	public function setGitUrl($gitUrl) {
-		$this->gitUrl = $gitUrl;
-	}
-
-	/**
-	 * @return string
-	 */
-	public function getGitUrl() {
-		return $this->gitUrl;
-	}
-
-	/**
-	 * @param string $sshUrl
-	 */
-	public function setSshUrl($sshUrl) {
-		$this->sshUrl = $sshUrl;
-	}
-
-	/**
-	 * @return string
-	 */
-	public function getSshUrl() {
-		return $this->sshUrl;
 	}
 
 	/**
