@@ -377,6 +377,7 @@ class Payload extends JsonDataMapper {
 	public function storeCommitComment(Commit $commit, $message) {
 		$url = $this->getRepository()->resolveApiUrl(Repository::API_URL_COMMITS);
 		$url = str_replace('{/sha}', '/' . $commit->getId(), $url);
+		$url .= '/comments';
 		$parameters = array(
 			'body' => $message
 		);
