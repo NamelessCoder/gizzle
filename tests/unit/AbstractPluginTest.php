@@ -37,6 +37,7 @@ class AbstractPluginTest extends \PHPUnit_Framework_TestCase {
 		$payload->expects($this->never())->method('getResponse');
 		$mock = $this->getMockForAbstractClass('NamelessCoder\\Gizzle\\AbstractPlugin');
 		$result = $mock->process($payload);
+		$this->assertNull($result);
 	}
 
 	public function testGetSettingValueReturnsDefaultIfValueNotSet() {
@@ -56,6 +57,17 @@ class AbstractPluginTest extends \PHPUnit_Framework_TestCase {
 		$mock = $this->getMockForAbstractClass('NamelessCoder\\Gizzle\\AbstractPlugin', array(), '', FALSE, FALSE, TRUE, array('getSettingValue'));
 		$mock->expects($this->once())->method('getSettingValue')->with('foobar');
 		$mock->getSetting('foobar');
+	}
+
+	public function testGetSubPluginSettingsReturnsSettingsAndMergesDefaultsWithOverride() {
+		$parameters = array('foo' => 'nuked', 'array' => array('baz' => 'baz'));
+		$mock = $this->getMockForAbstractClass('NamelessCoder\\Gizzle\\AbstractPlugin', array(), '', FALSE, FALSE, TRUE, array('getSettingValue'));
+		$mock->expects($this->once())->method('getSettingValue')->with('foobar', $parameters)
+			->willReturn(array('bar' => 'foo', 'foo' => 'bar', 'array' => array('baz' => 'baz')));
+		$method = new \ReflectionMethod('NamelessCoder\\Gizzle\\AbstractPlugin', 'getSubPluginSettings');
+		$method->setAccessible(TRUE);
+		$result = $method->invokeArgs($mock, array('foobar', $parameters));
+		$this->assertEquals(array('foo' => 'bar', 'bar' => 'foo', 'array' => array('baz' => 'baz')), $result);
 	}
 
 }
