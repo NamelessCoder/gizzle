@@ -22,6 +22,8 @@ class SelfUpdatePlugin extends AbstractPlugin implements PluginInterface {
 
 	const OPTION_ENABLED = 'enabled';
 	const OPTION_BRANCH = 'branch';
+	const OPTION_GITCOMMAND = 'gitCommand';
+	const OPTION_COMPOSERCOMMAND = 'composerCommand';
 
 	/**
 	 * This plugin will always trigger
@@ -64,7 +66,9 @@ class SelfUpdatePlugin extends AbstractPlugin implements PluginInterface {
 	 * @return string
 	 */
 	protected function getCommand() {
-		return 'cd ..; `which git` pull; COMPOSER_HOME="/tmp/" `which composer` install --no-dev --no-ansi';
+		$gitCommand = $this->getSettingValue(self::OPTION_GITCOMMAND, '`which git`');
+		$composerCommand = $this->getSettingValue(self::OPTION_COMPOSERCOMMAND, '`which composer`');
+		return 'cd ..; ' . $gitCommand . ' pull; COMPOSER_HOME="/tmp/" ' . $composerCommand . ' install --no-dev --no-ansi';
 	}
 
 }
