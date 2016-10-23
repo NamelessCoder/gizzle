@@ -40,7 +40,7 @@ class BranchTest extends \PHPUnit_Framework_TestCase {
 	 * @param mixed $value
 	 */
 	public function testGetterAndSetter($property, $value) {
-		$payload = $this->getMock('NamelessCoder\\Gizzle\\Branch', array('__construct'), array($this->fixture, ''));
+		$payload = $this->getMockBuilder('NamelessCoder\\Gizzle\\Branch')->setMethods(array('__construct'))->setConstructorArgs(array($this->fixture, ''))->getMock();
 		$getter = 'get' . ucfirst($property);
 		$setter = 'set' . ucfirst($property);
 		$payload->$setter($value);

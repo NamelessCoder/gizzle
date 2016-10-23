@@ -30,7 +30,7 @@ class CommentPluginTest extends \PHPUnit_Framework_TestCase {
 	 * @param boolean $expectation
 	 */
 	public function testTriggerRespectsEnabledOption($enabledFlag, $api, $expectation) {
-		$payload = $this->getMock('NamelessCoder\\Gizzle\\Payload', array('getApi'), array(), '', FALSE);
+		$payload = $this->getMockBuilder('NamelessCoder\\Gizzle\\Payload')->setMethods(array('getApi'))->disableOriginalConstructor()->getMock();
 		$payload->expects($this->once())->method('getApi')->willReturn($api);
 		$mock = new CommentPlugin();
 		$settings = array(CommentPlugin::OPTION_ENABLED => $enabledFlag);
@@ -61,7 +61,7 @@ class CommentPluginTest extends \PHPUnit_Framework_TestCase {
 	 * @param string $expectedComment
 	 */
 	public function testProcess(CommentPlugin $plugin, array $settings, array $errors, array $output, $expectedMethod, $expectedComment) {
-		$payload = $this->getMock('NamelessCoder\\Gizzle\\Payload', array($expectedMethod), array(), '', FALSE);
+		$payload = $this->getMockBuilder('NamelessCoder\\Gizzle\\Payload')->setMethods(array($expectedMethod))->disableOriginalConstructor()->getMock();
 		$propertyReflection = new \ReflectionProperty($payload, 'response');
 		$propertyReflection->setAccessible(TRUE);
 		$propertyReflection->setValue($payload, new Response());

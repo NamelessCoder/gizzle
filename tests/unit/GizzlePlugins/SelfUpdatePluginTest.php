@@ -20,26 +20,26 @@ use NamelessCoder\Gizzle\Response;
 class SelfUpdatePluginTest extends \PHPUnit_Framework_TestCase {
 
 	public function testGetCommandReturnsExpectedCommand() {
-		$payload = $this->getMock('NamelessCoder\\Gizzle\\Payload', array('getRef', 'getResponse'), array(), '', FALSE);
+		$payload = $this->getMockBuilder('NamelessCoder\\Gizzle\\Payload')->setMethods(array('getRef', 'getResponse'))->disableOriginalConstructor()->getMock();
 		$payload->expects($this->once())->method('getResponse')->will($this->returnValue(new Response()));
-		$mock = $this->getMock('NamelessCoder\\Gizzle\\GizzlePlugins\\SelfUpdatePlugin', array('getCommand', 'invokeShellCommand'));
+		$mock = $this->getMockBuilder('NamelessCoder\\Gizzle\\GizzlePlugins\\SelfUpdatePlugin')->setMethods(array('getCommand', 'invokeShellCommand'))->getMock();
 		$mock->expects($this->once())->method('invokeShellCommand')->with('ls', array());
 		$mock->expects($this->once())->method('getCommand')->will($this->returnValue('ls'));
 		$mock->process($payload);
 	}
 
 	public function testInvokeShellCommandReturnsShellReturnCodeAndSetsOutput() {
-		$payload = $this->getMock('NamelessCoder\\Gizzle\\Payload', array('getRef', 'getResponse'), array(), '', FALSE);
+		$payload = $this->getMockBuilder('NamelessCoder\\Gizzle\\Payload')->setMethods(array('getRef', 'getResponse'))->disableOriginalConstructor()->getMock();
 		$payload->expects($this->once())->method('getResponse')->will($this->returnValue(new Response()));
-		$mock = $this->getMock('NamelessCoder\\Gizzle\\GizzlePlugins\\SelfUpdatePlugin', array('getCommand'));
+		$mock = $this->getMockBuilder('NamelessCoder\\Gizzle\\GizzlePlugins\\SelfUpdatePlugin')->setMethods(array('getCommand'))->getMock();
 		$mock->expects($this->once())->method('getCommand')->will($this->returnValue('ls'));
 		$mock->process($payload);
 	}
 
 	public function testProcessInvokesShellCommand() {
-		$mock = $this->getMock('NamelessCoder\\Gizzle\\GizzlePlugins\\SelfUpdatePlugin', array('invokeShellCommand'));
+		$mock = $this->getMockBuilder('NamelessCoder\\Gizzle\\GizzlePlugins\\SelfUpdatePlugin')->setMethods(array('invokeShellCommand'))->getMock();
 		$mock->expects($this->once())->method('invokeShellCommand')->will($this->returnValue(0));
-		$payload = $this->getMock('NamelessCoder\\Gizzle\\Payload', array('getResponse'), array(), '', FALSE);
+		$payload = $this->getMockBuilder('NamelessCoder\\Gizzle\\Payload')->setMethods(array('getResponse'))->disableOriginalConstructor()->getMock();
 		$payload->expects($this->once())->method('getResponse')->will($this->returnValue(new Response()));
 		$mock->process($payload);
 	}
@@ -52,7 +52,7 @@ class SelfUpdatePluginTest extends \PHPUnit_Framework_TestCase {
 	 * @param boolean $expectation
 	 */
 	public function testTriggerRespectsEnabledOption($payloadBranch, $enabledFlag, $matchingBranch, $expectation) {
-		$payload = $this->getMock('NamelessCoder\\Gizzle\\Payload', array('getRef'), array(), '', FALSE);
+		$payload = $this->getMockBuilder('NamelessCoder\\Gizzle\\Payload')->setMethods(array('getRef'))->disableOriginalConstructor()->getMock();
 		$mock = new SelfUpdatePlugin();
 		$settings = array(SelfUpdatePlugin::OPTION_ENABLED => $enabledFlag);
 		if (NULL !== $matchingBranch) {

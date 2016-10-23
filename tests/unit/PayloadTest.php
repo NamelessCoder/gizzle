@@ -39,20 +39,20 @@ class PayloadTest extends \PHPUnit_Framework_TestCase {
 
 	public function testConstructorThrowsRuntimeExceptionIfGizzleHomeConstantNotDefined() {
 		$data = file_get_contents('tests/fixtures/sample-payload.json');
-		$this->setExpectedException('RuntimeException');
-		$payload = $this->getMock('NamelessCoder\\Gizzle\\Payload', array('validate'), array($data, ''));
+		$this->expectException('RuntimeException');
+		$this->getMockBuilder('NamelessCoder\\Gizzle\\Payload')->setMethods(array('validate'))->setConstructorArgs(array($data, ''))->getMock();
 	}
 
 	public function testConstructorAcceptsFixtureJson() {
 		$this->setUpConstant();
 		$data = file_get_contents('tests/fixtures/sample-payload.json');
-		$payload = $this->getMock('NamelessCoder\\Gizzle\\Payload', array('validate'), array($data, ''));
+		$this->getMockBuilder('NamelessCoder\\Gizzle\\Payload')->setMethods(array('validate'))->setConstructorArgs(array($data, ''))->getMock();
 	}
 
 	public function testReadSignatureHeader() {
 		// test: execution *without* this mocked request header will fail
 		$_SERVER['HTTP_X_HUB_SIGNATURE'] = 'sha1=' . hash_hmac('sha1', '{}', '');
-		$instance = $this->getMock('NamelessCoder\\Gizzle\\Payload', array('isCommandLine'), array(), '', FALSE);
+		$instance = $this->getMockBuilder('NamelessCoder\\Gizzle\\Payload')->setMethods(array('isCommandLine'))->disableOriginalConstructor()->getMock();
 		$instance->expects($this->once())->method('isCommandLine')->will($this->returnValue(FALSE));
 		$instance->__construct('{}', '');
 	}
@@ -64,7 +64,7 @@ class PayloadTest extends \PHPUnit_Framework_TestCase {
 				get_class($plugin) => array()
 			)
 		));
-		$payload = $this->getMock('NamelessCoder\\Gizzle\\Payload', array('loadPluginInstances', 'executePlugin'), array('{}', ''));
+		$payload = $this->getMockBuilder('NamelessCoder\\Gizzle\\Payload')->setMethods(array('loadPluginInstances', 'executePlugin'))->setConstructorArgs(array('{}', ''))->getMock();
 		$payload->expects($this->once())->method('loadPluginInstances')
 			->with($plugin->getSetting(AbstractPlugin::OPTION_EVENTS_ONSTART))->will($this->returnValue(array($plugin)));
 		$payload->expects($this->once())->method('executePlugin')->with($plugin);
@@ -81,7 +81,7 @@ class PayloadTest extends \PHPUnit_Framework_TestCase {
 			)
 		));
 		$exception = new \RuntimeException();
-		$payload = $this->getMock('NamelessCoder\\Gizzle\\Payload', array('loadPluginInstances', 'executePlugin'), array('{}', ''));
+		$payload = $this->getMockBuilder('NamelessCoder\\Gizzle\\Payload')->setMethods(array('loadPluginInstances', 'executePlugin'))->setConstructorArgs(array('{}', ''))->getMock();
 		$payload->expects($this->once())->method('loadPluginInstances')
 			->with($plugin->getSetting(AbstractPlugin::OPTION_EVENTS_ONSTART))->will($this->returnValue(array($plugin)));
 		$payload->expects($this->once())->method('executePlugin')->with($plugin, FALSE)->willReturn($exception);
@@ -92,7 +92,7 @@ class PayloadTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	public function testLoadPlugins() {
-		$payload = $this->getMock('NamelessCoder\\Gizzle\\Payload', array('validate', 'loadPluginsFromPackage'), array('{}', ''));
+		$payload = $this->getMockBuilder('NamelessCoder\\Gizzle\\Payload')->setMethods(array('validate', 'loadPluginsFromPackage'))->setConstructorArgs(array('{}', ''))->getMock();
 		$payload->expects($this->once())->method('loadPluginsFromPackage')
 			->with('NamelessCoder\\Gizzle')
 			->will($this->returnValue(array()));
@@ -100,7 +100,7 @@ class PayloadTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	public function testLoadPluginsSupportsArray() {
-		$payload = $this->getMock('NamelessCoder\\Gizzle\\Payload', array('validate', 'loadPluginsFromPackage'), array('{}', ''));
+		$payload = $this->getMockBuilder('NamelessCoder\\Gizzle\\Payload')->setMethods(array('validate', 'loadPluginsFromPackage'))->setConstructorArgs(array('{}', ''))->getMock();
 		$payload->expects($this->exactly(2))->method('loadPluginsFromPackage')
 			->with('NamelessCoder\\Gizzle')
 			->will($this->returnValue(array()));
@@ -108,14 +108,14 @@ class PayloadTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	public function testLoadPluginsLoadsExpectedPlugins() {
-		$payload = $this->getMock('NamelessCoder\\Gizzle\\Payload', array('validate'), array('{}', ''));
+		$payload = $this->getMockBuilder('NamelessCoder\\Gizzle\\Payload')->setMethods(array('validate'))->setConstructorArgs(array('{}', ''))->getMock();
 		$payload->loadPlugins('NamelessCoder\\Gizzle\\Tests\\Fixtures');
 		$this->assertAttributeEquals(array(new Plugin()), 'plugins', $payload);
 	}
 
 	public function testLoadsAndMapsPayloadData() {
 		$data = file_get_contents('tests/fixtures/sample-payload.json');
-		$payload = $this->getMock('NamelessCoder\\Gizzle\\Payload', array('validate'), array($data, ''));
+		$payload = $this->getMockBuilder('NamelessCoder\\Gizzle\\Payload')->setMethods(array('validate'))->setConstructorArgs(array($data, ''))->getMock();
 		$payload->loadPlugins('NamelessCoder\\Gizzle\\Tests\\Fixtures');
 		$result = $payload->process();
 		$this->assertInstanceOf('NamelessCoder\\Gizzle\\Response', $result);
@@ -125,7 +125,7 @@ class PayloadTest extends \PHPUnit_Framework_TestCase {
 	public function testProcessLoadsSettingsForConfiguredPackagesIfPluginListEmpty() {
 		$data = file_get_contents('tests/fixtures/sample-payload.json');
 		$secret = 'dummysecret';
-		$payload = $this->getMock('NamelessCoder\\Gizzle\\Payload', array('loadSettings', 'loadPlugins'), array($data, $secret), '', FALSE);
+		$payload = $this->getMockBuilder('NamelessCoder\\Gizzle\\Payload')->setMethods(array('loadSettings', 'loadPlugins'))->setConstructorArgs(array($data, $secret))->getMock();
 		$payload->expects($this->once())->method('loadSettings')->will($this->returnValue(array('foo' => 'bar')));
 		$payload->expects($this->once())->method('loadPlugins')->with(array('foo'))->will($this->returnValue(array()));
 		$payload->process();
@@ -135,11 +135,7 @@ class PayloadTest extends \PHPUnit_Framework_TestCase {
 		$data = file_get_contents('tests/fixtures/sample-payload.json');
 		$secret = 'dummysecret';
 		$hash = hash_hmac('sha1', $data, $secret);
-		$payload = $this->getMock(
-			'NamelessCoder\\Gizzle\\Payload',
-			array('readSignatureHeader', 'isCommandLine'),
-			array($data, $secret)
-		);
+		$payload = $this->getMockBuilder('NamelessCoder\\Gizzle\\Payload')->setMethods(array('readSignatureHeader', 'isCommandLine'))->setConstructorArgs(array($data, $secret))->getMock();
 		$payload->expects($this->once())->method('isCommandLine')->will($this->returnValue(FALSE));
 		$payload->expects($this->once())->method('readSignatureHeader')->will($this->returnValue('sha1=' . $hash));
 		$payload->__construct($data, $secret);
@@ -149,16 +145,11 @@ class PayloadTest extends \PHPUnit_Framework_TestCase {
 		$data = file_get_contents('tests/fixtures/sample-payload.json');
 		$secret = 'dummysecret';
 		$hash = hash_hmac('sha1', $data . 'appendforinvalidchecksum', $secret);
-		$payload = $this->getMock(
-			'NamelessCoder\\Gizzle\\Payload',
-			array('readSignatureHeader', 'isCommandLine'),
-			array($data, $secret),
-			'',
-			FALSE
-		);
+		$payload = $this->getMockBuilder('NamelessCoder\\Gizzle\\Payload')->setMethods(array('readSignatureHeader', 'isCommandLine'))->setConstructorArgs(array($data, $secret))->getMock();
 		$payload->expects($this->once())->method('isCommandLine')->will($this->returnValue(FALSE));
 		$payload->expects($this->once())->method('readSignatureHeader')->will($this->returnValue('sha1=' . $hash));
-		$this->setExpectedException('RuntimeException', '', 1411225210);
+        $this->expectException('RuntimeException');
+		$this->expectExceptionCode(1411225210);
 		$payload->__construct($data, $secret);
 	}
 
@@ -173,7 +164,7 @@ class PayloadTest extends \PHPUnit_Framework_TestCase {
 
 	public function testResponseContainsErrorCodeAndErrorsWhenPluginsCauseErrors() {
 		$errorPlugin = new ErrorPlugin();
-		$payload = $this->getMock('NamelessCoder\\Gizzle\\Payload', array('loadPluginsFromPackage', 'validate'), array('{}', ''));
+		$payload = $this->getMockBuilder('NamelessCoder\\Gizzle\\Payload')->setMethods(array('loadPluginsFromPackage', 'validate'))->setConstructorArgs(array('{}', ''))->getMock();
 		$payload->expects($this->once())->method('loadPluginsFromPackage')
 			->with('NamelessCoder\\Gizzle')
 			->will($this->returnValue(array($errorPlugin)));
@@ -188,7 +179,7 @@ class PayloadTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	public function testHasResponseAfterProcessing() {
-		$payload = $this->getMock('NamelessCoder\\Gizzle\\Payload', array('validate'), array('{}', ''));
+		$payload = $this->getMockBuilder('NamelessCoder\\Gizzle\\Payload')->setMethods(array('validate'))->setConstructorArgs(array('{}', ''))->getMock();
 		$response = $payload->process();
 		$result = $payload->getResponse();
 		$this->assertEquals($response, $result);
@@ -200,7 +191,7 @@ class PayloadTest extends \PHPUnit_Framework_TestCase {
 	 * @param mixed $value
 	 */
 	public function testGetterAndSetter($property, $value) {
-		$payload = $this->getMock('NamelessCoder\\Gizzle\\Payload', array('loadPluginsFromPackage', 'validate'), array('{}', ''));
+		$payload = $this->getMockBuilder('NamelessCoder\\Gizzle\\Payload')->setMethods(array('loadPluginsFromPackage', 'validate'))->setConstructorArgs(array('{}', ''))->getMock();
 		$getter = 'get' . ucfirst($property);
 		$setter = 'set' . ucfirst($property);
 		$payload->$setter($value);
@@ -234,14 +225,14 @@ class PayloadTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	public function testSendMessageStoresMessage() {
-		$payload = $this->getMock('NamelessCoder\\Gizzle\\Payload', array('loadPluginsFromPackage', 'validate'), array('{}', ''));
+		$payload = $this->getMockBuilder('NamelessCoder\\Gizzle\\Payload')->setMethods(array('loadPluginsFromPackage', 'validate'))->setConstructorArgs(array('{}', ''))->getMock();
 		$message = new Message('Test');
 		$payload->sendMessage($message);
 		$this->assertContains($message, $this->getObjectAttribute($payload, 'messages'));
 	}
 
 	public function testSendMessageIgnoresDuplicates() {
-		$payload = $this->getMock('NamelessCoder\\Gizzle\\Payload', array('loadPluginsFromPackage', 'validate'), array('{}', ''));
+		$payload = $this->getMockBuilder('NamelessCoder\\Gizzle\\Payload')->setMethods(array('loadPluginsFromPackage', 'validate'))->setConstructorArgs(array('{}', ''))->getMock();
 		$message = new Message('Test');
 		$payload->sendMessage($message);
 		$payload->sendMessage($message);
@@ -251,7 +242,7 @@ class PayloadTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	public function testSendMessageSetsPullRequestToPayloadPullRequestIfPullRequestAndCommitNotSpecified() {
-		$payload = $this->getMock('NamelessCoder\\Gizzle\\Payload', array('loadPluginsFromPackage', 'validate'), array('{}', ''));
+		$payload = $this->getMockBuilder('NamelessCoder\\Gizzle\\Payload')->setMethods(array('loadPluginsFromPackage', 'validate'))->setConstructorArgs(array('{}', ''))->getMock();
 		$pullRequest = new PullRequest();
 		$payload->setPullRequest($pullRequest);
 		$message = new Message('Test');
@@ -262,7 +253,7 @@ class PayloadTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	public function testSendMessageSetsCommitToPayloadHeadIfPayloadNotForPullRequestAndPullRequestAndCommitNotSpecified() {
-		$payload = $this->getMock('NamelessCoder\\Gizzle\\Payload', array('loadPluginsFromPackage', 'validate'), array('{}', ''));
+		$payload = $this->getMockBuilder('NamelessCoder\\Gizzle\\Payload')->setMethods(array('loadPluginsFromPackage', 'validate'))->setConstructorArgs(array('{}', ''))->getMock();
 		$head = new Commit();
 		$payload->setHead($head);
 		$message = new Message('Test');
@@ -274,7 +265,7 @@ class PayloadTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	public function testSendMessageSetsCommitAndPullRequestWithPriorityForPullRequest() {
-		$payload = $this->getMock('NamelessCoder\\Gizzle\\Payload', array('loadPluginsFromPackage', 'validate'), array('{}', ''));
+		$payload = $this->getMockBuilder('NamelessCoder\\Gizzle\\Payload')->setMethods(array('loadPluginsFromPackage', 'validate'))->setConstructorArgs(array('{}', ''))->getMock();
 		$head = new Commit();
 		$pullRequest = new PullRequest();
 		$payload->setHead($head);
@@ -293,7 +284,7 @@ class PayloadTest extends \PHPUnit_Framework_TestCase {
 	 * @dataProvider getGenerateSummaryOfMessageTestValues
 	 */
 	public function testGenerateSummaryOfMessage(Message $message, $expected) {
-		$payload = $this->getMock('NamelessCoder\\Gizzle\\Payload', array('loadPluginsFromPackage', 'validate'), array('{}', ''));
+		$payload = $this->getMockBuilder('NamelessCoder\\Gizzle\\Payload')->setMethods(array('loadPluginsFromPackage', 'validate'))->setConstructorArgs(array('{}', ''))->getMock();
 		$payload->sendMessage($message);
 		$method = new \ReflectionMethod('NamelessCoder\\Gizzle\\Payload', 'generateSummaryOfMessage');
 		$method->setAccessible(TRUE);
@@ -302,7 +293,7 @@ class PayloadTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	public function testGenerateSummaryOfMessages() {
-		$payload = $this->getMock('NamelessCoder\\Gizzle\\Payload', array('loadPluginsFromPackage', 'validate'), array('{}', ''));
+		$payload = $this->getMockBuilder('NamelessCoder\\Gizzle\\Payload')->setMethods(array('loadPluginsFromPackage', 'validate'))->setConstructorArgs(array('{}', ''))->getMock();
 		$messageDataSets = $this->getGenerateSummaryOfMessageTestValues();
 		$expected = '';
 		$messages = array();
@@ -323,8 +314,8 @@ class PayloadTest extends \PHPUnit_Framework_TestCase {
 	 * @dataProvider getDispatchMessageTestValues
 	 */
 	public function testDispatchMessage(Message $message, $expected) {
-		$payload = $this->getMock('NamelessCoder\\Gizzle\\Payload', array('loadPluginsFromPackage', 'getApi', 'getRepository'), array('{}', ''));
-		$api = $this->getMock('Milo\\GitHub\\Api', array('post'));
+		$payload = $this->getMockBuilder('NamelessCoder\\Gizzle\\Payload')->setMethods(array('loadPluginsFromPackage', 'getApi', 'getRepository'))->setConstructorArgs(array('{}', ''))->getMock();
+		$api = $this->getMockBuilder('Milo\\GitHub\\Api')->setMethods(array('post'))->getMock();
 		$payload->expects($this->any())->method('getRepository')->willReturn(new Repository());
 		$payload->expects($this->once())->method('getApi')->willReturn($api);
 		$api->expects($this->once())->method('post')->with($this->anything(), json_encode($expected));
@@ -390,11 +381,7 @@ class PayloadTest extends \PHPUnit_Framework_TestCase {
 	 * @dataProvider getDispatchMessagesTestValues
 	 */
 	public function testDispatchMessages($numberOfMessages, $limit, $customMessage, $expectedNumberOfMessages) {
-		$payload = $this->getMock(
-			'NamelessCoder\\Gizzle\\Payload',
-			array('loadSettings', 'dispatchMessage'),
-			array('{}', '')
-		);
+		$payload = $this->getMockBuilder('NamelessCoder\\Gizzle\\Payload')->setMethods(array('loadSettings', 'dispatchMessage'))->setConstructorArgs(array('{}', ''))->getMock();
 		$payload->expects($this->exactly($expectedNumberOfMessages))->method('dispatchMessage');
 		$payload->expects($this->any())->method('loadSettings')->willReturn(array(Payload::OPTION_MAX_MESSAGES => Payload::OPTION_MAX_MESSAGES_DEFAULT));
 		while (0 < $numberOfMessages) {
@@ -425,8 +412,8 @@ class PayloadTest extends \PHPUnit_Framework_TestCase {
 		$commit = new Commit();
 		$commit->setId('fakesha1');
 		$expected = json_encode(array('body' => 'fakemessage'));
-		$api = $this->getMock('Milo\\GitHub\\Api', array('post'));
-		$payload = $this->getMock('NamelessCoder\\Gizzle\\Payload', array('getApi', 'getRepository'), array('{}', ''));
+		$api = $this->getMockBuilder('Milo\\GitHub\\Api')->setMethods(array('post'))->getMock();
+		$payload = $this->getMockBuilder('NamelessCoder\\Gizzle\\Payload')->setMethods(array('getApi', 'getRepository'))->setConstructorArgs(array('{}', ''))->getMock();
 		$payload->expects($this->any())->method('getRepository')->willReturn(new Repository());
 		$payload->expects($this->once())->method('getApi')->willReturn($api);
 		$api->expects($this->once())->method('post')->with($this->anything(), $expected);
@@ -442,8 +429,8 @@ class PayloadTest extends \PHPUnit_Framework_TestCase {
 		$commit->setId('fakesha1');
 		$pullRequest = new PullRequest();
 		$expected = json_encode(array('commit_id' => 'fakesha1', 'body' => 'fakemessage', 'path' => '/a/b/c', 'position' => 123));
-		$api = $this->getMock('Milo\\GitHub\\Api', array('post'));
-		$payload = $this->getMock('NamelessCoder\\Gizzle\\Payload', array('getApi', 'getRepository'), array('{}', ''));
+		$api = $this->getMockBuilder('Milo\\GitHub\\Api')->setMethods(array('post'))->getMock();
+		$payload = $this->getMockBuilder('NamelessCoder\\Gizzle\\Payload')->setMethods(array('getApi', 'getRepository'))->setConstructorArgs(array('{}', ''))->getMock();
 		$payload->expects($this->any())->method('getRepository')->willReturn(new Repository());
 		$payload->expects($this->once())->method('getApi')->willReturn($api);
 		$api->expects($this->once())->method('post')->with($this->anything(), $expected);
@@ -456,8 +443,8 @@ class PayloadTest extends \PHPUnit_Framework_TestCase {
 	public function testStorePullRequestComment() {
 		$pullRequest = new PullRequest();
 		$expected = json_encode(array('body' => 'fakemessage'));
-		$api = $this->getMock('Milo\\GitHub\\Api', array('post'));
-		$payload = $this->getMock('NamelessCoder\\Gizzle\\Payload', array('getApi'), array('{}', ''));
+		$api = $this->getMockBuilder('Milo\\GitHub\\Api')->setMethods(array('post'))->getMock();
+		$payload = $this->getMockBuilder('NamelessCoder\\Gizzle\\Payload')->setMethods(array('getApi'))->setConstructorArgs(array('{}', ''))->getMock();
 		$payload->expects($this->once())->method('getApi')->willReturn($api);
 		$api->expects($this->once())->method('post')->with($this->anything(), $expected);
 		$payload->storePullRequestComment($pullRequest, 'fakemessage');
@@ -467,7 +454,7 @@ class PayloadTest extends \PHPUnit_Framework_TestCase {
 	 * @return void
 	 */
 	public function testGetHeadAssignsRepositoryToHead() {
-		$payload = $this->getMock('NamelessCoder\\Gizzle\\Payload', array('getApi'), array('{}', ''));
+		$payload = $this->getMockBuilder('NamelessCoder\\Gizzle\\Payload')->setMethods(array('getApi'))->setConstructorArgs(array('{}', ''))->getMock();
 		$repository = new Repository();
 		$repository->setId('test-repository');
 		$payload->setRepository($repository);

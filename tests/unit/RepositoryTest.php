@@ -31,7 +31,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase {
 	 * @param mixed $value
 	 */
 	public function testGetterAndSetter($property, $value) {
-		$repository = $this->getMock('NamelessCoder\\Gizzle\\Repository', array('dummy'));
+		$repository = $this->getMockBuilder('NamelessCoder\\Gizzle\\Repository')->setMethods(array('dummy'))->getMock();
 		$getter = 'get' . ucfirst($property);
 		$setter = 'set' . ucfirst($property);
 		$repository->$setter($value);

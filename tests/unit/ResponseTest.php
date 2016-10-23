@@ -20,7 +20,7 @@ class ResponseTest extends \PHPUnit_Framework_TestCase {
 
 	public function addOutputFromPluginStoresOutput() {
 		$response = new Response();
-		$plugin = $this->getMockForAbstractClass('NamelessCoder\\Gizzle\\PluginInterface');
+		$plugin = $this->getMockBuilder('NamelessCoder\\Gizzle\\PluginInterface')->getMockForAbstractClass();
 		$hash = get_class($plugin) . ':' . spl_object_hash($plugin);
 		$expected = array($hash => array('foo' => 'bar'));
 		$response->addOutputFromPlugin($plugin, array('foo' => 'bar'));
@@ -39,7 +39,7 @@ class ResponseTest extends \PHPUnit_Framework_TestCase {
 	 * @param mixed $value
 	 */
 	public function testGetterAndSetter($property, $value) {
-		$payload = $this->getMock('NamelessCoder\\Gizzle\\Response', array('__construct'), array('{}', ''));
+		$payload = $this->getMockBuilder('NamelessCoder\\Gizzle\\Response')->setMethods(array('__construct'))->setConstructorArgs(array('{}', ''))->getMock();
 		$getter = 'get' . ucfirst($property);
 		$setter = 'set' . ucfirst($property);
 		$payload->$setter($value);

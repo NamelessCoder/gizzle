@@ -30,7 +30,7 @@ class EntityTest extends \PHPUnit_Framework_TestCase {
 	 * @param mixed $value
 	 */
 	public function testGetterAndSetter($property, $value) {
-		$payload = $this->getMock('NamelessCoder\\Gizzle\\Entity', array('__construct'), array('{}', ''));
+		$payload = $this->getMockBuilder('NamelessCoder\\Gizzle\\Entity')->setMethods(array('__construct'))->setConstructorArgs(array('{}', ''))->getMock();
 		$getter = 'get' . ucfirst($property);
 		$setter = 'set' . ucfirst($property);
 		$payload->$setter($value);
