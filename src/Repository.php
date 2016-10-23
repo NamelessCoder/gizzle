@@ -191,6 +191,21 @@ class Repository extends JsonDataMapper {
 	 */
 	protected $owner = NULL;
 
+    /**
+     * @var string
+     */
+    protected $cloneUrl = NULL;
+
+    /**
+     * @var string
+     */
+    protected $sshUrl = NULL;
+
+    /**
+     * @var string
+     */
+    protected $gitUrl = NULL;
+
 	/**
 	 * @param \DateTime $created
 	 */
@@ -483,5 +498,47 @@ class Repository extends JsonDataMapper {
 	public function getOwner() {
 		return $this->owner;
 	}
+
+    /**
+     * @return string
+     */
+    public function getCloneUrl() {
+        return $this->cloneUrl;
+    }
+
+    /**
+     * @param string $cloneUrl
+     */
+    public function setCloneUrl($cloneUrl) {
+        $this->cloneUrl = $cloneUrl;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSshUrl() {
+        return $this->sshUrl;
+    }
+
+    /**
+     * @param string $sshUrl
+     */
+    public function setSshUrl($sshUrl) {
+        $this->sshUrl = $sshUrl;
+    }
+
+    /**
+     * @return string
+     */
+    public function getGitUrl() {
+        return $this->gitUrl;
+    }
+
+    /**
+     * @param string $gitUrl
+     */
+    public function setGitUrl($gitUrl) {
+        $this->gitUrl = $gitUrl;
+    }
 
 }
