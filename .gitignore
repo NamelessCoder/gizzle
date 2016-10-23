@@ -2,3 +2,4 @@
 .secret
 .token
 vendor
+composer.lock
