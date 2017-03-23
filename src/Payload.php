@@ -328,7 +328,7 @@ class Payload extends JsonDataMapper {
 			$expectedFile = FALSE === file_exists($expectedFile) ? $base . 'Settings.yml' : $expectedFile;
 			$file = TRUE === file_exists($expectedFile) ? $expectedFile : NULL;
 		}
-		return (array) (TRUE === file_exists($file) ? Yaml::parse($file) : array());
+		return (array) (TRUE === file_exists($file) ? Yaml::parse(file_get_contents($file)) : array());
 	}
 
 	/**
